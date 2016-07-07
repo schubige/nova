@@ -93,6 +93,7 @@ public class UIHandler extends HTTPHandler {
 			out.tag(HTML.Title);
 			out.print("NOVA");
 			out.end(HTML.Title);
+			out.print("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>");
 			out.script(
 					 "function httpGet(theUrl) {",
 					 "   var xmlHttp = new XMLHttpRequest();",

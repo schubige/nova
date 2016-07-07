@@ -10,7 +10,7 @@ public class Random extends Content {
 
 	private void randomize() {
 		for(int i = 0; i < frame.length; i++)
-			frame[i] = (float) Math.random();
+			frame[i] += (float) (Math.random() * 0.2);
 	}
 	
 	@Override
@@ -18,12 +18,18 @@ public class Random extends Content {
 		if(rgbFrame.length != frame.length) {
 			frame = new float[rgbFrame.length];
 			last  = -1;
+			for(int i = 0; i < frame.length; i++)
+				frame[i] = (float) (Math.random() * Math.PI * 2);
 		}
-		if(last != (long)timeInSec) {
+		long t = (long)(timeInSec*10);
+		if(last != t) {
 			randomize();
-			last = (long) timeInSec;
+			last = t;
 		}
-		System.arraycopy(frame, 0, rgbFrame, 0, frame.length);
+		for(int i = 0; i < frame.length; i++) {
+			float v = (float) Math.sin(frame[i]);
+			rgbFrame[i] = 1 - (v * v);
+		}
 		return --frames > 0;
 	}
 }

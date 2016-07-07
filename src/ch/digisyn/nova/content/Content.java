@@ -55,7 +55,68 @@ public abstract class Content {
 		rgbFrame[idx+1] = g;
 		rgbFrame[idx+2] = b;
 	}
-	
+
+	/**
+	 * Utility function to add RGB values of a voxel at position (i,j,k) to rgbFrame.
+	 * @param rgbFrame The voxel frame to operate on.
+	 * @param i The X-position.
+	 * @param j The Y-position.
+	 * @param k The Z-position.
+	 * @param r The red value.
+	 * @param g The green value.
+	 * @param b The blue value.
+	 */
+	protected void addVoxel(float[] rgbFrame, int i, int j, int k, float r, float g, float b) {
+		final int idx = 3 * (k + (dimK * (i + j * dimI)));
+		rgbFrame[idx+0] += r;
+		rgbFrame[idx+1] += g;
+		rgbFrame[idx+2] += b;
+	}
+
+	static final float SCALE = 5f;
+	/**
+	 * Utility function to set a weighted RGB values of a voxel at position (i,j,k).
+	 * @param rgbFrame The voxel frame to operate on.
+	 * @param i The X-position.
+	 * @param j The Y-position.
+	 * @param k The Z-position.
+	 * @param r The red value.
+	 * @param g The green value.
+	 * @param b The blue value.
+	 * @param w The weight.
+	 */
+	protected void setVoxel(float[] rgbFrame, int i, int j, int k, float r, float g, float b, float w) {
+		final int idx  = 3 * (k + (dimK * (i + j * dimI)));
+		w *= SCALE;
+		final float w1 = 1 -w;
+		rgbFrame[idx+0] = r * w + w1 * rgbFrame[idx+0];
+		rgbFrame[idx+1] = g * w + w1 * rgbFrame[idx+1];
+		rgbFrame[idx+2] = b * w + w1 * rgbFrame[idx+2];
+	}
+
+	/**
+	 * Utility function to set a weighted RGB values of a voxel at position (i,j,k).
+	 * @param rgbFrame The voxel frame to operate on.
+	 * @param i The X-position.
+	 * @param j The Y-position.
+	 * @param k The Z-position.
+	 * @param r The red value.
+	 * @param g The green value.
+	 * @param b The blue value.
+	 * @param wr The red weight.
+	 * @param wg The green weight.
+	 * @param wb The blue weight.
+	 */
+	protected void setVoxel(float[] rgbFrame, int i, int j, int k, float r, float g, float b, float wr, float wg, float wb) {
+		final int idx  = 3 * (k + (dimK * (i + j * dimI)));
+		wr *= SCALE;
+		wg *= SCALE;
+		wb *= SCALE;
+		rgbFrame[idx+0] = r * wr + (1-wr) * rgbFrame[idx+0];
+		rgbFrame[idx+1] = g * wg + (1-wg) * rgbFrame[idx+1];
+		rgbFrame[idx+2] = b * wb + (1-wb) * rgbFrame[idx+2];
+	}
+
 	/**
 	 * Called when a content is activated.
 	 */
