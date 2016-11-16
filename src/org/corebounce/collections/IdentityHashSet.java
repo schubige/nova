@@ -140,6 +140,7 @@ public final class IdentityHashSet<K> extends AbstractSet<K> implements Cloneabl
 		addAll(m);
 	}
 
+	@SuppressWarnings("unchecked")
 	public IdentityHashSet(K ... elements) {
 		// Allow for a bit of growth
 		this((int) ((1 + elements.length) * 1.1));

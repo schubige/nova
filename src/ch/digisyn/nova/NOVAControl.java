@@ -1,5 +1,6 @@
 package ch.digisyn.nova;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.DatagramSocket;
@@ -14,6 +15,7 @@ import org.corebounce.net.winnetou.HTTPServer;
 import org.corebounce.util.ClassUtilities;
 
 import ch.digisyn.nova.content.Content;
+import ch.digisyn.nova.content.Movie;
 
 public class NOVAControl implements ISyncListener, Runnable, IConstants {
 	private static final int N_BUFS            = 1024;
@@ -118,9 +120,25 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
+		if(args.length != 1) {
+			System.out.println("usage: " + NOVAControl.class.getName() + " <config_file>");
+			System.exit(0);
+		}
+		if(System.getProperty("java.vm.name").contains("64")) {
+			System.out.println(NOVAControl.class.getName() + " requires a 32 Bit VM, current VM is '" + System.getProperty("java.vm.name") + "'");
+			System.exit(0);
+		}
+		
 		PROPS = new Properties();
 		PROPS.load(new FileReader(args[0]));
 
+		if(PROPS.getProperty("movies") != null) {
+			File movies = new File(PROPS.getProperty("movies"));
+			if(movies.exists() && movies.isDirectory()) {
+				Movie.ROOT_DIR = movies;
+			}
+		}
+		
 		int dimI = 0;
 		int dimJ = 0;
 		int[][] tmp = new int[100][100];
