@@ -4,12 +4,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.corebounce.net.Log;
 import org.corebounce.net.winnetou.HTTPServer;
 import org.corebounce.util.ClassUtilities;
 
@@ -46,18 +49,22 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		this.socket     = new DatagramSocket();
 		this.selfIpPort = this.socket.getLocalPort();
 
-		EnetInterface device = null;
-		for(EnetInterface eif : EnetInterface.interfaces()) { 
+		for(EnetInterface eif : EnetInterface.interfaces()) 
 			System.out.println("Interface:" + eif);
+
+		EnetInterface device = null;
+		for(EnetInterface eif : EnetInterface.interfaces()) {
 			if(useInterface(eif, false)) {
-				System.out.println("Using " + eif);
+				Log.info("Using " + eif);
 				eif.open();
 				device = eif;
 				break;
 			}
 		}
-		if(device == null)
+
+		if(device == null) {
 			throw new IOException("No ethernet interface found.");
+		}
 
 		this.device = device;
 
@@ -71,7 +78,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			frameQ.add(new int[maxModule + 1][config.dimI() * config.dimJ() * config.dimK() * 3]);
 
 		disp           = new Dispatcher(device, config);
-		httpServer         = PROPS.getProperty("http") == null ? new HTTPServer(8181) : new HTTPServer(PROPS.getProperty("http"), 80);
+		httpServer         = new HTTPServer(localIp(PROPS.getProperty("http")), 80);
 
 		uiHandler      = new UIHandler(httpServer);
 		paramHandler   = new ParamHandler(httpServer);
@@ -90,9 +97,9 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		httpServer.addHandler(paramHandler, "/nova/reset");
 		httpServer.start();
 
-		tcpServer     = new TCPServer(PROPS.getProperty("tcp"), TCPServer.PORT);
+		tcpServer     = new TCPServer(localIp(PROPS.getProperty("tcp")), TCPServer.PORT);
 		tcpServer.start();
-		
+
 		Thread sender = new Thread(this, "Voxel Streamer");
 		sender.setPriority(Thread.MIN_PRIORITY);
 		sender.start();
@@ -115,6 +122,23 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 				t.printStackTrace();
 			}
 		}
+	}
+
+	private String localIp(String ip) {
+		if(ip == null) {
+			try {
+				ip = "";
+				byte[] addr = InetAddress.getLocalHost().getAddress();
+				for(int i = 0; i < addr.length; i++) {
+					if(i > 0) ip += ".";
+					ip += (addr[i] & 0xFF);
+				}
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+				ip = "127.0.01";
+			}
+		}
+		return ip; 
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -145,7 +169,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		try {
 			numFrames = Integer.parseInt(PROPS.getProperty("duration")) * 25;
 		} catch(Throwable t) {}
-		
+
 		for(String content : PROPS.getProperty("content").split("[,]")) {
 			try {
 				@SuppressWarnings("unchecked")
@@ -312,7 +336,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 				final float   g     = getIntGreen();
 				final float   b     = getIntBlue();
 				boolean continueWithContent = contents.get(getContent()).fillFrame(fframe, time);
-				
+
 				for(int m : config.getModules()) {
 					int off = config.getFrameOffset(m);
 					int idx = 0;

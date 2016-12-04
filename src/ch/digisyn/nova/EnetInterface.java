@@ -116,12 +116,12 @@ public class EnetInterface implements IConstants {
 		if (r == Pcap.NOT_OK || alldevs.isEmpty()) {  
 			System.err.printf("Can't read list of devices, error is %s", errbuf.toString());  
 			interfaces = new EnetInterface[0];
-		}  
-		interfaces = new EnetInterface[alldevs.size()];
-		int i = 0;
-		for(PcapIf pif : alldevs)
-			interfaces[i++] = new EnetInterface(pif);
-
+		}  else {
+			interfaces = new EnetInterface[alldevs.size()];
+			int i = 0;
+			for(PcapIf pif : alldevs)
+				interfaces[i++] = new EnetInterface(pif);
+		}
 		return interfaces;
 	}
 

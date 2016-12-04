@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
+import org.corebounce.net.Log;
+
 public class TCPServer extends Thread {
 	public static final int PORT = 55555;
 	
@@ -15,6 +17,8 @@ public class TCPServer extends Thread {
 		setDaemon(true);
 
 		socket = new ServerSocket(port, 50, host == null ? null : InetAddress.getByName(host));
+		
+		Log.info("Running TCP server on " + socket);
 	}
 
 	@Override
