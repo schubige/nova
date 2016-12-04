@@ -25,6 +25,7 @@ public class SyncGenerator implements IConstants {
 		this.disp   = disp;
 		disp.setSyncGen(this);
 		sync = new Thread() {
+			@SuppressWarnings("unused")
 			@Override
 			public void run() {
 				try {

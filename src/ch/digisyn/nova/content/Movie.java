@@ -6,7 +6,9 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movie extends Content {	
+public class Movie extends Content {
+	public static File ROOT_DIR = new File("movies");
+
 	private       byte[]        buffer;
 	private final List<Content> contents;
 	private final File          file;
@@ -25,16 +27,25 @@ public class Movie extends Content {
 				}
 			};
 
-			for(File file : new File("movies").listFiles(fileFilter))
-				contents.add(new Movie(this, file));
+			for(File file : ROOT_DIR.listFiles(fileFilter))
+				if(file.isFile() && file.getName().endsWith(".raw"))
+					contents.add(new Movie(this, file));
 		} catch(Throwable e) {
 		}
 	}
 
 	private Movie(Movie parent, File file) {
-		super(file.getName().substring(0, file.getName().indexOf('.')).replace('_', ' '), parent.dimI, parent.dimJ, parent.dimK, numFrames(parent, file));
+		super(toLabel(file), parent.dimI, parent.dimJ, parent.dimK, numFrames(parent, file));
 		this.file     = file;
 		this.contents = parent.contents;
+	}
+
+	private static String toLabel(File file) {
+		String result = file.getName();
+		result = result.substring(0, result.indexOf('.'));
+		if(result.endsWith("x10"))
+			result = result.substring(0, result.indexOf('_'));
+		return result;
 	}
 
 	private static int numFrames(Movie parent, File file) {

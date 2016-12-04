@@ -1,5 +1,7 @@
 package ch.digisyn.nova;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.corebounce.io.Utilities;
 import org.jnetpcap.ByteBufferHandler;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapBpfProgram;
@@ -21,6 +24,30 @@ public class EnetInterface implements IConstants {
 	private final LinkedBlockingQueue<byte[]> queue = new LinkedBlockingQueue<byte[]>();
 	private final AtomicBoolean               close = new AtomicBoolean();
 	private static final int                  SEND_DELAY = 1;
+
+	static {
+		/*
+		try {
+			File tmp = File.createTempFile("NOVAatHOME", "lck");
+			if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+				File dllDst = new File(tmp.getParentFile(), "jnetpcap.dll");
+				Utilities.copy(EnetInterface.class.getResourceAsStream("/native/" + dllDst.getName()), new FileOutputStream(dllDst));
+				dllDst.setExecutable(true);
+				dllDst.deleteOnExit();
+				System.load(dllDst.getAbsolutePath());				
+			} else {
+				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.so");
+				Utilities.copy(EnetInterface.class.getResourceAsStream("/native/" + soDst.getName()), new FileOutputStream(soDst));
+				soDst.deleteOnExit();
+				soDst.setExecutable(true);
+				System.load(soDst.getAbsolutePath());				
+			}
+			tmp.delete();
+		} catch(Throwable t) {
+			t.printStackTrace();
+		}
+		*/
+	}
 
 	public EnetInterface(PcapIf device) throws IOException {
 		this.device = device;
