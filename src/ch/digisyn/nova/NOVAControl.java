@@ -80,7 +80,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			frameQ.add(new int[maxModule + 1][config.dimI() * config.dimJ() * config.dimK() * 3]);
 
 		disp           = new Dispatcher(device, config);
-		httpServer         = new HTTPServer(localIp(PROPS.getProperty("http")), 80);
+		httpServer     = new HTTPServer(null, 80);
 
 		uiHandler      = new UIHandler(httpServer);
 		paramHandler   = new ParamHandler(httpServer);
