@@ -26,7 +26,6 @@ public class EnetInterface implements IConstants {
 	private static final int                  SEND_DELAY = 1;
 
 	static {
-		/*
 		try {
 			File tmp = File.createTempFile("NOVAatHOME", "lck");
 			if(System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -37,7 +36,7 @@ public class EnetInterface implements IConstants {
 				System.load(dllDst.getAbsolutePath());				
 			} else {
 				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.so");
-				Utilities.copy(EnetInterface.class.getResourceAsStream("/native/" + soDst.getName()), new FileOutputStream(soDst));
+				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (System.getProperty("os.arch").contains("64") ? "/x64/" : "/x86/") + soDst.getName()), new FileOutputStream(soDst));
 				soDst.deleteOnExit();
 				soDst.setExecutable(true);
 				System.load(soDst.getAbsolutePath());				
@@ -46,7 +45,6 @@ public class EnetInterface implements IConstants {
 		} catch(Throwable t) {
 			t.printStackTrace();
 		}
-		*/
 	}
 
 	public EnetInterface(PcapIf device) throws IOException {
