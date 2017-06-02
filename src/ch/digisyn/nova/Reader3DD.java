@@ -23,9 +23,14 @@ public class Reader3DD extends Common3DD {
 		this(f, ddimX, ddimY, ddimZ, false);
 	}
 	
+	@SuppressWarnings("nls")
 	public Reader3DD(File f, int ddimX, int ddimY, int ddimZ, boolean overwrite) throws IOException {
 		this.file    = f;
 
+		boolean cropX = ddimX < 0; ddimX = Math.abs(ddimX);
+		boolean cropY = ddimY < 0; ddimY = Math.abs(ddimY);
+		boolean cropZ = ddimZ < 0; ddimZ = Math.abs(ddimZ);
+		
 		int dimX = 50;
 		int dimY = 50;
 		int dimZ = 10;
@@ -54,7 +59,10 @@ public class Reader3DD extends Common3DD {
 			for(int i = 0; i < frames.length; i++)
 				frames[i] = new Frame(header, i);
 		} else {
-			System.out.println("Converting " + f);
+			System.out.println("Converting " + f + 
+					" x:" +dimX + "->" + ddimX + (cropX ? "c" : "") + 
+					" y:"+ dimY + "->" + ddimY + (cropY ? "c" : "") +
+					" z:"+ dimZ + "->" + ddimZ + (cropZ ? "c" : ""));
 
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(rawFile), 8 * 1024 * 1024);
 			RandomAccessFile     inf = new RandomAccessFile(f, "r");
@@ -74,9 +82,9 @@ public class Reader3DD extends Common3DD {
 					for(int j = 0; j < ddimY; j++)
 						for(int i = 0; i < ddimX; i++) {
 							final int didx = 3 * (k + (ddimZ * (i + j * ddimX)));
-							final int si   = (dimX * i) / ddimX;
-							final int sj   = (dimY * j) / ddimY;
-							final int sk   = (dimZ * k) / ddimZ;
+							final int si   = cropX ? i : ((dimX * i) / ddimX);
+							final int sj   = cropY ? j : ((dimY * j) / ddimY);
+							final int sk   = cropZ ? k : ((dimZ * k) / ddimZ);
 							final int sidx = 3 * (sk + (dimZ * (si + sj * dimX)));
 							dst[didx+0] = src[sidx+0];
 							dst[didx+1] = src[sidx+1];

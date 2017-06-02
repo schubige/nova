@@ -8,6 +8,7 @@ import org.corebounce.net.winnetou.Response301;
 import org.corebounce.net.winnetou.Response304;
 import org.corebounce.net.winnetou.Response500;
 
+@SuppressWarnings("nls")
 public class RedirectHandler extends HTTPHandler {
 
 	protected RedirectHandler(HTTPServer server) {

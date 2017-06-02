@@ -2,6 +2,7 @@ package org.corebounce.net;
 
 import org.corebounce.util.SystemInfo;
 
+@SuppressWarnings("nls")
 public class NetworkUtilities {
 	private static byte[][] macAddresses;
 

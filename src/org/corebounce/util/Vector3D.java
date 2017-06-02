@@ -2,6 +2,7 @@ package org.corebounce.util;
 
 import java.util.Arrays;
 
+@SuppressWarnings("nls")
 public class Vector3D {
 
     public double[] c = new double[3];

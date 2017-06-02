@@ -1,5 +1,6 @@
 package ch.digisyn.nova;
 
+@SuppressWarnings("nls")
 public interface IConstants {
 	int  UDP_PAYLOAD_OFF = 42;
 	

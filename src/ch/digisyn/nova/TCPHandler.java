@@ -12,6 +12,7 @@ import org.corebounce.util.TextUtilities;
 
 import ch.digisyn.nova.content.Content;
 
+@SuppressWarnings("nls")
 public class TCPHandler extends Thread {
 	private static final Set<String> NUMBERS_SET = new HashSet<String>();
 	private static final Set<String> ANIMS_SET   = new HashSet<String>();

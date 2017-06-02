@@ -1,6 +1,7 @@
 package ch.digisyn.nova.content;
 
 
+@SuppressWarnings("nls")
 public class Planes extends Content {
 	
 	public Planes(int dimI, int dimJ, int dimK, int numFrames) {

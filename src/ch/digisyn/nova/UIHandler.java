@@ -17,6 +17,7 @@ import org.corebounce.util.Strings;
 
 import ch.digisyn.nova.content.Content;
 
+@SuppressWarnings("nls")
 public class UIHandler extends HTTPHandler {
 
 	protected UIHandler(HTTPServer server) {

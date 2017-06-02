@@ -8,6 +8,7 @@ package org.corebounce.util;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public class UTHTML extends UnicodeTranslator implements Unicode {
 
 	final static String[] UNICODE2HTML = { 

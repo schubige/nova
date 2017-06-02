@@ -8,6 +8,7 @@ import org.corebounce.net.winnetou.HTTPServer;
 import org.corebounce.net.winnetou.Response200;
 import org.corebounce.net.winnetou.Response500;
 
+@SuppressWarnings("nls")
 public class ParamHandler extends HTTPHandler {
 
 	protected ParamHandler(HTTPServer server) {

@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Map;
 
+@SuppressWarnings("nls")
 public class CanonicalSynchronizedSet<K> {
 	public synchronized K intern(K object) {
 		if(object == null) return null;

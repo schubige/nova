@@ -11,6 +11,7 @@ import java.io.IOException;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class Response404 extends HTTPResponse {
 	public Response404(HTTPRequest req) {
 		super(req);

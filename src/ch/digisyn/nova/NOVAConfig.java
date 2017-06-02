@@ -1,15 +1,18 @@
 package ch.digisyn.nova;
 
+@SuppressWarnings("nls")
 public final class NOVAConfig {
 	private final int[][]      modules;
 	private final int[]        modulesFlat;
 	private final DMUXStatus[] stat = new DMUXStatus[101];
 	private final int          dimI;
 	private final int          dimJ;
+	private final boolean      flipK;
 	
-	public NOVAConfig(int[][] modules) {
+	public NOVAConfig(int[][] modules, boolean flipK) {
 		this.modules  = modules;
 		this.dimJ     = modules.length * moduleDimJ();
+		this.flipK    = flipK;
 		int[] tmp     = new int[100];
 		int   count   = 0;
 		int   maxI    = 0;
@@ -82,5 +85,9 @@ public final class NOVAConfig {
         }
 
         throw new IllegalArgumentException("Invalid module number for getFrameOffset()");
+	}
+
+	public boolean flipK() {
+		return flipK;
 	}
 }

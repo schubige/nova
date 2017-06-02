@@ -23,6 +23,7 @@ import org.corebounce.net.AddressUtilities;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class HTTPServer implements Runnable {
 	private HashMap<Integer, HashMap<String, HTTPHandler>> handlers;
 	private ServerSocket                                   server;

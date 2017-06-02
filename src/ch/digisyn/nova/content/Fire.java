@@ -2,6 +2,7 @@ package ch.digisyn.nova.content;
 
 import java.util.Arrays;
 
+@SuppressWarnings("nls")
 public class Fire extends Content {
 	double[][] off;
 	

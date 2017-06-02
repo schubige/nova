@@ -45,6 +45,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 	static final  List<Content>                contents   = new ArrayList<Content>();
 	static        Properties                   PROPS      = System.getProperties();
 
+	@SuppressWarnings("nls")
 	public NOVAControl(NOVAConfig config) throws IOException, InterruptedException {
 		this.config     = config;
 		this.selfIpAddr = Inet4Address.getLocalHost().getAddress();
@@ -126,6 +127,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 	}
 
+	@SuppressWarnings("nls")
 	private String localIp(String ip) {
 		if(ip == null) {
 			try {
@@ -143,6 +145,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		return ip; 
 	}
 
+	@SuppressWarnings("nls")
 	public static void main(String[] args) throws IOException, InterruptedException {
 		if(args.length != 1) {
 			System.out.println("usage: " + NOVAControl.class.getName() + " <config_file>");
@@ -152,7 +155,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			System.out.println(NOVAControl.class.getName() + " requires a 32 Bit VM, current VM is '" + System.getProperty("java.vm.name") + "'");
 			System.exit(0);
 		}
-		
+
 		PROPS = new Properties();
 		PROPS.load(new FileReader(args[0]));
 
@@ -162,7 +165,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 				Movie.ROOT_DIR = movies;
 			}
 		}
-		
+
 		int dimI = 0;
 		int dimJ = 0;
 		int[][] tmp = new int[100][100];
@@ -181,7 +184,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			for(int j = 0; j < dimJ; j++)
 				config[i][j] = tmp[i][j];
 
-		NOVAConfig novaConfig = new NOVAConfig(config);
+		NOVAConfig novaConfig = new NOVAConfig(config, PROPS.getProperty("flip", "f").toLowerCase().startsWith("t"));
 
 		int numFrames = 0;
 		try {
@@ -278,6 +281,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		speed = value;
 	}
 
+	@SuppressWarnings("nls")
 	public static void setContent(int value) {
 		try{contents.get(content).stop();}catch(Throwable t) {}
 		content = value % contents.size();
@@ -289,6 +293,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		return syncGen != null;
 	}
 
+	@SuppressWarnings("nls")
 	public void novaOn() throws IOException, InterruptedException {
 		if(!(isOn()) && device != null) {
 			System.out.println("NOVA ON");
@@ -312,6 +317,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		device.send(packet);
 	}
 
+	@SuppressWarnings("nls")
 	void reset() throws IOException, InterruptedException {
 		System.out.print("Resetting Modules:");
 		for(int m : config.getModules())
@@ -334,6 +340,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		System.out.println("Reset done.");
 	}
 
+	@SuppressWarnings("nls")
 	public void novaOff() {
 		if(isOn()) {
 			System.out.println("NOVA OFF");
@@ -360,17 +367,34 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 					int idx = 0;
 
 					final int[] pixels = frame[m];
-					for(int i = config.moduleDimI(); i-- > 0; ) {
-						for(int j = config.moduleDimJ(); j-- > 0; ) {
-							for(int k = 0; k < config.moduleDimK(); k++) {
-								final int x = off + 3 * (j * config.dimI() * config.dimK() + i * config.dimK() + k);
-								final float fr = fframe[x];
-								final float fg = fframe[x+1];
-								final float fb = fframe[x+2];
+					if(config.flipK()) {
+						for(int i = config.moduleDimI(); i-- > 0; ) {
+							for(int j = config.moduleDimJ(); j-- > 0; ) {
+								for(int k = 0; k < config.moduleDimK(); k++) {
+									final int x = off + 3 * (j * config.dimI() * config.dimK() + i * config.dimK() + ((config.dimK()-1) - k));
+									final float fr = fframe[x];
+									final float fg = fframe[x+1];
+									final float fb = fframe[x+2];
 
-								pixels[idx++] = (((int)(r * fr * fr) << 20) & 0x3FF00000)
-										|   (((int)(g * fg * fg) << 10) & 0x000FFC00) 
-										|   ((int) (b * fb * fb)        & 0x000003FF);
+									pixels[idx++] = (((int)(r * fr * fr) << 20) & 0x3FF00000)
+											|   (((int)(g * fg * fg) << 10) & 0x000FFC00) 
+											|   ((int) (b * fb * fb)        & 0x000003FF);
+								}
+							}
+						}
+					} else {
+						for(int i = config.moduleDimI(); i-- > 0; ) {
+							for(int j = config.moduleDimJ(); j-- > 0; ) {
+								for(int k = 0; k < config.moduleDimK(); k++) {
+									final int x = off + 3 * (j * config.dimI() * config.dimK() + i * config.dimK() + k);
+									final float fr = fframe[x];
+									final float fg = fframe[x+1];
+									final float fb = fframe[x+2];
+
+									pixels[idx++] = (((int)(r * fr * fr) << 20) & 0x3FF00000)
+											|   (((int)(g * fg * fg) << 10) & 0x000FFC00) 
+											|   ((int) (b * fb * fb)        & 0x000003FF);
+								}
 							}
 						}
 					}
@@ -384,6 +408,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 	}
 
+	@SuppressWarnings("nls")
 	@Override
 	public void sync(int seqNum) {
 		try {
@@ -412,6 +437,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 	}
 
+	@SuppressWarnings("nls")
 	public void getStatus() {
 		byte[] packet = new byte[ADDR_LEN + PROT_LEN + DATA_LEN];
 		AddressUtils.BROADCAST(packet, 0);
@@ -431,6 +457,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 	}
 
+	@SuppressWarnings("nls")
 	public static boolean useInterface(EnetInterface eif, boolean forSync) {
 		String eth = PROPS.getProperty(forSync ? "sync" : "nova");
 		if(eth == null)

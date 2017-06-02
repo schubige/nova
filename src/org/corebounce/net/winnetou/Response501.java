@@ -11,6 +11,7 @@ import java.io.IOException;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class Response501 extends HTTPResponse {
 	public Response501(HTTPRequest req) {
 		super(req);

@@ -20,6 +20,7 @@ import org.corebounce.net.AddressUtilities;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public class Version {
 	public final static String fImplTitle = "__IMPL_TITLE__";
 	public final static String fImplVendor = "__IMPL_VENDOR__";

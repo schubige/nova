@@ -15,6 +15,7 @@ import java.lang.reflect.Modifier;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public abstract class UnicodeTranslator {
 
 	protected UnicodeTranslator(String[] unicode2table) {

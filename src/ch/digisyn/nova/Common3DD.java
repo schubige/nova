@@ -12,6 +12,7 @@ import java.nio.MappedByteBuffer;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+@SuppressWarnings("nls")
 public class Common3DD {
 	private static RandomAccessFile currentRA;
 	private static File             currentFile;

@@ -9,6 +9,7 @@ package org.corebounce.util;
  * @see org.corebounce.util.UnicodeTranslator
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public class UnicodeTrans implements Unicode {
 
 	public static String[] HTML2UNICODE = UTHTML.HTML2UNICODE;

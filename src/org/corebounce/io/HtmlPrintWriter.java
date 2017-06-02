@@ -17,6 +17,7 @@ import org.corebounce.util.UTHTML;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class HtmlPrintWriter implements HTML {
 	private Stack<String> tag_stack = new Stack<String>();
 	PrintWriter writer;

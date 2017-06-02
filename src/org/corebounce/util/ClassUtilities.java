@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import org.corebounce.collections.IdentityHashSet;
 
+@SuppressWarnings("nls")
 public class ClassUtilities {
 	public static final Class<Object>          CLS_Object          = Object.class;
 	public static final Class<Object[]>        CLS_ObjectA         = Object[].class;

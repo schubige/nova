@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.corebounce.util.Strings;
 
+@SuppressWarnings("nls")
 public class SyncGenerator implements IConstants {
 	private static final boolean DBG = false;
 	

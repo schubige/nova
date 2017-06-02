@@ -19,6 +19,7 @@ import org.corebounce.io.Utilities;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class Response200 extends HTTPResponse {
 	protected byte[] data = null;
 	protected String mimetype;

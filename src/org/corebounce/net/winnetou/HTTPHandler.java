@@ -9,6 +9,7 @@ package org.corebounce.net.winnetou;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public abstract class HTTPHandler {
 	public static final byte[] EMPTY = new byte[0]; 
 

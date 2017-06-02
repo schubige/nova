@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class FileTypeMap extends MIME {
 
 	private static HashMap<String, String> mimeMediaType = new HashMap<String, String>();

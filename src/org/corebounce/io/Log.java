@@ -13,6 +13,7 @@ import java.util.logging.Level;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public class Log {
 	public static final String LOG = "org.corebounce.io";
 

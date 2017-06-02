@@ -6,6 +6,7 @@ import java.util.List;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 
+@SuppressWarnings("nls")
 public class SystemInfo {
 	/**
 	 * Get a list with all mac addresses connected to a hardware device (independent of connected state) 

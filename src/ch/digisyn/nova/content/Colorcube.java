@@ -5,6 +5,7 @@ import org.corebounce.util.Vector3D;
 
 import ch.digisyn.nova.NOVAControl;
 
+@SuppressWarnings("nls")
 public class Colorcube extends Content {
 	static final double SPEED_FACTOR = 2;
 

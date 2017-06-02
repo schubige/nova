@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public class Strings {
 
 	public static final String WS = " \t\r\n";

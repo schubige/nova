@@ -1,6 +1,7 @@
 package ch.digisyn.nova.content;
 
 
+@SuppressWarnings("nls")
 public class Jump extends Content {	
 	public Jump(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Jump", dimI, dimJ, dimK, numFrames);

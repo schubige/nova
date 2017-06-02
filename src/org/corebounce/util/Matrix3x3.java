@@ -1,6 +1,7 @@
 package org.corebounce.util;
 
 
+@SuppressWarnings("nls")
 public class Matrix3x3 {
 
 	// matrix represented by Mrow-col

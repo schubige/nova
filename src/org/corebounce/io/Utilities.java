@@ -25,6 +25,7 @@ import java.net.Socket;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public class Utilities {
 	static final int BUFFER_SZ = 8192;
 

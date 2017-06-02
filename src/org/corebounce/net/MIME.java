@@ -12,6 +12,7 @@ import org.corebounce.util.Strings;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class MIME {
 	public final static String GIF = MIME.Image + "/" + MIME.Gif;
 	public final static String HTML = MIME.Text + "/" + MIME.Html;

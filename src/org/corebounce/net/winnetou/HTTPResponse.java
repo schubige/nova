@@ -15,6 +15,7 @@ import org.corebounce.util.Strings;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public abstract class HTTPResponse {
 	protected HTTPRequest request;
 

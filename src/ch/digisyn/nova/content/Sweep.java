@@ -1,6 +1,7 @@
 package ch.digisyn.nova.content;
 
 
+@SuppressWarnings("nls")
 public class Sweep extends Content {	
 	public Sweep(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Sweep", dimI, dimJ, dimK, numFrames);

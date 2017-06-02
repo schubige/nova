@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Map.Entry;
 
+@SuppressWarnings("nls")
 public class TextUtilities {
 	static public final String HEXTAB   = "0123456789ABCDEF";
 	

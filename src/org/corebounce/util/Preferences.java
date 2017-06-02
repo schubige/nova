@@ -19,6 +19,7 @@ import java.util.zip.ZipInputStream;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public class Preferences {
 	static final String PREF_RESET = "preferences_reset";
 	static private Vector<PreferencesStore> stores = new Vector<PreferencesStore>();

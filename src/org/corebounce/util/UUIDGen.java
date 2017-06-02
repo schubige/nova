@@ -37,6 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.corebounce.collections.CanonicalSynchronizedSet;
 import org.corebounce.net.NetworkUtilities;
 
+@SuppressWarnings("nls")
 public final class UUIDGen {
 	private static final CanonicalSynchronizedSet<UUID> intern     = new CanonicalSynchronizedSet<UUID>();
 	private static final Map<String, UUID>              chars2uuid = new ConcurrentHashMap<String, UUID>(); 

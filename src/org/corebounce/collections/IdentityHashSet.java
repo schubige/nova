@@ -6,6 +6,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+@SuppressWarnings("nls")
 public final class IdentityHashSet<K> extends AbstractSet<K> implements Cloneable {
 	/**
 	 * The initial capacity used by the no-args constructor.

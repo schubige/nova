@@ -11,6 +11,7 @@ import java.io.IOException;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class Response204 extends HTTPResponse {
 
 	/**

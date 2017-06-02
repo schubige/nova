@@ -1,6 +1,6 @@
 package ch.digisyn.nova.content;
 
-
+@SuppressWarnings("nls")
 public class Cylinder extends Content {
 	private double      dimI1;
 	private double      dimJ1;

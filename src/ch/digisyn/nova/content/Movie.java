@@ -6,6 +6,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("nls")
 public class Movie extends Content {
 	public static File ROOT_DIR = new File("movies");
 

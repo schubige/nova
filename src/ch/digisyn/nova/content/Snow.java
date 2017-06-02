@@ -1,6 +1,7 @@
 package ch.digisyn.nova.content;
 
 
+@SuppressWarnings("nls")
 public class Snow extends Content {
 	private static final int N = 50;
 	private double[][] phase;

@@ -1,5 +1,6 @@
 package ch.digisyn.nova.content;
 
+@SuppressWarnings("nls")
 public class Random extends Content {
 	long    last;
 	float[] frame = new float[0];

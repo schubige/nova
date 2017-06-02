@@ -20,6 +20,7 @@ import java.io.OutputStream;
  * @see org.corebounce.util.Base64Encoder
  */
 
+@SuppressWarnings("nls")
 public class Base64Decoder {
 	private static final int BUFFER_SIZE = 1024;
 

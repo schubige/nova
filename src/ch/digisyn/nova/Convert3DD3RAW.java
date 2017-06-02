@@ -5,6 +5,7 @@ import java.io.IOException;
 
 public class Convert3DD3RAW {
 
+	@SuppressWarnings("nls")
 	public static void main(String[] args) throws IOException {
 		File src = new File(args[0]);
 		if(src.isDirectory()) {

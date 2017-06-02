@@ -16,6 +16,7 @@ import org.jnetpcap.PcapBpfProgram;
 import org.jnetpcap.PcapHeader;
 import org.jnetpcap.PcapIf;
 
+@SuppressWarnings("nls")
 public class EnetInterface implements IConstants {
 	private static EnetInterface[]            interfaces;
 	private final PcapIf                      device;

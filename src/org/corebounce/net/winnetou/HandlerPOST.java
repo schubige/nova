@@ -18,6 +18,7 @@ import org.corebounce.util.Strings;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public abstract class HandlerPOST extends HTTPHandler {
 	static final String FORM_DATA = MIME.Multipart + "/" + MIME.Form_data;
 	static final String FORM_URLENCODED = MIME.Application + "/" + MIME.X_www_form_urlencoded;

@@ -11,6 +11,7 @@ package org.corebounce.util;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public interface Unicode {
 
 	public final static String nbsp = "\u00A0"; // non breaking space

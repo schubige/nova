@@ -8,6 +8,7 @@ package org.corebounce.io;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public interface HTML {
 	public static final String A = "/A";
 	public static final String Address = "/address";

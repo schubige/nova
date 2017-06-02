@@ -11,6 +11,7 @@ import java.io.IOException;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class Response400 extends HTTPResponse {
 
 	public Response400(HTTPRequest req) {

@@ -2,6 +2,7 @@ package ch.digisyn.nova.content;
 
 import java.util.Arrays;
 
+@SuppressWarnings("nls")
 public class Solid extends Content {
 
 	public Solid(int dimI, int dimJ, int dimK, int numFrames) {

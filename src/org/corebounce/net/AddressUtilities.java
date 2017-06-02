@@ -23,6 +23,7 @@ import org.corebounce.util.Preferences;
  * 
  * @author shoobee
  */
+@SuppressWarnings("nls")
 public class AddressUtilities {
 
 	private final static String PREF_NETWORK_INTERFACE = "netif";

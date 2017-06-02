@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 
 import org.corebounce.net.Log;
 
+@SuppressWarnings("nls")
 public class TCPServer extends Thread {
 	public static final int PORT = 55555;
 	

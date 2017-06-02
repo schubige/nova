@@ -2,6 +2,7 @@ package ch.digisyn.nova.content;
 
 import java.util.Arrays;
 
+@SuppressWarnings("nls")
 public class Pulse extends Content {
 	
 	public Pulse(int dimI, int dimJ, int dimK, int numFrames) {

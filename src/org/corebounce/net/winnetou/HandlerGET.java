@@ -22,6 +22,7 @@ import org.corebounce.util.Strings;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class HandlerGET extends HTTPHandler implements HTML {
 	File root;
 	String prefix;

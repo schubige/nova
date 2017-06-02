@@ -32,6 +32,7 @@ import org.corebounce.util.Base64FormatException;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class HTTPRequest implements Runnable {
 	private static boolean DBG = false;
 

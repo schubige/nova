@@ -11,6 +11,7 @@ import java.io.IOException;
  * @author shoobee
  */
 
+@SuppressWarnings("nls")
 public class Response301 extends HTTPResponse {
 	protected byte[] data = null;
 	protected String newLocation;

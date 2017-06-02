@@ -1,6 +1,7 @@
 package ch.digisyn.nova.content;
 
 
+@SuppressWarnings("nls")
 public class Test2 extends Content {	
 	public Test2(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Test2", dimI, dimJ, dimK, numFrames);
