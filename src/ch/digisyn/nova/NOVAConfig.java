@@ -26,6 +26,7 @@ public final class NOVAConfig {
 		this.modulesFlat = new int[count];
 		System.arraycopy(tmp, 0, this.modulesFlat, 0, count);
 		if(this.modulesFlat.length == 0) throw new IllegalArgumentException("At least one module must be configured");
+		System.out.println("Configured " + dimI + "x" + dimJ + (flipK ? " flipped" : ""));
 	}
 
 	public int numOperational() {
