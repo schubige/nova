@@ -17,7 +17,7 @@ public class Planes extends Content {
 		int x = Math.abs((t0 % ((dimI*2)-1))-(dimI-1));
 		int y = Math.abs((t1 % ((dimJ*2)-1))-(dimJ-1));
 		int z = Math.abs((t2 % ((dimK*2)-1))-(dimK-1));
-		
+				
 		for(int i = 0; i < rgbFrame.length; i++)
 			rgbFrame[i] *= 0.5f;
 		

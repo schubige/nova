@@ -78,6 +78,7 @@ public final class NOVAConfig {
 	}
 
 	public int getFrameOffset(int m) {
+		System.out.println("getFrameOffset " + m);
         for(int i = 0; i < this.modules.length ; i++) {
            for(int j = 0; j < this.modules[i].length ; j++) {
                 if (this.modules[i][j] == m)
