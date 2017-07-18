@@ -11,18 +11,18 @@ public final class NOVAConfig {
 	
 	public NOVAConfig(int[][] modules, boolean flipK) {
 		this.modules  = modules;
-		this.dimI     = modules.length * moduleDimI();
+		this.dimJ     = modules.length * moduleDimJ();
 		this.flipK    = flipK;
 		int[] tmp     = new int[100];
 		int   count   = 0;
-		int   maxJ    = 0;
+		int   maxI    = 0;
 		for(int[] row : modules) {
-			maxJ = Math.max(maxJ, row.length);
+			maxI = Math.max(maxI, row.length);
 			for(int m : row)
 				if(m > 0 && m < 101)
 					tmp[count++] = m;
 		}
-		this.dimJ        = maxJ * moduleDimJ();
+		this.dimI        = maxI * moduleDimI();
 		this.modulesFlat = new int[count];
 		System.arraycopy(tmp, 0, this.modulesFlat, 0, count);
 		if(this.modulesFlat.length == 0) throw new IllegalArgumentException("At least one module must be configured");
