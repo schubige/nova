@@ -2,6 +2,7 @@ package org.corebounce.net.winnetou;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.BindException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
@@ -32,23 +33,27 @@ public class HTTPServer implements Runnable {
 	ThreadGroup                                            httpGroup = new ThreadGroup("Winnetou");
 	InetAddress                                            addr;
 	HTTPHandler                                            defaultHandler;
-	
+
 	public HTTPServer(int port) {
 		this(null, port);
 	}
-	
+
 	public HTTPServer(String host, int port) {
 		handlers = new HashMap<Integer, HashMap<String, HTTPHandler>>();
 		for (int i = HTTPHandler.METHODS.length; --i >= 0;)
 			handlers.put(i, new HashMap<String, HTTPHandler>());
 		try {
 			this.port = port;
-			server = host == null ? new ServerSocket(port) : new ServerSocket(port, 50, InetAddress.getByName(host));
-			//server.setReuseAddress(true);
+			try {
+				server = host == null ? new ServerSocket(port) : new ServerSocket(port, 50, InetAddress.getByName(host));
+			} catch(BindException ex) {
+				server = host == null ? new ServerSocket(0) : new ServerSocket(0, 50, InetAddress.getByName(host));
+				Log.info("BindException:" + ex.getMessage());
+			}
 
 			addr = AddressUtilities.getDefaultInterface();
 
-			Log.info("HTTP Server bound (" + addr + ":" + port + ")");
+			Log.info("HTTP Server bound (" + addr + ":" + server.getLocalPort() + ")");
 			serverThread = new Thread(httpGroup, this, "Server");
 			serverThread.setPriority(Thread.MIN_PRIORITY);
 		} catch (Exception e) {
@@ -155,7 +160,7 @@ public class HTTPServer implements Runnable {
 	public void setDefaultHandler(HTTPHandler defaultHandler) {
 		this.defaultHandler = defaultHandler;
 	}
-	
+
 	// Server thread
 
 	@Override

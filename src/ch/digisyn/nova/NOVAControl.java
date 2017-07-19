@@ -137,6 +137,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 					if(i > 0) ip += ".";
 					ip += (addr[i] & 0xFF);
 				}
+				if(addr.length != 4) throw new UnknownHostException("Not an IPv4 address:" + ip);
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 				ip = "127.0.01";
@@ -459,6 +460,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 
 	@SuppressWarnings("nls")
 	public static boolean useInterface(EnetInterface eif, boolean forSync) {
+		if(eif == EnetInterface.DUMMY) return true;
 		String eth = PROPS.getProperty(forSync ? "sync" : "nova");
 		if(eth == null)
 			eth = "eth0";

@@ -34,7 +34,13 @@ public class EnetInterface implements IConstants {
 				Utilities.copy(EnetInterface.class.getResourceAsStream("/native/" + dllDst.getName()), new FileOutputStream(dllDst));
 				dllDst.setExecutable(true);
 				dllDst.deleteOnExit();
-				System.load(dllDst.getAbsolutePath());				
+				System.load(dllDst.getAbsolutePath());
+			} else if(System.getProperty("os.name").toLowerCase().contains("mac os")) {
+				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.dylib");
+				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (System.getProperty("os.arch").contains("64") ? "/x64/" : "/x86/") + soDst.getName()), new FileOutputStream(soDst));
+				soDst.deleteOnExit();
+				soDst.setExecutable(true);
+				System.load(soDst.getAbsolutePath());				
 			} else {
 				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.so");
 				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (System.getProperty("os.arch").contains("64") ? "/x64/" : "/x86/") + soDst.getName()), new FileOutputStream(soDst));
@@ -50,7 +56,7 @@ public class EnetInterface implements IConstants {
 
 	public EnetInterface(PcapIf device) throws IOException {
 		this.device = device;
-		this.addr   = device.getHardwareAddress();
+		this.addr   = device == null ? new byte[6] : device.getHardwareAddress();
 	}
 
 	public void open() throws IOException {
@@ -58,22 +64,26 @@ public class EnetInterface implements IConstants {
 		int flags            = Pcap.MODE_PROMISCUOUS;  
 		int timeout          = 1;   
 		StringBuilder errbuf = new StringBuilder();
-		pcap                 = Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf);
-		System.out.println(errbuf);
-		if(pcap == null) throw new IOException("Could not open " + this);
+		if(device != null) {
+			pcap                 = Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf);
+			System.out.println(errbuf);
+			if(pcap == null) throw new IOException("Could not open " + this);
 
-		PcapBpfProgram filter = new PcapBpfProgram();
-		String expression = "ether proto " + PROT_SYNC + " and ether dst " + toEnet(addr) + " or ether broadcast";
-		if(pcap.compile(filter, expression, 1, 0) != Pcap.OK)
-			throw new IOException(pcap.getErr() + ":" + expression);
-		pcap.setFilter(filter);
-
+			PcapBpfProgram filter = new PcapBpfProgram();
+			String expression = "ether proto " + PROT_SYNC + " and ether dst " + toEnet(addr) + " or ether broadcast";
+			if(pcap.compile(filter, expression, 1, 0) != Pcap.OK)
+				throw new IOException(pcap.getErr() + ":" + expression);
+			pcap.setFilter(filter);
+		}
 		RxThread rx = new RxThread();
 		rx.setDaemon(true);
 		rx.start();
 	}
 
 	private static final String HEXTAB = "0123456789ABCDEF";
+
+	static final EnetInterface DUMMY = createDummy();
+
 	private String toEnet(byte[] addr) {
 		StringBuilder result = new StringBuilder();
 		for(int i = 0; i < 6; i++) {
@@ -85,12 +95,23 @@ public class EnetInterface implements IConstants {
 		return result.toString();
 	}
 
+	private static EnetInterface createDummy() {
+		try {
+			return new EnetInterface(null);
+		} catch(Throwable t) {
+			t.printStackTrace();
+		}
+		return null;
+	}
+
 	class RxThread extends Thread implements ByteBufferHandler<LinkedBlockingQueue<byte[]>> {		
 		@Override
 		public void run() {
-			while(!(close.get()))
-				pcap.dispatch(-1, this, queue);
-			pcap.close();
+			if(pcap != null) {
+				while(!(close.get()))
+					pcap.dispatch(-1, this, queue);
+				pcap.close();
+			}
 			pcap = null;
 			close.set(false);
 		}
@@ -129,7 +150,7 @@ public class EnetInterface implements IConstants {
 
 	@Override
 	public String toString() {
-		return device.getDescription() + "/" + device.getName();
+		return device == null ? "dummy device" : (device.getDescription() + "/" + device.getName());
 	}
 
 	static EnetInterface[] interfaces() throws IOException {
@@ -138,15 +159,20 @@ public class EnetInterface implements IConstants {
 		List<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with NICs  
 		StringBuilder errbuf = new StringBuilder(); // For any error msgs  
 
-		int r = Pcap.findAllDevs(alldevs, errbuf);  
-		if (r == Pcap.NOT_OK || alldevs.isEmpty()) {  
-			System.err.printf("Can't read list of devices, error is %s", errbuf.toString());  
-			interfaces = new EnetInterface[0];
-		}  else {
-			interfaces = new EnetInterface[alldevs.size()];
-			int i = 0;
-			for(PcapIf pif : alldevs)
-				interfaces[i++] = new EnetInterface(pif);
+		try {
+			int r = Pcap.findAllDevs(alldevs, errbuf);  
+			if (r == Pcap.NOT_OK || alldevs.isEmpty()) {  
+				System.err.printf("Can't read list of devices, error is %s", errbuf.toString());  
+				interfaces = new EnetInterface[0];
+			}  else {
+				interfaces = new EnetInterface[alldevs.size()];
+				int i = 0;
+				for(PcapIf pif : alldevs)
+					interfaces[i++] = new EnetInterface(pif);
+			}
+		} catch(Throwable t) {
+			interfaces = new EnetInterface[] {EnetInterface.DUMMY};
+			t.printStackTrace();
 		}
 		return interfaces;
 	}
