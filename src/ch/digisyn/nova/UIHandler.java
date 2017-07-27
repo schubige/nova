@@ -122,6 +122,7 @@ public class UIHandler extends HTTPHandler {
 			makeSlider(out,   "speed",      "Speed",      NOVAControl.getSpeed(),       -3.0, 5);
 			
 			makeButton(out,   "reset",      "Reset");
+			makeButton(out,   "reload",     "Reload");
 			
 			out.close();
 			return new Response200(req, MIME.HTML, bout.toByteArray());

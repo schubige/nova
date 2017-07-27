@@ -40,6 +40,8 @@ public class ParamHandler extends HTTPHandler {
 				NOVAControl.setContent((int)Double.parseDouble(value));
 			else if("reset".equals(param))
 				NOVAControl.resetNOVA();
+			else if("reload".equals(param))
+				System.exit(0);
 			return new Response200(req, MIME.HTML, EMPTY);
 		} catch(Throwable t) {
 			return new Response500(req, t);

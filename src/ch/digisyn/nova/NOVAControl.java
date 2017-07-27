@@ -98,6 +98,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		httpServer.addHandler(paramHandler, "/nova/content");
 		httpServer.addHandler(paramHandler, "/nova/color");
 		httpServer.addHandler(paramHandler, "/nova/reset");
+		httpServer.addHandler(paramHandler, "/nova/reload");
 		httpServer.start();
 
 		tcpServer     = new TCPServer(localIp(PROPS.getProperty("tcp")), TCPServer.PORT);
