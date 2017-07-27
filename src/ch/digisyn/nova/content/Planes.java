@@ -1,6 +1,6 @@
 package ch.digisyn.nova.content;
 
-//test
+
 @SuppressWarnings("nls")
 public class Planes extends Content {
 	
