@@ -56,7 +56,7 @@ public class BouncingMetaBallsT extends Content {
 					}
 					double r,g,b;
 					double v = CROP_INTERVAL(sum, 0, 255);
-					v = v>120?255:0;
+					v = v>120?1:0;
 
 					setVoxel(rgbFrame, x, y, z, (float) v, (float) v, (float) v);
 				}
