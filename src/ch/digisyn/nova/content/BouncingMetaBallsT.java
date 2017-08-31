@@ -1,7 +1,7 @@
 package ch.digisyn.nova.content;
 
 @SuppressWarnings("nls")
-public class BouncingMetaBalls extends Content {
+public class BouncingMetaBallsT extends Content {
 
 	private static final int NUM = 7; // number of ball centers
 	private double[][] positions;
@@ -10,8 +10,8 @@ public class BouncingMetaBalls extends Content {
 	private int[] dim;
 	private double prevTime = 0;
 
-	public BouncingMetaBalls(int dimI, int dimJ, int dimK, int numFrames) {
-		super("BouncingMetaBalls", dimI, dimJ, dimK, numFrames);
+	public BouncingMetaBallsT(int dimI, int dimJ, int dimK, int numFrames) {
+		super("BouncingMetaBallsT", dimI, dimJ, dimK, numFrames);
 		this.positions = new double[NUM][3];
 		this.speeds = new double[NUM][3];
 		dim = new int[3];
@@ -54,45 +54,11 @@ public class BouncingMetaBalls extends Content {
 						dsq = Math.sqrt(dsq);
 						sum += 120 * rad / dsq;
 					}
-					double S = 1;
-					// double V = sum > 80 ? 1 : 0;
-					// activation functions
-					// double V = (Math.tanh(sum-80)+1)*0.5; // tanh
-					double V = 1 / (1 + Math.exp(sum - 85)); // sigmoid
-					V = 1 - V;
-					double C = V * S;
-					double H = CROP_INTERVAL(sum, 0, 360);
-					double X = C * (1 - Math.abs(sum / 60.0 % 2 - 1));
+					double r,g,b;
+					double v = CROP_INTERVAL(sum, 0, 255);
+					v = v>120?v:0;
 
-					// HSV to RGB conversion for fancy rainbow colors
-					double r, g, b;
-					if (H < 60) {
-						r = C;
-						g = X;
-						b = 0;
-					} else if (H < 120) {
-						r = X;
-						g = C;
-						b = 0;
-					} else if (H < 180) {
-						r = 0;
-						g = C;
-						b = X;
-					} else if (H < 240) {
-						r = 0;
-						g = X;
-						b = C;
-					} else if (H < 300) {
-						r = X;
-						g = 0;
-						b = C;
-					} else {
-						r = C;
-						g = 0;
-						b = X;
-					}
-
-					setVoxel(rgbFrame, x, y, z, (float) r, (float) g, (float) b);
+					setVoxel(rgbFrame, x, y, z, (float) v, (float) v, (float) v);
 				}
 			}
 		}
