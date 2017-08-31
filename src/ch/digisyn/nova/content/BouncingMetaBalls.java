@@ -51,10 +51,10 @@ public class BouncingMetaBalls extends Content {
                          Math.pow((this.positions[i][1]-y),2) +
                          Math.pow((this.positions[i][2]-z),2);
             dsq = Math.sqrt(dsq);
-            sum += 150 * rad / dsq;
+            sum += 120 * rad / dsq;
           }
           double S = 1;
-          double V = sum > 90 ? 1 : 0;
+          double V = sum > 80 ? 1 : 0;
           double C = V*S;
           double H = CROP_INTERVAL(sum,0,360);
           double X = C * (1- Math.abs(sum/60.0 % 2 - 1));
