@@ -24,7 +24,7 @@ public class BouncingMetaBallsT extends Content {
 				this.positions[i][j] = FRAND(0, dim[j]);
 				this.speeds[i][j] = FRAND(-0.2, 0.2);
 			}
-			this.radii[i] = FRAND(1, 2.2);
+			this.radii[i] = FRAND(1.2, 2.2);
 		}
 	}
 
@@ -35,7 +35,7 @@ public class BouncingMetaBallsT extends Content {
 		prevTime = timeInSec;
 		for (int i = 0; i < NUM; i++) {
 			for (int j = 0; j < 3; j++) {
-				this.positions[i][j] += d*2 * this.speeds[i][j];
+				this.positions[i][j] += d*3 * this.speeds[i][j];
 				if (this.positions[i][j] < 0 || this.positions[i][j] > dim[j]) {
 					this.speeds[i][j] *= -1;
 				}
@@ -56,7 +56,7 @@ public class BouncingMetaBallsT extends Content {
 					}
 					double r,g,b;
 					double v = CROP_INTERVAL(sum, 0, 255);
-					v = v>120?v:0;
+					v = v>120?255:0;
 
 					setVoxel(rgbFrame, x, y, z, (float) v, (float) v, (float) v);
 				}
