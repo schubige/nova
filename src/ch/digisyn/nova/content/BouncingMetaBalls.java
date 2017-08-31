@@ -22,7 +22,7 @@ public class BouncingMetaBalls extends Content {
     for (int i=0; i<NUM; i++) {
       for (int j=0; j<3; j++) {
         this.positions[i][j] = FRAND(0,dim[j]);
-        this.speeds[i][j] = FRAND(-1,1);
+        this.speeds[i][j] = FRAND(-0.3,0.3);
       }
       this.radii[i] = FRAND(1,2.5);
     }
