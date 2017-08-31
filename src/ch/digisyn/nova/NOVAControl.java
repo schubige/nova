@@ -153,10 +153,11 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			System.out.println("usage: " + NOVAControl.class.getName() + " <config_file>");
 			System.exit(0);
 		}
+		/*
 		if(System.getProperty("os.name").toLowerCase().contains("windows") && System.getProperty("java.vm.name").contains("64")) {
 			System.out.println(NOVAControl.class.getName() + " requires a 32 Bit VM, current VM is '" + System.getProperty("java.vm.name") + "'");
 			System.exit(0);
-		}
+		}*/
 
 		PROPS = new Properties();
 		PROPS.load(new FileReader(args[0]));
@@ -204,7 +205,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 					contents.add(ci);
 				}
 			} catch(Throwable t) {
-				System.out.println("Could not load content '" + content + "'");
+				Log.warning(t, "Could not load content '" + content + "'");
 			}
 		}
 
