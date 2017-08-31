@@ -17,7 +17,7 @@ public class BouncingMetaBalls extends Content {
     int[] dim = {dimI, dimJ, dimK};
     for (int i=0; i<NUM; i++) {
       for (int j=0; j<3; j++) {
-        this.postions[i][j] = FRAND(0,dim[j]);
+        this.positions[i][j] = FRAND(0,dim[j]);
         this.speeds[i][j] = FRAND(-1,1);
       }
       this.radii[i] = FRAND(1,2.5);
@@ -29,8 +29,8 @@ public class BouncingMetaBalls extends Content {
     // update positions
     for (int i=0; i<NUM; i++) {
       for (int j=0; j<3; j++) {
-        this.postions[i][j] += this.speeds[i][j];
-        if (this.postions[i][j]<0 || this.postions[i][j]>dim[j]) {
+        this.positions[i][j] += this.speeds[i][j];
+        if (this.positions[i][j]<0 || this.positions[i][j]>dim[j]) {
           this.speeds[i][j] *= -1;
         }
       }
@@ -43,9 +43,9 @@ public class BouncingMetaBalls extends Content {
           double sum = 0;
           for (int i=0; i<NUM; i++) {
             double rad = this.radii[i];
-            double dsq = Math.pow((this.postions[i][0]-x),2) +
-                         Math.pow((this.postions[i][1]-y),2) +
-                         Math.pow((this.postions[i][2]-z),2);
+            double dsq = Math.pow((this.positions[i][0]-x),2) +
+                         Math.pow((this.positions[i][1]-y),2) +
+                         Math.pow((this.positions[i][2]-z),2);
             dsq = Math.sqrt(dsq);
             sum += 100 * rad / dsq;
           }
@@ -81,7 +81,7 @@ public class BouncingMetaBalls extends Content {
             b = X;
           }
 
-          setVoxel(rgbFrame, x, y, z, r,g,b);
+          setVoxel(rgbFrame, x, y, z, (float)r,(float)g,(float)b);
         }
       }
     }
