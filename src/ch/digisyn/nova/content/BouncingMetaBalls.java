@@ -58,6 +58,7 @@ public class BouncingMetaBalls extends Content {
           //activation functions
           //double V = (Math.tanh(sum-80)+1)*0.5;  // tanh
           double V = 1 / (1 + Math.exp(sum-80)); // sigmoid
+          V = 1-V;
           double C = V*S;
           double H = CROP_INTERVAL(sum,0,360);
           double X = C * (1- Math.abs(sum/60.0 % 2 - 1));
