@@ -11,13 +11,14 @@ public class BouncingMetaBalls extends Content {
   private int[] dim;
 
   public BouncingMetaBalls(int dimI, int dimJ, int dimK, int numFrames) {
-    super("BouncingBalls", dimI, dimJ, dimK, numFrames);
+    super("BouncingMetaBalls", dimI, dimJ, dimK, numFrames);
     this.positions = new double[NUM][3];
     this.speeds = new double[NUM][3];
     dim = new int[3];
     dim[0] = dimI;
     dim[1] = dimJ;
     dim[2] = dimK;
+    this.radii[i] = new double[NUM];
     for (int i=0; i<NUM; i++) {
       for (int j=0; j<3; j++) {
         this.positions[i][j] = FRAND(0,dim[j]);
