@@ -8,13 +8,16 @@ public class BouncingMetaBalls extends Content {
   private double[][] positions;
   private double[][] speeds;
   private double[] radii;
-  //private int[] dim;
+  private int[] dim;
 
   public BouncingMetaBalls(int dimI, int dimJ, int dimK, int numFrames) {
     super("BouncingBalls", dimI, dimJ, dimK, numFrames);
     this.positions = new double[NUM][3];
     this.speeds = new double[NUM][3];
-    int[] dim = {dimI, dimJ, dimK};
+    dim = new int[3];
+    dim[0] = dimI;
+    dim[1] = dimJ;
+    dim[2] = dimK;
     for (int i=0; i<NUM; i++) {
       for (int j=0; j<3; j++) {
         this.positions[i][j] = FRAND(0,dim[j]);
