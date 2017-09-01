@@ -84,6 +84,25 @@ public class MVector {
 	public static MVector mult(MVector v, double f) {
 		return new MVector(v.x*f, v.y*f, v.z*f);
 	}
+	
+	public static MVector add(MVector a, MVector b) {
+		return new MVector(a.x+b.x, a.y+b.y, a.z+b.z);
+	}
+	
+	public static MVector sub(MVector a, MVector b) {
+		return new MVector(a.x-b.x, a.y-b.y, a.z-b.z);
+	}
+	
+	public static double dist(MVector a, MVector b) {
+		return Math.sqrt(distSq(a,b));
+	}
+
+	public static double distSq(MVector a, MVector b) {
+		double dx = a.x-b.x;
+		double dy = a.y-b.y;
+		double dz = a.z-b.z;
+		return Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2);
+	}
 
 	public void limit(double l) {
 		double mg = this.mag();

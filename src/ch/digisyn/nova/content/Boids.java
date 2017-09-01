@@ -8,9 +8,11 @@ public class Boids extends Content {
 	public Boids(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Boids", dimI, dimJ, dimK, numFrames);
 		int NUM = 8;
+		MVector nc = new MVector(0,0,0);
+		MVector xc = new MVector(50,10,10);
 		boids = new ArrayList<Boid>();
 		for (int i = 0; i < NUM; i++) {
-			boids.add(new Boid());
+			boids.add(new Boid(nc,xc));
 		}
 	}
 
