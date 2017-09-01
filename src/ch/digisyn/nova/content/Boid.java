@@ -30,10 +30,10 @@ public class Boid {
 		maxc = xc;
 	}
 
-	public void move() {
+	public void move(double t) {
 		this.vel.add(acc);
 		this.vel.limit(maxSpeed);
-		this.pos.add(this.vel);
+		this.pos.add(MVector.mult(this.vel, t));
 		this.acc.mult(0);
 		
 		if (pos.x > maxc.x) pos.x = minc.x;
