@@ -6,9 +6,10 @@ public class Boid {
 	public MVector pos, vel, acc;
 	public MVector ali, coh, sep;
 	public MVector minc, maxc;
-	private double maxSpeed = 2;
-	private double neighborhoodRadius = 5;
-	private double maxSteerForce = 0.1;
+	private double maxSpeed = 1.8;
+	private double neighborhoodRadius = 2;
+	private double maxSteerForce = 0.05;
+	public float[] color;
 
 	public Boid() {
 		pos = new MVector(FRAND(3, 47), FRAND(2, 8), FRAND(2, 8));
@@ -22,6 +23,7 @@ public class Boid {
 	public Boid(MVector nc, MVector xc) {
 		pos = new MVector(FRAND(nc.x,xc.x), FRAND(nc.y,xc.y), FRAND(nc.z,xc.z));
 		vel = MVector.random3D();
+		vel.mult(0.7);
 		acc = new MVector();
 		ali = new MVector();
 		coh = new MVector();
@@ -49,8 +51,8 @@ public class Boid {
 		coh = this.cohesion(boids);
 		sep = this.separation(boids);
 		this.acc.add(MVector.mult(ali, 1));
-		this.acc.add(MVector.mult(coh, 3));
-		this.acc.add(MVector.mult(sep, 1));
+		this.acc.add(MVector.mult(coh, 2));
+		this.acc.add(MVector.mult(sep, 2));
 	}
 
 	private MVector separation(ArrayList<Boid> boids) {
