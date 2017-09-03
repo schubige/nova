@@ -8,7 +8,7 @@ public class Boids extends Content {
 	private double prevTime = 0;
 	public Boids(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Boids", dimI, dimJ, dimK, numFrames);
-		int NUM = 10;
+		int NUM = 20;
 		MVector nc = new MVector(0,0,0);
 		MVector xc = new MVector(50,10,10);
 		
