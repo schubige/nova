@@ -1,5 +1,7 @@
 package ch.digisyn.nova;
 
+import org.corebounce.util.Log;
+
 @SuppressWarnings("nls")
 public final class NOVAConfig {
 	private final int[][]      modules;
@@ -35,7 +37,7 @@ public final class NOVAConfig {
 		this.modulesFlat = new int[count];
 		System.arraycopy(tmp, 0, this.modulesFlat, 0, count);
 		if(this.modulesFlat.length == 0) throw new IllegalArgumentException("At least one module must be configured");
-		System.out.println("Configured " + dimI + "x" + dimJ + (flipK ? " flipped" : ""));
+		Log.info("Configured " + dimI + "x" + dimJ + (flipK ? " flipped" : ""));
 	}
 
 	private int calcFrameOffset(int m) {

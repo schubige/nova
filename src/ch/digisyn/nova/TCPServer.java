@@ -5,7 +5,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
-import org.corebounce.net.Log;
+import org.corebounce.util.Log;
 
 @SuppressWarnings("nls")
 public class TCPServer extends Thread {
@@ -28,7 +28,7 @@ public class TCPServer extends Thread {
 			try {
 				new TCPHandler(socket.accept());
 			} catch(Throwable t) {
-				t.printStackTrace();
+				Log.severe(t);
 			}
 		}
 	}

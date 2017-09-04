@@ -18,7 +18,7 @@ import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
-import org.corebounce.net.Log;
+import org.corebounce.util.Log;
 import org.corebounce.net.MIME;
 import org.corebounce.util.Base64Decoder;
 import org.corebounce.util.Base64FormatException;
@@ -47,7 +47,7 @@ public class HTTPRequest implements Runnable {
 
 	public HTTPRequest(Socket client, HTTPServer server) {
 		if (DBG)
-			System.out.println("new request:" + client);
+			Log.info("new request:" + client);
 		this.client = client;
 		this.server = server;
 		header = new InternetHeaders();
@@ -181,7 +181,7 @@ public class HTTPRequest implements Runnable {
 			do {
 				inline = readln();
 				if (DBG)
-					System.out.println(inline);
+					Log.info(inline);
 				if (inline == null)
 					return;
 			} while (inline.equals(""));
@@ -201,7 +201,7 @@ public class HTTPRequest implements Runnable {
 				inline = readln();
 
 				if (DBG)
-					System.out.println(inline);
+					Log.info(inline);
 
 				header.addHeaderLine(inline);
 			} while (!inline.equals(""));
@@ -210,7 +210,7 @@ public class HTTPRequest implements Runnable {
 
 			HTTPHandler handler = server.getHandler(tokens[0], new URL("http", server.getHostAddress(), server.getPort(), tokens[1]));
 
-			// System.out.println("handler for " + tokens[0] + " " + tokens[1] +
+			// Log.info("handler for " + tokens[0] + " " + tokens[1] +
 			// ":" + handler);
 
 			HTTPResponse response = handler == null ? new Response404(this) : handler.request(this);

@@ -49,10 +49,5 @@ public class UnicodeTrans implements Unicode {
 		}
 		return s;
 	}
-
-	public static void main(String[] argv) {
-		for (int i = 32; i < 256; i++)
-			System.out.println(i + ":" + Integer.toHexString(i) + ":" + (char) i);
-	}
 }
 

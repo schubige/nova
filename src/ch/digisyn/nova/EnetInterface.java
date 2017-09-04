@@ -10,6 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.corebounce.io.Utilities;
+import org.corebounce.util.Log;
 import org.jnetpcap.ByteBufferHandler;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapBpfProgram;
@@ -50,7 +51,7 @@ public class EnetInterface implements IConstants {
 			}
 			tmp.delete();
 		} catch(Throwable t) {
-			t.printStackTrace();
+			Log.severe(t);
 		}
 	}
 
@@ -66,7 +67,7 @@ public class EnetInterface implements IConstants {
 		StringBuilder errbuf = new StringBuilder();
 		if(device != null) {
 			pcap                 = Pcap.openLive(device.getName(), snaplen, flags, timeout, errbuf);
-			System.out.println(errbuf);
+			Log.warning(errbuf.toString());
 			if(pcap == null) throw new IOException("Could not open " + this);
 
 			PcapBpfProgram filter = new PcapBpfProgram();
@@ -99,7 +100,7 @@ public class EnetInterface implements IConstants {
 		try {
 			return new EnetInterface(null);
 		} catch(Throwable t) {
-			t.printStackTrace();
+			Log.severe(t);
 		}
 		return null;
 	}
@@ -135,7 +136,7 @@ public class EnetInterface implements IConstants {
 		if(pcap != null) {
 			ByteBuffer b = ByteBuffer.wrap(packet);  
 			if (pcap.sendPacket(b) != Pcap.OK) 
-				System.err.println(pcap.getErr());  
+				Log.severe(pcap.getErr());  
 		}
 		try {
 			Thread.sleep(SEND_DELAY);
@@ -162,7 +163,7 @@ public class EnetInterface implements IConstants {
 		try {
 			int r = Pcap.findAllDevs(alldevs, errbuf);  
 			if (r == Pcap.NOT_OK || alldevs.isEmpty()) {  
-				System.err.printf("Can't read list of devices, error is %s", errbuf.toString());  
+				Log.severe("Can't read list of devices, error is " + errbuf.toString());  
 				interfaces = new EnetInterface[0];
 			}  else {
 				interfaces = new EnetInterface[alldevs.size()];
@@ -172,7 +173,7 @@ public class EnetInterface implements IConstants {
 			}
 		} catch(Throwable t) {
 			interfaces = new EnetInterface[] {EnetInterface.DUMMY};
-			t.printStackTrace();
+			Log.severe(t);
 		}
 		return interfaces;
 	}

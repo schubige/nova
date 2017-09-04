@@ -6,6 +6,8 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.corebounce.util.Log;
+
 @SuppressWarnings("nls")
 public class Movie extends Content {
 	public static File ROOT_DIR = new File("movies");
@@ -55,7 +57,7 @@ public class Movie extends Content {
 
 	@Override
 	public void start() {
-		System.out.println("Playing " + this);
+		Log.info("Playing " + this);
 		startTime = -1.0;
 		if(buffer == null) {
 			final byte[] lbuffer = new byte[(int)file.length()];
@@ -71,7 +73,7 @@ public class Movie extends Content {
 							f.close();
 						}
 					} catch(Throwable t) {
-						t.printStackTrace();
+						Log.severe(t);
 					}
 				}
 			}.start();
@@ -80,7 +82,7 @@ public class Movie extends Content {
 
 	@Override
 	public void stop() {
-		System.out.println("Stopping " + this);
+		Log.info("Stopping " + this);
 		buffer = null;
 	}
 

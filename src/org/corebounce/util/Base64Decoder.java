@@ -159,33 +159,4 @@ public class Base64Decoder {
 		this.out = out;
 		this.stringp = false;
 	}
-
-	/**
-	 * Test the decoder. Run it with one argument: the string to be decoded, it
-	 * will print out the decoded value.
-	 */
-
-	public static void main(String args[]) {
-		if (args.length == 1) {
-			try {
-				Base64Decoder b = new Base64Decoder(args[0]);
-				System.out.println("[" + b.processString() + "]");
-			} catch (Base64FormatException e) {
-				System.out.println("Invalid Base64 format !");
-				System.exit(1);
-			}
-		} else if ((args.length == 2) && (args[0].equals("-f"))) {
-			try {
-				FileInputStream in = new FileInputStream(args[1]);
-				Base64Decoder b = new Base64Decoder(in, System.out);
-				b.process();
-			} catch (Exception ex) {
-				System.out.println("error: " + ex.getMessage());
-				System.exit(1);
-			}
-		} else {
-			System.out.println("Base64Decoder [strong] [-f file]");
-		}
-		System.exit(0);
-	}
 }

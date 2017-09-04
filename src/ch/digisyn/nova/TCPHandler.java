@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.corebounce.util.Log;
 import org.corebounce.util.TextUtilities;
 
 import ch.digisyn.nova.content.Content;
@@ -62,7 +63,7 @@ public class TCPHandler extends Thread {
 				while(in.read() != ',') {}
 			}
 		} catch(Throwable t) {
-			t.printStackTrace();
+			Log.severe(t);
 		}
 	}
 

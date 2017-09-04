@@ -156,9 +156,4 @@ public class UTHTML extends UnicodeTranslator implements Unicode {
 	public String getNative(String unicode) {
 		return UnicodeTrans._trans(unicode, UNICODE2HTML);
 	}
-
-	public static void main(String[] argv) {
-		System.out.println("getNative(" + argv[0] + ") = " + UTHTML.trans.getNative(argv[0]));
-		System.out.println("getUnicode(" + argv[0] + ") = " + UTHTML.trans.getUnicode(argv[0]));
-	}
 }
