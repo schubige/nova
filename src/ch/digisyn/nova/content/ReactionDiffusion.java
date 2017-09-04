@@ -156,7 +156,7 @@ public class ReactionDiffusion extends Content {
 		}
 		
 		
-		if (frameCount%90==0) {
+		if (frameCount%300==0) {
 //			int ix = (int) Math.floor(Math.random() * (nx * ny * nz));
 //			A[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
 //			B[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
