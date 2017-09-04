@@ -156,12 +156,12 @@ public class ReactionDiffusion extends Content {
 		}
 		
 		
-//		if (frameCount%20==0) {
-//			int ix = (int) Math.floor(Math.random() * (nx * ny * nz));
-//			A[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
-//			B[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
-//			An[ix] = Bn[ix] = 0;
-//		}
+		if (frameCount%20==0) {
+			int ix = (int) Math.floor(Math.random() * (nx * ny * nz));
+			A[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
+			B[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
+			An[ix] = Bn[ix] = 0;
+		}
 		frameCount++;
 		
 		return --frames > 0;
