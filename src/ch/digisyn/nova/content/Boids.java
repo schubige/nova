@@ -60,9 +60,9 @@ public class Boids extends Content {
 					int yt = y % 10;
 					for (int z=lz; z<lz+rd2; z++) {
 						int zt = z % 10;
-						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
-						d = 2-d;
-						d = 1;
+//						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
+//						d = 2-d;
+						float d = 1;
 						setVoxel(rgbFrame, xt, yt, zt, d*b.color[0], d*b.color[1], d*b.color[2]);
 					}
 				}
