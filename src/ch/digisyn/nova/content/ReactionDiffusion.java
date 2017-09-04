@@ -41,6 +41,8 @@ public class ReactionDiffusion extends Content {
 	public final static int PATTERN_POCKED = 6;
 	public final static int PATTERN_TEST = 7;
 	public Random random;
+	
+	private int frameCount = 0;
 
 	public ReactionDiffusion(int dimI, int dimJ, int dimK, int numFrames) {
 		super("ReactionDiffusion", dimI, dimJ, dimK, numFrames);
@@ -48,6 +50,7 @@ public class ReactionDiffusion extends Content {
 		this.ny = dimJ;
 		this.nz = dimK;
 		nYZ = ny * nz;
+		iSetting = 4;
 		setupReaction();
 	}
 
@@ -145,10 +148,22 @@ public class ReactionDiffusion extends Content {
 					int ix = getIndex(x,y,z);
 					float f = (A[ix]-low)/(high-low);
 					float fb = (B[ix]-lowb)/(highb-lowb);
-					setVoxel(rgbFrame, x, y, z, 0, f*0.5f, f);
+					float[] rgb = getRGBfromHSV(fb);
+//					setVoxel(rgbFrame, x, y, z, 0, f*0.5f, f);
+					setVoxel(rgbFrame, x, y, z, rgb[0], rgb[1], rgb[2]);
 				}
 			}
 		}
+		
+		
+//		if (frameCount%20==0) {
+//			int ix = (int) Math.floor(Math.random() * (nx * ny * nz));
+//			A[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
+//			B[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
+//			An[ix] = Bn[ix] = 0;
+//		}
+		frameCount++;
+		
 		return --frames > 0;
 	}
 
@@ -194,5 +209,43 @@ public class ReactionDiffusion extends Content {
 				An[i] = Bn[i] = 0;
 			}
 		}
+	}
+	
+	private float[] getRGBfromHSV(float f) {
+		float V = 1-f;
+		float S = 1;
+		float C = V * S;
+		float H = f*360;
+		float X = (float) (C * (1 - Math.abs(H / 60.0 % 2 - 1)));
+
+		// HSV to RGB conversion for fancy rainbow colors
+		float r, g, b;
+		if (H < 60) {
+			r = C;
+			g = X;
+			b = 0;
+		} else if (H < 120) {
+			r = X;
+			g = C;
+			b = 0;
+		} else if (H < 180) {
+			r = 0;
+			g = C;
+			b = X;
+		} else if (H < 240) {
+			r = 0;
+			g = X;
+			b = C;
+		} else if (H < 300) {
+			r = X;
+			g = 0;
+			b = C;
+		} else {
+			r = C;
+			g = 0;
+			b = X;
+		}
+		float[] out = {r,g,b};
+		return out;
 	}
 }

@@ -45,7 +45,7 @@ public class Boids extends Content {
 			b.move(delta);
 		}
 		// draw boids
-		int rad = 2;
+		int rad = 1;
 		int rd2 = rad * 2;
 		for (Boid b : boids) {
 			int lx = (int) Math.floor(b.pos.x - rad);
@@ -62,6 +62,7 @@ public class Boids extends Content {
 						int zt = z % 10;
 						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
 						d = 2-d;
+						d = 1;
 						setVoxel(rgbFrame, xt, yt, zt, d*b.color[0], d*b.color[1], d*b.color[2]);
 					}
 				}
@@ -70,7 +71,7 @@ public class Boids extends Content {
 		// fade out
 		for (int i=0; i<rgbFrame.length; i++) {
 			float d = rgbFrame[i];
-			rgbFrame[i] = d*0.5f;
+			rgbFrame[i] = d*0.98f;
 		}
 		
 		return --frames > 0;

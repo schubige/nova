@@ -52,13 +52,15 @@ public class BouncingMetaBallsT extends Content {
 						double dsq = Math.pow((this.positions[i][0] - x), 2) + Math.pow((this.positions[i][1] - y), 2)
 								+ Math.pow((this.positions[i][2] - z), 2);
 						dsq = Math.sqrt(dsq);
-						sum += 120 * rad / dsq;
+						sum += 150 * rad / dsq;
 					}
 					double r,g,b;
-					double v = CROP_INTERVAL(sum, 0, 255);
-					v = v>120?1:0;
+					double v = CROP_INTERVAL(sum, 0, 360);
+					double V = 1 / (1 + Math.exp(v - 150)); // sigmoid
+//					v = v>120?1:0;
+					v = 1-V;
 
-					setVoxel(rgbFrame, x, y, z, (float) v, (float) v, (float) v);
+					setVoxel(rgbFrame, x, y, z, 0, (float) (v*0.5), (float) v);
 				}
 			}
 		}
