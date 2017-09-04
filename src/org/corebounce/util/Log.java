@@ -1,7 +1,13 @@
 package org.corebounce.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.Calendar;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 
 /**
@@ -17,9 +23,32 @@ import java.util.logging.Level;
 public class Log {
 	public static final String LOG = "org.corebounce.util";
 
+	private static final boolean LOG_TO_FILE = true;
+
+	static {
+		if(LOG_TO_FILE) {
+			FileHandler fh;
+			SimpleDateFormat format = new SimpleDateFormat("MdHHmmss");
+			try {
+				fh = new FileHandler("NOVA_" + format.format(Calendar.getInstance().getTime()) + ".log");
+				fh.setFormatter(new SimpleFormatter());
+				Logger.getLogger(LOG).addHandler(fh);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static String getStackTrace(final Throwable throwable) {
+		final StringWriter sw = new StringWriter();
+		final PrintWriter pw = new PrintWriter(sw, true);
+		throwable.printStackTrace(pw);
+		return sw.getBuffer().toString();
+	}
+
 	private static String getMsg(Throwable t) {
-		return t instanceof InvocationTargetException ? ((InvocationTargetException) t).getTargetException().getMessage() : t.getMessage();
-		// return Util.toString(t).replace('\n','|');
+		String result = t instanceof InvocationTargetException ? ((InvocationTargetException) t).getTargetException().getMessage() : t.getMessage();
+		return result + " -- " + getStackTrace(t);
 	}
 
 	public static void entering(Object o, String method) {
@@ -51,13 +80,10 @@ public class Log {
 	}
 
 	public static void severe(String msg) {
-		System.err.println("SEVERE:" + msg);
 		Logger.getLogger(LOG).log(Level.SEVERE, msg);
 	}
 
 	public static void severe(Throwable t) {
-		System.err.println("SEVERE:" + getMsg(t));
-		t.printStackTrace(System.err);
 		Logger.getLogger(LOG).log(Level.SEVERE, getMsg(t), t);
 	}
 }

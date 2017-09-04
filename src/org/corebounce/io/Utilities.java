@@ -17,6 +17,8 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
 
+import org.corebounce.util.Log;
+
 /**
  * Various io utilities.
  * 

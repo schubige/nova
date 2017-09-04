@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.corebounce.net.Log;
+import org.corebounce.util.Log;
 import org.corebounce.net.AddressUtilities;
 
 /**
@@ -182,10 +182,10 @@ public class HTTPServer implements Runnable {
 			System.exit(1);
 		}
 		int port = Integer.parseInt(argv[0]);
-		System.out.print("Starting up: " + AddressUtilities.getDefaultInterface() + ":" + port);
+		Log.info("Starting up: " + AddressUtilities.getDefaultInterface() + ":" + port);
 		HTTPServer server = new HTTPServer(port);
 		server.addHandler(new HandlerGET(new File(argv[1]), server), "/");
 		server.start();
-		System.out.println("\nRunning.");
+		Log.info("\nRunning.");
 	}
 }

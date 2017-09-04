@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Stack;
 
+import org.corebounce.util.Log;
 import org.corebounce.util.UTHTML;
 
 /**
@@ -88,7 +89,7 @@ public class HtmlPrintWriter implements HTML {
 		try {
 			print("<" + tag.substring(1) + ">");
 		} catch (StringIndexOutOfBoundsException e) {
-			e.printStackTrace();
+			Log.severe(e);
 		}
 	}
 
@@ -104,7 +105,7 @@ public class HtmlPrintWriter implements HTML {
 			try {
 				end(tag_stack.peek());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.severe(e);
 			}
 		}
 		writer.close();
@@ -138,7 +139,7 @@ public class HtmlPrintWriter implements HTML {
 		try {
 			print("<" + tag.substring(1));
 		} catch (StringIndexOutOfBoundsException e) {
-			e.printStackTrace();
+			Log.severe(e);
 		}
 		for (int i = 0; i < attributes.length; i += 2) {
 			print("\n" + attributes[i] + "=" + "\"" + attributes[i+1] + "\"");
@@ -179,20 +180,5 @@ public class HtmlPrintWriter implements HTML {
 			writer.println("<null>");
 		else
 			writer.println(UTHTML.trans.getNative(s));
-	}
-
-	public static void main(String[] argv) {
-		try {
-			HtmlPrintWriter html = new HtmlPrintWriter("hello", System.out);
-			html.tag(B);
-			html.println("Hello World!");
-			html.end(B);
-			html.tag(A, "HREF", "mailto:simon.schubiger@unifr.ch");
-			html.println("Dont't write me!");
-			html.end(A);
-			html.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

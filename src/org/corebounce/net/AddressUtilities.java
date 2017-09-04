@@ -14,8 +14,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import org.corebounce.util.Preferences;
-
 /**
  * Implementation of iiuf.net, Utilities
  * 
@@ -25,29 +23,15 @@ import org.corebounce.util.Preferences;
  */
 @SuppressWarnings("nls")
 public class AddressUtilities {
-
-	private final static String PREF_NETWORK_INTERFACE = "netif";
-	private final static String PREF_NETWORK_IPV6 = "ipv6";
-
 	private static final int[][] PRIVATE_ADDRS = { { 10 }, { 192, 168 },
 			{ 172, 16 }, { 172, 17 }, { 172, 18 }, { 172, 19 }, { 172, 20 },
 			{ 172, 21 }, { 172, 22 }, { 172, 23 }, { 172, 24 }, { 172, 25 },
 			{ 172, 26 }, { 172, 27 }, { 172, 28 }, { 172, 29 }, { 172, 30 },
 			{ 172, 31 }, };
 
-	static {
-		Preferences.addDefine(PREF_NETWORK_INTERFACE, "[string] Network interface to listen to (IP address or hostname)");
-		Preferences.addDefine(PREF_NETWORK_IPV6, "Enable IPV6");
-	}
-
 	
 	public static InetAddress getDefaultInterface() throws UnknownHostException, SocketException {
-		String  netif = (String)Preferences.get(PREF_NETWORK_INTERFACE);
-		
-		if (netif != null)
-			return InetAddress.getByName(netif);
-		
-		boolean ipv6  = Preferences.isDefined(PREF_NETWORK_IPV6);
+		boolean ipv6  = false;
 		
 	    InetAddress addr = getFirstNonLoopback(!ipv6);
 	    if (addr != null) return addr;

@@ -21,7 +21,7 @@ public class SystemInfo {
 
 		int r = Pcap.findAllDevs(alldevs, errbuf);  
 		if (r == Pcap.NOT_OK || alldevs.isEmpty()) {  
-			System.err.printf("Can't read list of devices, error is %s", errbuf.toString());  
+			Log.severe("Can't read list of devices, error is " + errbuf.toString());  
 			return "";
 		} 
 		try {

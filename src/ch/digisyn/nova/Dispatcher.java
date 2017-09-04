@@ -1,5 +1,6 @@
 package ch.digisyn.nova;
 
+import org.corebounce.util.Log;
 
 public class Dispatcher extends Thread implements IConstants {
 	final EnetInterface device;
@@ -17,6 +18,7 @@ public class Dispatcher extends Thread implements IConstants {
 		this.sync = sync;
 	}
 	
+	@Override
 	public void run() {
 		byte[] status = new byte[ADDR_LEN + PROT_LEN + DATA_LEN];
 		AddressUtils.SYNC(status, 6);
@@ -46,7 +48,7 @@ public class Dispatcher extends Thread implements IConstants {
 					}
 				}
 			} catch(Throwable t) {
-				t.printStackTrace();
+				Log.severe(t);
 			}
 		}
 	}

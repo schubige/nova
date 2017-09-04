@@ -93,21 +93,5 @@ public abstract class UnicodeTranslator {
 		}
 		return result;
 	}
-
-	public static void main(String[] argv) {
-		Field[] fields = Unicode.class.getFields();
-
-		for (int i = 0; i < fields.length; i++) {
-			if (fields[i].getModifiers() != (Modifier.FINAL | Modifier.PUBLIC | Modifier.STATIC))
-				continue;
-			try {
-				Object o = fields[i].get(Unicode.class);
-				if (o instanceof String)
-					System.out.println(o + ":" + Integer.toHexString(((String) o).charAt(0)) + ":" + fields[i].getName());
-			} catch (IllegalAccessException e) {
-				Log.warning(e);
-			}
-		}
-	}
 }
 

@@ -399,7 +399,7 @@ public class Strings {
 			try{
 				for(int i = 0; i < ILLEGAL_NAME_CHARS.length(); i++)
 					result = result.replace(ILLEGAL_NAME_CHARS.charAt(i), '_');
-			} catch(StringIndexOutOfBoundsException e) {e.printStackTrace();}
+			} catch(StringIndexOutOfBoundsException e) {Log.severe(e);}
 
 			String[] sresult = split(result, '_');
 

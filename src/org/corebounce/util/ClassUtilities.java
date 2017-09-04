@@ -252,7 +252,7 @@ public class ClassUtilities {
 			for(Field f : type.getDeclaredFields())
 				result.add(f);
 		} catch(Throwable t) {
-			t.printStackTrace();
+			Log.severe(t);
 		}
 		return getAllFields(type.getSuperclass(), result);
 	}

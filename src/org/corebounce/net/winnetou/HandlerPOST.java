@@ -4,7 +4,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimePartDataSource;
 
-import org.corebounce.net.Log;
+import org.corebounce.util.Log;
 import org.corebounce.net.MIME;
 import org.corebounce.net.AddressUtilities;
 import org.corebounce.util.Strings;

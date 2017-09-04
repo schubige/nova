@@ -12,6 +12,8 @@ import java.nio.MappedByteBuffer;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+import org.corebounce.util.Log;
+
 @SuppressWarnings("nls")
 public class Common3DD {
 	private static RandomAccessFile currentRA;
@@ -136,7 +138,7 @@ public class Common3DD {
 				} else
 					frameArray = frame.get(); 
 			} catch(Throwable t)  {
-				t.printStackTrace();
+				Log.severe(t);
 			}
 			return frameArray;
 		}

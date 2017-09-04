@@ -13,7 +13,7 @@ import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.corebounce.net.Log;
+import org.corebounce.util.Log;
 import org.corebounce.net.winnetou.HTTPServer;
 import org.corebounce.util.ClassUtilities;
 
@@ -53,7 +53,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		this.selfIpPort = this.socket.getLocalPort();
 
 		for(EnetInterface eif : EnetInterface.interfaces()) 
-			System.out.println("Interface:" + eif);
+			Log.info("Interface:" + eif);
 
 		EnetInterface device = null;
 		for(EnetInterface eif : EnetInterface.interfaces()) {
@@ -111,7 +111,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		for(;;) {
 			try {
 				getStatus();
-				System.out.println("NOVA Status: " + config.numOperational() + " of " + config.numModules() + " operational");
+				Log.info("NOVA Status: " + config.numOperational() + " of " + config.numModules() + " operational");
 				if(config.isOperational()) {
 					if(!(isOn()))
 						novaOn();
@@ -123,7 +123,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 				}
 				Thread.sleep(isOn() ? 10000 : 1000);
 			} catch(Throwable t) {
-				t.printStackTrace();
+				Log.severe(t);
 			}
 		}
 	}
@@ -140,7 +140,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 				}
 				if(addr.length != 4) throw new UnknownHostException("Not an IPv4 address:" + ip);
 			} catch (UnknownHostException e) {
-				e.printStackTrace();
+				Log.severe(e);
 				ip = "127.0.01";
 			}
 		}
@@ -155,7 +155,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 		/*
 		if(System.getProperty("os.name").toLowerCase().contains("windows") && System.getProperty("java.vm.name").contains("64")) {
-			System.out.println(NOVAControl.class.getName() + " requires a 32 Bit VM, current VM is '" + System.getProperty("java.vm.name") + "'");
+			Log.severe(NOVAControl.class.getName() + " requires a 32 Bit VM, current VM is '" + System.getProperty("java.vm.name") + "'");
 			System.exit(0);
 		}*/
 
@@ -201,7 +201,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 				Content c = cls.getConstructor(ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int).
 						newInstance(novaConfig.dimI(), novaConfig.dimJ(), novaConfig.dimK(), numFrames);
 				for(Content ci : c.getContents()) {
-					System.out.println("Adding content '" + ci + "'");
+					Log.info("Adding content '" + ci + "'");
 					contents.add(ci);
 				}
 			} catch(Throwable t) {
@@ -288,7 +288,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 	public static void setContent(int value) {
 		try{contents.get(content).stop();}catch(Throwable t) {}
 		content = value % contents.size();
-		System.out.println("setContent(" + content + ")" + contents.get(content));
+		Log.info("setContent(" + content + ")" + contents.get(content));
 		try{contents.get(content).start();}catch(Throwable t) {}
 	}
 
@@ -299,7 +299,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 	@SuppressWarnings("nls")
 	public void novaOn() throws IOException, InterruptedException {
 		if(!(isOn()) && device != null) {
-			System.out.println("NOVA ON");
+			Log.info("NOVA ON");
 			reset();
 			syncGen = new SyncGenerator(device, disp);
 			for(int i = -MODULE_QUEUE_SIZE; i < 0; i++)
@@ -322,10 +322,11 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 
 	@SuppressWarnings("nls")
 	void reset() throws IOException, InterruptedException {
-		System.out.print("Resetting Modules:");
+		StringBuilder msg = new StringBuilder("Resetting Modules:");
 		for(int m : config.getModules())
-			System.out.print(" " + m);
-		System.out.println();		
+			msg.append(" ").append(m);
+		msg.append('\n');
+		Log.info(msg.toString());
 		for(int i = 0; i < 4; i++) {
 			for(int m : config.getModules()) {
 				byte[] packet = packet();
@@ -340,13 +341,13 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			send(packet, m);
 		}
 		Thread.sleep(1000);
-		System.out.println("Reset done.");
+		Log.info("Reset done.");
 	}
 
 	@SuppressWarnings("nls")
 	public void novaOff() {
 		if(isOn()) {
-			System.out.println("NOVA OFF");
+			Log.info("NOVA OFF");
 			syncGen.setListener(null);
 			syncGen.dispose();
 			syncGen = null;
@@ -408,7 +409,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 					setContent(getContent() + 1);
 				}
 			} catch(Throwable t) {
-				t.printStackTrace();
+				Log.severe(t);
 			}
 		}
 	}
@@ -427,7 +428,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			final byte[]  packet = packet();
 
 			if(frame == null) {
-				System.out.println("Frame queue underrun");
+				Log.info("Frame queue underrun");
 				return;
 			}
 
@@ -438,7 +439,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 
 			frameQ.add(frame);
 		} catch(Throwable t) {
-			t.printStackTrace();
+			Log.severe(t);
 		}
 	}
 
@@ -455,9 +456,9 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 				Thread.sleep(500);
 				if(config.numOperational() > 0)
 					return;
-				System.out.println("No modules found, retry " + (1 + i));
+				Log.info("No modules found, retry " + (1 + i));
 			} catch(Throwable t) {
-				t.printStackTrace();
+				Log.severe(t);
 			}
 		}
 	}
