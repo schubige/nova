@@ -50,14 +50,27 @@ public class ReactionDiffusion extends Content {
 		this.ny = dimJ;
 		this.nz = dimK;
 		nYZ = ny * nz;
-		iSetting = 4;
+		iSetting = 2;
 		setupReaction();
 	}
 
+	int a = 0;
+	int b = 1;
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
 		int i = 0;
 		// diffuse;
+		
+		CA = settings[iSetting][0];
+		CB = settings[iSetting][1];
+		double fct = (Math.sin(timeInSec*0.1)*0.5)+0.5;
+		CA = (float) (fct*settings[a][0] + (1-fct)*settings[b][0]);
+		CB = (float) (fct*settings[a][1] + (1-fct)*settings[b][1]);
+		if (1-fct < 0.000001) {
+			a = b;
+			b = (b+1) % 5;
+			System.out.println(a+" : "+ b);
+		}
 
 		for (int x = 0; x < nx; x++) {
 			for (int y = 0; y < ny; y++) {
@@ -188,7 +201,8 @@ public class ReactionDiffusion extends Content {
 		B = new float[nx * ny * nz];
 		An = new float[nx * ny * nz];
 		Bn = new float[nx * ny * nz];
-		initRandom();
+//		initRandom();
+		initSym();
 	}
 
 	public int getIndex(int x, int y, int z) {
@@ -211,6 +225,23 @@ public class ReactionDiffusion extends Content {
 				A[i] = -7 + (float) Math.random() * (17 + 7);
 				B[i] = -7 + (float) Math.random() * (17 + 7);
 				An[i] = Bn[i] = 0;
+			}
+		}
+	}
+	
+	public void initSym() {
+		for (int i = 0; i < An.length; i++) {
+			A[i] = -7;
+			B[i] = -7;
+			An[i] = Bn[i] = 0;
+		}
+		for (int x=23; x<27; x++) {
+			for (int y=3; y<7; y++) {
+				for (int z=3; z<7; z++) {
+					int ix = getIndex(x, y, z);
+					A[ix] = 17;
+					B[ix] = 17;
+				}
 			}
 		}
 	}
