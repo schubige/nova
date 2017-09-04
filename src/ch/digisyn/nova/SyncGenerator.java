@@ -20,13 +20,14 @@ public class SyncGenerator implements IConstants {
 	private        ISyncListener listener;
 	private        long          last;
 	private final  Dispatcher    disp;
-	private static final boolean NOSLEEP    = System.getProperty("nosleep") != null;
+	private static final boolean NOSLEEP    = true;
 	
 	public SyncGenerator(EnetInterface device, Dispatcher disp) {
 		this.device = device;
 		this.disp   = disp;
 		disp.setSyncGen(this);
 		sync = new Thread() {
+			@SuppressWarnings("unused")
 			@Override
 			public void run() {
 				try {
@@ -49,7 +50,7 @@ public class SyncGenerator implements IConstants {
 								PacketUtils.pll(packet, ADDR_LEN, seqNum.get());
 							SyncGenerator.this.device.send(packet);
 							if(DBG && ticks > 1)
-								Log.info("Sync miss");
+								Log.info("Sync miss: " + ticks);
 							while(ticks-- > 0) {
 								seqNum.incrementAndGet();
 								if((seqNum.get() & 1) == 1 && listener != null && running.get())

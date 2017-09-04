@@ -405,7 +405,6 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 				}
 				txQ.add(frame);
 				if(!(continueWithContent)) {
-					resetNOVA();
 					setContent(getContent() + 1);
 				}
 			} catch(Throwable t) {

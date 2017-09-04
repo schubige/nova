@@ -138,11 +138,13 @@ public class EnetInterface implements IConstants {
 			if (pcap.sendPacket(b) != Pcap.OK) 
 				Log.severe(pcap.getErr());  
 		}
+		/*
 		try {
 			Thread.sleep(SEND_DELAY);
 		} catch(Throwable t) {
 			throw new IOException(t);
 		}
+		*/
 	}
 
 	public byte[] recieve() throws InterruptedException {
