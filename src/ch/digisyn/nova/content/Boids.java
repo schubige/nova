@@ -8,7 +8,7 @@ public class Boids extends Content {
 	private double prevTime = 0;
 	public Boids(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Boids", dimI, dimJ, dimK, numFrames);
-		int NUM = 20;
+		int NUM = 30;
 		MVector nc = new MVector(0,0,0);
 		MVector xc = new MVector(50,10,10);
 		
@@ -60,9 +60,9 @@ public class Boids extends Content {
 					int yt = y % 10;
 					for (int z=lz; z<lz+rd2; z++) {
 						int zt = z % 10;
-//						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
-//						d = 2-d;
-						float d = 1;
+						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
+						d = 2f-d;
+//						float d = 1;
 						setVoxel(rgbFrame, xt, yt, zt, d*b.color[0], d*b.color[1], d*b.color[2]);
 					}
 				}
@@ -71,7 +71,7 @@ public class Boids extends Content {
 		// fade out
 		for (int i=0; i<rgbFrame.length; i++) {
 			float d = rgbFrame[i];
-			rgbFrame[i] = d*0.98f;
+			rgbFrame[i] = d*0.9f;
 		}
 		
 		return --frames > 0;

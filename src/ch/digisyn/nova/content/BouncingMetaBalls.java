@@ -3,7 +3,7 @@ package ch.digisyn.nova.content;
 @SuppressWarnings("nls")
 public class BouncingMetaBalls extends Content {
 
-	private static final int NUM = 7; // number of ball centers
+	private static final int NUM = 8; // number of ball centers
 	private double[][] positions;
 	private double[][] speeds;
 	private double[] radii;
@@ -23,6 +23,7 @@ public class BouncingMetaBalls extends Content {
 			for (int j = 0; j < 3; j++) {
 				this.positions[i][j] = FRAND(0, dim[j]);
 				this.speeds[i][j] = FRAND(-0.2, 0.2);
+				if (j==0) this.speeds[i][j] *= 3;
 			}
 			this.radii[i] = FRAND(1.2, 2.2);
 		}
@@ -39,7 +40,7 @@ public class BouncingMetaBalls extends Content {
 				if (this.positions[i][j] < 0 || this.positions[i][j] > dim[j]) {
 					this.speeds[i][j] *= -1;
 				}
-//				this.speeds[i][j] += FRAND(-0.05, 0.05);
+//				this.speeds[i][j] += FRAND(-0.02, 0.02);
 			}
 		}
 
@@ -53,13 +54,13 @@ public class BouncingMetaBalls extends Content {
 						double dsq = Math.pow((this.positions[i][0] - x), 2) + Math.pow((this.positions[i][1] - y), 2)
 								+ Math.pow((this.positions[i][2] - z), 2);
 						dsq = Math.sqrt(dsq);
-						sum += 150 * rad / dsq;
+						sum += 110 * rad / dsq;
 					}
 					double S = 1;
 					// double V = sum > 80 ? 1 : 0;
 					// activation functions
 					// double V = (Math.tanh(sum-80)+1)*0.5; // tanh
-					double V = 1 / (1 + Math.exp(sum - 130)); // sigmoid
+					double V = 1 / (1 + Math.exp(sum - 140)); // sigmoid
 					V = 1 - V;
 					double C = V * S;
 					double H = CROP_INTERVAL(sum, 0, 360);

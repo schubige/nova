@@ -59,16 +59,16 @@ public class Boid {
 		ali = this.alignment(boids);
 		coh = this.cohesion(boids);
 		sep = this.separation(boids);
-//		this.acc.add(MVector.mult(ali, 0.5));
-//		this.acc.add(MVector.mult(coh, 1));
-		this.acc.add(MVector.mult(sep, 3));
+		this.acc.add(MVector.mult(ali, 1));
+		this.acc.add(MVector.mult(coh, 1.5));
+		this.acc.add(MVector.mult(sep, 2));
 		
 		// avoid walls, no direct bounce as in vel *= -1
 		float f = 0.5f;
+//		this.acc.add(MVector.mult(avoid(new MVector(maxc.x, pos.y, pos.z), true),  f));
+//		this.acc.add(MVector.mult(avoid(new MVector(minc.x, pos.y, pos.z), true),  f));
 		this.acc.add(MVector.mult(avoid(new MVector(pos.x, maxc.y, pos.z), true),  f));
 		this.acc.add(MVector.mult(avoid(new MVector(pos.x, minc.y, pos.z), true),  f));
-		this.acc.add(MVector.mult(avoid(new MVector(maxc.x, pos.y, pos.z), true),  f));
-		this.acc.add(MVector.mult(avoid(new MVector(minc.x, pos.y, pos.z), true),  f));
 		this.acc.add(MVector.mult(avoid(new MVector(pos.x, pos.y, maxc.z), true),  f));
 		this.acc.add(MVector.mult(avoid(new MVector(pos.x, pos.y, minc.z), true),  f));
 	}
@@ -128,8 +128,6 @@ public class Boid {
 		MVector steer = MVector.sub(this.pos, target);
 		if (weight)
 			steer.mult(1 / Math.pow(MVector.dist(pos, target), 2));
-		// steer.limit(maxSteerForce); //limits the steering force to
-		// maxSteerForce
 		return steer;
 	}
 

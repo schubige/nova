@@ -148,23 +148,24 @@ public class ReactionDiffusion extends Content {
 					int ix = getIndex(x,y,z);
 					float f = (A[ix]-low)/(high-low);
 					float fb = (B[ix]-lowb)/(highb-lowb);
-					float[] rgb = getRGBfromHSV(fb);
+					float[] rgb = getRGBfromHSV(f);
 //					setVoxel(rgbFrame, x, y, z, 0, f*0.5f, f);
 					setVoxel(rgbFrame, x, y, z, rgb[0], rgb[1], rgb[2]);
 				}
 			}
 		}
 		
-		
-		if (frameCount%300==0) {
+//		CB += Math.sin(frameCount/1000.0)*0.2;
+//		CA += Math.sin(frameCount/1000.0)*0.2;
+//		if (frameCount%500==0) {
 //			int ix = (int) Math.floor(Math.random() * (nx * ny * nz));
 //			A[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
 //			B[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
 //			An[ix] = Bn[ix] = 0;
-			iSetting = (iSetting+1) % settings.length;
-			CA = settings[iSetting][0];
-			CB = settings[iSetting][1];
-		}
+//			iSetting = (iSetting+1) % settings.length;
+//			CA = settings[iSetting][0];
+//			CB = settings[iSetting][1];
+//		}
 		frameCount++;
 		
 		return --frames > 0;
