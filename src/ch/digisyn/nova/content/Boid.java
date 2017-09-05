@@ -18,6 +18,8 @@ public class Boid {
 		ali = new MVector();
 		coh = new MVector();
 		sep = new MVector();
+		minc = new MVector(0,0,0);
+		maxc = new MVector(50,10,10);
 	}
 
 	public Boid(MVector nc, MVector xc) {
@@ -30,6 +32,18 @@ public class Boid {
 		sep = new MVector();
 		minc = nc;
 		maxc = xc;
+	}
+	
+	public Boid(double x, double y, double z) {
+		pos = new MVector(x,y,z);
+		vel = MVector.random3D();
+		vel.mult(0.7);
+		acc = new MVector();
+		ali = new MVector();
+		coh = new MVector();
+		sep = new MVector();
+		minc = new MVector(0,0,0);
+		maxc = new MVector(50,10,10);
 	}
 
 	public void move(double t) {
@@ -56,17 +70,17 @@ public class Boid {
 	}
 
 	public void flock(ArrayList<Boid> boids) {
-		ali = this.alignment(boids);
-		coh = this.cohesion(boids);
+//		ali = this.alignment(boids);
+//		coh = this.cohesion(boids);
 		sep = this.separation(boids);
-		this.acc.add(MVector.mult(ali, 1));
-		this.acc.add(MVector.mult(coh, 1.5));
+//		this.acc.add(MVector.mult(ali, 1));
+//		this.acc.add(MVector.mult(coh, 1.5));
 		this.acc.add(MVector.mult(sep, 2));
 		
 		// avoid walls, no direct bounce as in vel *= -1
 		float f = 0.5f;
-//		this.acc.add(MVector.mult(avoid(new MVector(maxc.x, pos.y, pos.z), true),  f));
-//		this.acc.add(MVector.mult(avoid(new MVector(minc.x, pos.y, pos.z), true),  f));
+		this.acc.add(MVector.mult(avoid(new MVector(maxc.x, pos.y, pos.z), true),  f));
+		this.acc.add(MVector.mult(avoid(new MVector(minc.x, pos.y, pos.z), true),  f));
 		this.acc.add(MVector.mult(avoid(new MVector(pos.x, maxc.y, pos.z), true),  f));
 		this.acc.add(MVector.mult(avoid(new MVector(pos.x, minc.y, pos.z), true),  f));
 		this.acc.add(MVector.mult(avoid(new MVector(pos.x, pos.y, maxc.z), true),  f));

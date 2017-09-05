@@ -3,7 +3,7 @@ package ch.digisyn.nova.content;
 import java.util.Random;
 
 @SuppressWarnings("nls")
-public class ReactionDiffusion extends Content {
+public class ReactionDiffusionRandom extends Content {
 
 	public int nx = 42;
 	public int ny = 2;
@@ -44,8 +44,8 @@ public class ReactionDiffusion extends Content {
 	
 	private int frameCount = 0;
 
-	public ReactionDiffusion(int dimI, int dimJ, int dimK, int numFrames) {
-		super("ReactionDiffusion", dimI, dimJ, dimK, numFrames);
+	public ReactionDiffusionRandom(int dimI, int dimJ, int dimK, int numFrames) {
+		super("ReactionDiffusionRandom", dimI, dimJ, dimK, numFrames);
 		this.nx = dimI;
 		this.ny = dimJ;
 		this.nz = dimK;
@@ -168,17 +168,6 @@ public class ReactionDiffusion extends Content {
 			}
 		}
 		
-//		CB += Math.sin(frameCount/1000.0)*0.2;
-//		CA += Math.sin(frameCount/1000.0)*0.2;
-//		if (frameCount%500==0) {
-//			int ix = (int) Math.floor(Math.random() * (nx * ny * nz));
-//			A[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
-//			B[ix] *= Math.random()*0.2-0.1; //-7 + (float) Math.random() * (17 + 7);
-//			An[ix] = Bn[ix] = 0;
-//			iSetting = (iSetting+1) % settings.length;
-//			CA = settings[iSetting][0];
-//			CB = settings[iSetting][1];
-//		}
 		frameCount++;
 		
 		return --frames > 0;
@@ -201,8 +190,8 @@ public class ReactionDiffusion extends Content {
 		B = new float[nx * ny * nz];
 		An = new float[nx * ny * nz];
 		Bn = new float[nx * ny * nz];
-//		initRandom();
-		initSym();
+		initRandom();
+//		initSym();
 	}
 
 	public int getIndex(int x, int y, int z) {
