@@ -10,7 +10,7 @@ public class Pong extends Content {
 	double radius;
 
 	public Pong(int dimI, int dimJ, int dimK, int numFrames) {
-		super("BoidsNr", dimI, dimJ, dimK, numFrames);
+		super("Pong", dimI, dimJ, dimK, numFrames);
 
 		ball = new MVector(25, 5, 5);
 		double sx = FRAND(0.4,0.7);
@@ -39,13 +39,13 @@ public class Pong extends Content {
 		
 		int rad = 1;
 		int rd2 = rad * 2;
-		int lx = (int) Math.floor(ball.x - rad);
+		int lx = (int) Math.floor(ball.x - radius);
 		if (lx < rad)
 			lx += 48;
-		int ly = (int) Math.floor(ball.y - rad);
+		int ly = (int) Math.floor(ball.y - radius);
 		if (ly < rad)
 			ly += 8;
-		int lz = (int) Math.floor(ball.z - rad);
+		int lz = (int) Math.floor(ball.z - radius);
 		if (lz < rad)
 			lz += 8;
 		for (int x = lx; x < lx + rd2; x++) {
