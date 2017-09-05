@@ -63,10 +63,10 @@ public class ReactionDiffusionRandom extends Content {
 		
 		CA = settings[iSetting][0];
 		CB = settings[iSetting][1];
-		double fct = (Math.sin(timeInSec*0.5)*0.5)+0.5;
+		double fct = (Math.sin(timeInSec)*0.5)+0.5;
 		CA = (float) (fct*settings[a][0] + (1-fct)*settings[b][0]);
 		CB = (float) (fct*settings[a][1] + (1-fct)*settings[b][1]);
-		if (1-fct < 0.000002) {
+		if (1-fct < 0.000005) {
 			a = b;
 			b = (b+1) % 5;
 			System.out.println(a+" : "+ b);
