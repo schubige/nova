@@ -5,17 +5,17 @@ import java.util.Random;
 @SuppressWarnings("nls")
 public class ReactionDiffusion extends Content {
 
-	public int nx = 42;
-	public int ny = 2;
-	public int nz = 5;
+	public int nx;
+	public int ny;
+	public int nz;
 	int nYZ;
 
 	// float CA = 2.6;
 	// float CB = 24;
 //	float CA = 0.7f;
 //	float CB = 14f;
-	float CA =  0.1f;
-	float CB = 1f;
+	float CA;
+	float CB;
 
 	// boolean endless;
 	// boolean drawBox;
@@ -61,8 +61,8 @@ public class ReactionDiffusion extends Content {
 		int i = 0;
 		// diffuse;
 		
-		CA = settings[iSetting][0];
-		CB = settings[iSetting][1];
+//		CA = settings[iSetting][0];
+//		CB = settings[iSetting][1];
 		double fct = (Math.sin(timeInSec)*0.5)+0.5;
 		CA = (float) (fct*settings[a][0] + (1-fct)*settings[b][0]);
 		CB = (float) (fct*settings[a][1] + (1-fct)*settings[b][1]);

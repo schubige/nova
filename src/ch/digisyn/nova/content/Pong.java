@@ -5,9 +5,9 @@ import java.util.Arrays;
 @SuppressWarnings("nls")
 public class Pong extends Content {
 
-	MVector ball;
-	MVector speed;
-	double radius;
+	public MVector ball;
+	public MVector speed;
+	public double radius;
 
 	public Pong(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Pong", dimI, dimJ, dimK, numFrames);
@@ -34,8 +34,8 @@ public class Pong extends Content {
 		if (ball.z-radius < 0 || ball.z+radius > 10)
 			speed.z = speed.z * -1;
 		
-		speed.y = speed.y + FRAND(-0.01,0.01);
-		speed.z = speed.z + FRAND(-0.01,0.01);
+//		speed.y = speed.y + FRAND(-0.01,0.01);
+//		speed.z = speed.z + FRAND(-0.01,0.01);
 		
 		int rad = 1;
 		int rd2 = rad * 2;
@@ -56,6 +56,7 @@ public class Pong extends Content {
 					int zt = z % 10;
 					float dst = (float) MVector.dist(ball, new MVector(x, y, z));
 					dst = 2 - dst;
+					if (dst>1) dst = 1;
 					// float d = 1;
 //					dst = 1;
 					setVoxel(rgbFrame, xt, yt, zt, dst, dst, dst);

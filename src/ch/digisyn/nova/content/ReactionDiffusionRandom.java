@@ -5,17 +5,17 @@ import java.util.Random;
 @SuppressWarnings("nls")
 public class ReactionDiffusionRandom extends Content {
 
-	public int nx = 42;
-	public int ny = 2;
-	public int nz = 5;
+	public int nx;
+	public int ny;
+	public int nz;
 	int nYZ;
 
 	// float CA = 2.6;
 	// float CB = 24;
 //	float CA = 0.7f;
 //	float CB = 14f;
-	float CA =  0.1f;
-	float CB = 1f;
+	float CA;
+	float CB;
 
 	// boolean endless;
 	// boolean drawBox;
