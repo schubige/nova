@@ -42,8 +42,6 @@ public class ReactionDiffusionRandom extends Content {
 	public final static int PATTERN_TEST = 7;
 	public Random random;
 	
-	private int frameCount = 0;
-
 	public ReactionDiffusionRandom(int dimI, int dimJ, int dimK, int numFrames) {
 		super("ReactionDiffusionRandom", dimI, dimJ, dimK, numFrames);
 		this.nx = dimI;
@@ -145,13 +143,9 @@ public class ReactionDiffusionRandom extends Content {
 		// max min
 		low = Float.MAX_VALUE;
 		high = Float.NEGATIVE_INFINITY;
-		float lowb = Float.MAX_VALUE;
-		float highb = Float.NEGATIVE_INFINITY;
 		for (i = 0; i < An.length; i++) {
 			high = Math.max(A[i], high);
 			low = Math.min(A[i], low);
-			highb = Math.max(B[i], highb);
-			lowb = Math.min(B[i], lowb);
 		}
 
 		// render
@@ -160,7 +154,6 @@ public class ReactionDiffusionRandom extends Content {
 				for (int z = 0; z < nz; z++) {
 					int ix = getIndex(x,y,z);
 					float f = (A[ix]-low)/(high-low);
-					float fb = (B[ix]-lowb)/(highb-lowb);
 					float[] rgb = getRGBfromHSV(f);
 //					setVoxel(rgbFrame, x, y, z, 0, f*0.5f, f);
 					setVoxel(rgbFrame, x, y, z, rgb[0], rgb[1], rgb[2]);
@@ -168,7 +161,6 @@ public class ReactionDiffusionRandom extends Content {
 			}
 		}
 		
-		frameCount++;
 		
 		return --frames > 0;
 	}
