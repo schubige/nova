@@ -3,11 +3,11 @@ package ch.digisyn.nova.content;
 import java.util.ArrayList;
 
 @SuppressWarnings("nls")
-public class Boids extends Content {
+public class BoidsNr extends Content {
 	ArrayList<Boid> boids;
 	private double prevTime = 0;
-	public Boids(int dimI, int dimJ, int dimK, int numFrames) {
-		super("Boids", dimI, dimJ, dimK, numFrames);
+	public BoidsNr(int dimI, int dimJ, int dimK, int numFrames) {
+		super("BoidsNr", dimI, dimJ, dimK, numFrames);
 		int NUM = 30;
 		MVector nc = new MVector(0,0,0);
 		MVector xc = new MVector(10,50,10);
@@ -29,7 +29,8 @@ public class Boids extends Content {
 		
 		boids = new ArrayList<Boid>();
 		for (int i = 0; i < NUM; i++) {
-			Boid b = new Boid(nc,xc);
+//			Boid b = new Boid(nc,xc);
+			Boid b = new Boid(5,25,5);
 			b.color = colors[i%6];
 			boids.add(b);
 		}
@@ -71,7 +72,7 @@ public class Boids extends Content {
 		// fade out
 		for (int i=0; i<rgbFrame.length; i++) {
 			float d = rgbFrame[i];
-			rgbFrame[i] = d*0.9f;
+			rgbFrame[i] = d*0.98f;
 		}
 		
 		return --frames > 0;
