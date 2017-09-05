@@ -25,7 +25,7 @@ public class EnetInterface implements IConstants {
 	private final byte[]                      addr;
 	private final LinkedBlockingQueue<byte[]> queue = new LinkedBlockingQueue<byte[]>();
 	private final AtomicBoolean               close = new AtomicBoolean();
-	private static final int                  SEND_DELAY = 1;
+	private static final int                  SEND_DELAY = 0;
 
 	static {
 		try {
@@ -132,19 +132,20 @@ public class EnetInterface implements IConstants {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void send(byte[] packet) throws IOException {
 		if(pcap != null) {
-			ByteBuffer b = ByteBuffer.wrap(packet);  
+			ByteBuffer b = ByteBuffer.wrap(packet);
 			if (pcap.sendPacket(b) != Pcap.OK) 
 				Log.severe(pcap.getErr());  
 		}
-		/*
-		try {
-			Thread.sleep(SEND_DELAY);
-		} catch(Throwable t) {
-			throw new IOException(t);
+		if(SEND_DELAY > 0) {
+			try {
+				Thread.sleep(SEND_DELAY);
+			} catch(Throwable t) {
+				throw new IOException(t);
+			}
 		}
-		*/
 	}
 
 	public byte[] recieve() throws InterruptedException {

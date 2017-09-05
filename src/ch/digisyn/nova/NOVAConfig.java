@@ -33,11 +33,11 @@ public final class NOVAConfig {
 			}
 		}
 		
-		this.dimJ        = maxJ * moduleDimI();
+		this.dimJ        = maxJ * moduleDimJ();
 		this.modulesFlat = new int[count];
 		System.arraycopy(tmp, 0, this.modulesFlat, 0, count);
 		if(this.modulesFlat.length == 0) throw new IllegalArgumentException("At least one module must be configured");
-		Log.info("Configured " + dimI + "x" + dimJ + (flipK ? " flipped" : ""));
+		Log.info("Configured dimI=" + dimI + ", dimJ=" + dimJ + ", dimK=" + moduleDimK() + (flipK ? " (upside down)" : ""));
 	}
 
 	private int calcFrameOffset(int m) {
