@@ -12,14 +12,14 @@ public class Boid {
 	public float[] color;
 
 	public Boid() {
-		pos = new MVector(FRAND(3, 47), FRAND(2, 8), FRAND(2, 8));
+		pos = new MVector(FRAND(2, 8), FRAND(3, 47), FRAND(2, 8));
 		vel = MVector.random3D();
 		acc = new MVector();
 		ali = new MVector();
 		coh = new MVector();
 		sep = new MVector();
 		minc = new MVector(0,0,0);
-		maxc = new MVector(50,10,10);
+		maxc = new MVector(10,50,10);
 	}
 
 	public Boid(MVector nc, MVector xc) {
@@ -43,7 +43,7 @@ public class Boid {
 		coh = new MVector();
 		sep = new MVector();
 		minc = new MVector(0,0,0);
-		maxc = new MVector(50,10,10);
+		maxc = new MVector(10,50,10);
 	}
 
 	public void move(double t) {

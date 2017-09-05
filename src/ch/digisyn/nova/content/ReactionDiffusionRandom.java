@@ -61,7 +61,7 @@ public class ReactionDiffusionRandom extends Content {
 		
 		CA = settings[iSetting][0];
 		CB = settings[iSetting][1];
-		double fct = (Math.sin(timeInSec)*0.5)+0.5;
+		double fct = (Math.sin(timeInSec*3)*0.5)+0.5;
 		CA = (float) (fct*settings[a][0] + (1-fct)*settings[b][0]);
 		CB = (float) (fct*settings[a][1] + (1-fct)*settings[b][1]);
 		if (1-fct < 0.000005) {
@@ -187,7 +187,9 @@ public class ReactionDiffusionRandom extends Content {
 	}
 
 	public int getIndex(int x, int y, int z) {
-		return x * nYZ + y * nz + z;
+//		return x * nYZ + y * nz + z;
+		return (z + nz * (x + y * nx));
+//		(k + (dimK * (i + j * dimI)))
 	}
 
 	public void copyValues(float[] values) {

@@ -10,7 +10,7 @@ public class BoidsNr extends Content {
 		super("BoidsNr", dimI, dimJ, dimK, numFrames);
 		int NUM = 30;
 		MVector nc = new MVector(0,0,0);
-		MVector xc = new MVector(50,10,10);
+		MVector xc = new MVector(10,50,10);
 		
 		float[] orange = {1,0.5f,0};
 		float[] cyan   = {0,0.5f,1};
@@ -30,7 +30,7 @@ public class BoidsNr extends Content {
 		boids = new ArrayList<Boid>();
 		for (int i = 0; i < NUM; i++) {
 //			Boid b = new Boid(nc,xc);
-			Boid b = new Boid(25,5,5);
+			Boid b = new Boid(5,25,5);
 			b.color = colors[i%6];
 			boids.add(b);
 		}
@@ -50,15 +50,15 @@ public class BoidsNr extends Content {
 		int rd2 = rad * 2;
 		for (Boid b : boids) {
 			int lx = (int) Math.floor(b.pos.x - rad);
-			if (lx<0) lx += 50;
+			if (lx<0) lx += 10;
 			int ly = (int) Math.floor(b.pos.y - rad);
-			if (ly<0) ly += 10;
+			if (ly<0) ly += 50;
 			int lz = (int) Math.floor(b.pos.z - rad);
 			if (lz<0) lz += 10;
 			for (int x=lx; x<lx+rd2; x++) {
-				int xt = x % 50;
+				int xt = x % 10;
 				for (int y=ly; y<ly+rd2; y++) {
-					int yt = y % 10;
+					int yt = y % 50;
 					for (int z=lz; z<lz+rd2; z++) {
 						int zt = z % 10;
 						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
