@@ -6,11 +6,16 @@ import java.util.ArrayList;
 public class BoidsNr extends Content {
 	ArrayList<Boid> boids;
 	private double prevTime = 0;
+	int nx,ny,nz;
+	
 	public BoidsNr(int dimI, int dimJ, int dimK, int numFrames) {
 		super("BoidsNr", dimI, dimJ, dimK, numFrames);
 		int NUM = 30;
+		nx = dimI;
+		ny = dimJ;
+		nz = dimK;
 		MVector nc = new MVector(0,0,0);
-		MVector xc = new MVector(10,50,10);
+		MVector xc = new MVector(nx,ny,nz);
 		
 		float[] orange = {1,0.5f,0};
 		float[] cyan   = {0,0.5f,1};
@@ -29,8 +34,8 @@ public class BoidsNr extends Content {
 		
 		boids = new ArrayList<Boid>();
 		for (int i = 0; i < NUM; i++) {
-//			Boid b = new Boid(nc,xc);
-			Boid b = new Boid(5,25,5);
+			Boid b = new Boid(nc,xc);
+//			Boid b = new Boid(5,25,5);
 			b.color = colors[i%6];
 			boids.add(b);
 		}
@@ -50,17 +55,20 @@ public class BoidsNr extends Content {
 		int rd2 = rad * 2;
 		for (Boid b : boids) {
 			int lx = (int) Math.floor(b.pos.x - rad);
-			if (lx<0) lx += 10;
+			if (lx<0) lx += nx;
 			int ly = (int) Math.floor(b.pos.y - rad);
-			if (ly<0) ly += 50;
+			if (ly<0) ly += ny;
 			int lz = (int) Math.floor(b.pos.z - rad);
-			if (lz<0) lz += 10;
+			if (lz<0) lz += nz;
 			for (int x=lx; x<lx+rd2; x++) {
-				int xt = x % 10;
+//				int xt = x % nx;
+				int xt = Math.max(0, Math.min(x, nx-1));
 				for (int y=ly; y<ly+rd2; y++) {
-					int yt = y % 50;
+//					int yt = y % ny;
+					int yt = Math.max(0, Math.min(y, ny-1));
 					for (int z=lz; z<lz+rd2; z++) {
-						int zt = z % 10;
+//						int zt = z % nz;
+						int zt = Math.max(0, Math.min(x, nz-1));
 						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
 						d = 2f-d;
 //						float d = 1;

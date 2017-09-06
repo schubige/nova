@@ -6,11 +6,16 @@ import java.util.ArrayList;
 public class Boids extends Content {
 	ArrayList<Boid> boids;
 	private double prevTime = 0;
+	int nx,ny,nz;
+
 	public Boids(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Boids", dimI, dimJ, dimK, numFrames);
-		int NUM = 30;
+		int NUM = 10;
+		nx = dimI;
+		ny = dimJ;
+		nz = dimK;
 		MVector nc = new MVector(0,0,0);
-		MVector xc = new MVector(10,50,10);
+		MVector xc = new MVector(dimI,dimJ,dimK);
 		
 		float[] orange = {1,0.5f,0};
 		float[] cyan   = {0,0.5f,1};
@@ -55,11 +60,14 @@ public class Boids extends Content {
 			int lz = (int) Math.floor(b.pos.z - rad);
 			if (lz<0) lz += 10;
 			for (int x=lx; x<lx+rd2; x++) {
-				int xt = x % 10;
+//				int xt = x % nx;
+				int xt = Math.max(0, Math.min(x, nx-1));
 				for (int y=ly; y<ly+rd2; y++) {
-					int yt = y % 50;
+//					int yt = y % ny;
+					int yt = Math.max(0, Math.min(y, ny-1));
 					for (int z=lz; z<lz+rd2; z++) {
-						int zt = z % 10;
+//						int zt = z % nz;
+						int zt = Math.max(0, Math.min(x, nz-1));
 						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
 						d = 2f-d;
 //						float d = 1;

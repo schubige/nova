@@ -48,25 +48,30 @@ public class ReactionDiffusion extends Content {
 		this.ny = dimJ;
 		this.nz = dimK;
 		nYZ = ny * nz;
-		iSetting = 2;
+		iSetting = 1;
 		setupReaction();
 	}
 
 	int a = 0;
 	int b = 1;
+	int c = 0;
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
 		int i = 0;
 		// diffuse;
-		
+//		if ((int)(timeInSec/4)!=a) {
+//			iSetting = (iSetting+1)%5;
+//			a = (int)(timeInSec/4);
+//		}
 //		CA = settings[iSetting][0];
 //		CB = settings[iSetting][1];
-		double fct = (Math.sin(timeInSec*3)*0.5)+0.5;
+		double fct = (Math.sin(timeInSec)*0.5)+0.5;
 		CA = (float) (fct*settings[a][0] + (1-fct)*settings[b][0]);
 		CB = (float) (fct*settings[a][1] + (1-fct)*settings[b][1]);
-		if (1-fct < 0.000005) {
+		if ((int)(timeInSec/40)!=c) {
 			a = b;
-			b = (b+1) % 5;
+			b = (b+1) % 8;
+			c = (int)(timeInSec/40);
 			System.out.println(a+" : "+ b);
 		}
 
@@ -171,7 +176,7 @@ public class ReactionDiffusion extends Content {
 		settings[2] = new float[] { 1.6f, 6f };// 1.6d, 6d COLONY
 		settings[3] = new float[] { 0.1f, 1f };// 0.1d, 1d FINE
 		settings[4] = new float[] { 1f, 16f };// 1d, 16d FINGERPRINT
-		settings[5] = new float[] { 2.6f, 24f };// 2.6d, 24d MAZE
+		settings[5] = new float[] {0.7f, 0.14f}; //{ 2.6f, 24f };// 2.6d, 24d MAZE
 		settings[6] = new float[] { 1, 3 }; // 1d, 3d POCKED
 		settings[7] = new float[] { 1, 14 }; // 1d, 3d POCKED
 		CA = settings[iSetting][0];
@@ -186,8 +191,8 @@ public class ReactionDiffusion extends Content {
 	}
 
 	public int getIndex(int x, int y, int z) {
-//		return x * nYZ + y * nz + z;
-		return (z + nz * (x + y * nx));
+		return x * nYZ + y * nz + z;
+//		return (z + nz * (x + y * nx));
 //		(k + (dimK * (i + j * dimI)))
 	}
 
@@ -217,9 +222,9 @@ public class ReactionDiffusion extends Content {
 			B[i] = -7;
 			An[i] = Bn[i] = 0;
 		}
-		for (int x=23; x<27; x++) {
-			for (int y=3; y<7; y++) {
-				for (int z=3; z<7; z++) {
+		for (int x=nx/2-2; x<nx/2+2; x++) {
+			for (int y=ny/2-2; y<ny/2+2; y++) {
+				for (int z=nz/2-2; z<nz/2+2; z++) {
 					int ix = getIndex(x, y, z);
 					A[ix] = 17;
 					B[ix] = 17;
