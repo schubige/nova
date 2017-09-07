@@ -11,7 +11,7 @@ public class Pong2 extends Content {
 	MVector nc, xc;
 
 	public Pong2(int dimI, int dimJ, int dimK, int numFrames) {
-		super("Pong", dimI, dimJ, dimK, numFrames);
+		super("Pong2", dimI, dimJ, dimK, numFrames);
 		nx = dimI;
 		ny = dimJ;
 		nz = dimK;
@@ -36,7 +36,7 @@ public class Pong2 extends Content {
 		
 		if ((int)timeInSec != secs) {
 			secs++;
-			if (secs % 10 == 0) {
+			if (secs % 30 == 0 && balls.size()<10) {
 				Ball b = new Ball(nx / 2.0, ny / 2.0, nz / 2.0);
 				b.minc = nc;
 				b.maxc = xc;
