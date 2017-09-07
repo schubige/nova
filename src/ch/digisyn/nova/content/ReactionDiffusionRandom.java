@@ -240,7 +240,7 @@ public class ReactionDiffusionRandom extends Content {
 	}
 	
 	private float[] getRGBfromHSV(float f) {
-		float V = 1-f;
+		float V = 1;//1-f;
 		float S = 1;
 		float C = V * S;
 		float H = f*360;
