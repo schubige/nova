@@ -47,7 +47,7 @@ public class Boid {
 	}
 
 	public void move(double t) {
-		this.vel.add(acc);
+//		this.vel.add(acc);
 		MVector jitter = MVector.random3D();
 		jitter.mult(0.1);
 		this.vel.add(jitter);
@@ -55,18 +55,25 @@ public class Boid {
 		this.pos.add(MVector.mult(this.vel, t));
 		this.acc.mult(0);
 
-		if (pos.x > maxc.x)
-			pos.x = minc.x;
-		if (pos.x < minc.x)
-			pos.x = maxc.x;
-		if (pos.y > maxc.y)
-			pos.y = minc.y;
-		if (pos.y < minc.y)
-			pos.y = maxc.y;
-		if (pos.z > maxc.z)
-			pos.z = minc.z;
-		if (pos.z < minc.z)
-			pos.z = maxc.z;
+//		if (pos.x > maxc.x)
+//			pos.x = minc.x;
+//		if (pos.x < minc.x)
+//			pos.x = maxc.x;
+//		if (pos.y > maxc.y)
+//			pos.y = minc.y;
+//		if (pos.y < minc.y)
+//			pos.y = maxc.y;
+//		if (pos.z > maxc.z)
+//			pos.z = minc.z;
+//		if (pos.z < minc.z)
+//			pos.z = maxc.z;
+		
+		if (pos.x > maxc.x || pos.x < minc.x)
+			vel.x *= -1;
+		if (pos.y > maxc.y || pos.y < minc.y)
+			vel.y *= -1;
+		if (pos.z > maxc.z || pos.z < minc.z)
+			vel.z *= -1;
 	}
 
 	public void flock(ArrayList<Boid> boids) {

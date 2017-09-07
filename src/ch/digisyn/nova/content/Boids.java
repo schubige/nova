@@ -10,7 +10,7 @@ public class Boids extends Content {
 
 	public Boids(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Boids", dimI, dimJ, dimK, numFrames);
-		int NUM = 10;
+		int NUM = 30;
 		nx = dimI;
 		ny = dimJ;
 		nz = dimK;
@@ -54,11 +54,11 @@ public class Boids extends Content {
 		int rd2 = rad * 2;
 		for (Boid b : boids) {
 			int lx = (int) Math.floor(b.pos.x - rad);
-			if (lx<0) lx += 10;
+			if (lx<0) lx += nx;
 			int ly = (int) Math.floor(b.pos.y - rad);
-			if (ly<0) ly += 50;
+			if (ly<0) ly += ny;
 			int lz = (int) Math.floor(b.pos.z - rad);
-			if (lz<0) lz += 10;
+			if (lz<0) lz += nz;
 			for (int x=lx; x<lx+rd2; x++) {
 //				int xt = x % nx;
 				int xt = Math.max(0, Math.min(x, nx-1));
@@ -67,10 +67,10 @@ public class Boids extends Content {
 					int yt = Math.max(0, Math.min(y, ny-1));
 					for (int z=lz; z<lz+rd2; z++) {
 //						int zt = z % nz;
-						int zt = Math.max(0, Math.min(x, nz-1));
-						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
-						d = 2f-d;
-//						float d = 1;
+						int zt = Math.max(0, Math.min(z, nz-1));
+//						float d = (float) MVector.dist(b.pos, new MVector(x,y,z));
+//						d = 2f-d;
+						float d = 1;
 						setVoxel(rgbFrame, xt, yt, zt, d*b.color[0], d*b.color[1], d*b.color[2]);
 					}
 				}
@@ -79,7 +79,7 @@ public class Boids extends Content {
 		// fade out
 		for (int i=0; i<rgbFrame.length; i++) {
 			float d = rgbFrame[i];
-			rgbFrame[i] = d*0.9f;
+			rgbFrame[i] = d*0.95f;
 		}
 		
 		return --frames > 0;
