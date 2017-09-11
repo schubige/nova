@@ -61,7 +61,7 @@ public class BouncingMetaBallsT extends Content {
 //					v = v>120?1:0;
 					v = 1-V;
 
-					setVoxel(rgbFrame, x, y, z, 0, (float) (v*0.5), (float) v);
+					setVoxel(rgbFrame, x, y, z, (float) v, 0, (float) (v*0.5));
 				}
 			}
 		}
