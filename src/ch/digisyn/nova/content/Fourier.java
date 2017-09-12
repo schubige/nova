@@ -1,12 +1,10 @@
 package ch.digisyn.nova.content;
 
-import java.util.Arrays;
 
 @SuppressWarnings("nls")
 public class Fourier extends Content {
 	
 	int nx, ny, nz;
-	double p1,p2,p3;
 	int num = 4;
 	double[] params, par2;
 	public Fourier(int dimI, int dimJ, int dimK, int numFrames) {
@@ -14,10 +12,6 @@ public class Fourier extends Content {
 		nx = dimI;
 		ny = dimJ;
 		nz = dimK;
-		
-		p1 = Math.random();
-		p2 = Math.random();
-		p3 = Math.random();
 		
 		params = new double[num];
 		for (int i=0; i<num; i++) {
