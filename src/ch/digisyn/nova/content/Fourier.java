@@ -34,7 +34,7 @@ public class Fourier extends Content {
 						v += par2[i]*Math.sin(y*((i+1)*0.2) + timeInSec*params[i]);
 					}
 					v /= 1.;
-					float f = (float) (1 / (1 + Math.exp(v-(z-nz/2)))); // sigmoid
+					float f = (float) (1 / (1 + Math.exp(4*(v-(z-nz/2))))); // sigmoid
 					f = 1-f;
 					setVoxel(rgbFrame, x, y, z, 0,f/2,f);
 					
