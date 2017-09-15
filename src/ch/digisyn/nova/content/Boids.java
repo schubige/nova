@@ -7,13 +7,44 @@ public class Boids extends Content {
 	ArrayList<Boid> boids;
 	private double prevTime = 0;
 	int nx,ny,nz;
+	private double startTime;
 
 	public Boids(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Boids", dimI, dimJ, dimK, numFrames);
-		int NUM = 30;
 		nx = dimI;
 		ny = dimJ;
 		nz = dimK;
+//		MVector nc = new MVector(0,0,0);
+//		MVector xc = new MVector(dimI,dimJ,dimK);
+//		
+//		float[] orange = {1,0.5f,0};
+//		float[] cyan   = {0,0.5f,1};
+//		float[] pink   = {1,0,0.5f};
+//		float[] violet = {0.5f,0,1};
+//		float[] lime   = {0.5f,1,0};
+//		float[] mint   = {0,1,0.5f};
+//		
+//		float[][] colors = new float[6][3];
+//		colors[0] = orange;
+//		colors[1] = cyan;
+//		colors[2] = pink;
+//		colors[3] = violet;
+//		colors[4] = lime;
+//		colors[5] = mint;
+//		
+//		boids = new ArrayList<Boid>();
+//		for (int i = 0; i < NUM; i++) {
+//			Boid b = new Boid(nc,xc);
+//			b.color = colors[i%6];
+//			boids.add(b);
+//		}
+	}
+	
+	@Override
+	public void start() {
+		startTime = -1;
+		
+		int NUM = 30;
 		MVector nc = new MVector(0,0,0);
 		MVector xc = new MVector(dimI,dimJ,dimK);
 		
@@ -42,6 +73,8 @@ public class Boids extends Content {
 
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
+		if(startTime < 0) startTime = timeInSec;
+		timeInSec -= startTime;
 		double delta = timeInSec - prevTime;
 		prevTime = timeInSec;
 		// update positions

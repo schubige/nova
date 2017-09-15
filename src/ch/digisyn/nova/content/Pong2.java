@@ -9,6 +9,7 @@ public class Pong2 extends Content {
 	public ArrayList<Ball> balls;
 	int nx, ny, nz;
 	MVector nc, xc;
+	private double startTime;
 
 	public Pong2(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Pong2", dimI, dimJ, dimK, numFrames);
@@ -19,6 +20,22 @@ public class Pong2 extends Content {
 		nc = new MVector(0, 0, 0);
 		xc = new MVector(nx, ny, nz);
 
+//		balls = new ArrayList<Ball>();
+//		for (int i = 0; i < 1; i++) {
+//			Ball b = new Ball(nx / 2.0, ny / 2.0, nz / 2.0);
+//			b.minc = nc;
+//			b.maxc = xc;
+//			balls.add(b);
+//		}
+	}
+
+	double prevTime = 0;
+	int secs = 0;
+
+	@Override
+	public void start() {
+		startTime = -1;
+		
 		balls = new ArrayList<Ball>();
 		for (int i = 0; i < 1; i++) {
 			Ball b = new Ball(nx / 2.0, ny / 2.0, nz / 2.0);
@@ -27,12 +44,12 @@ public class Pong2 extends Content {
 			balls.add(b);
 		}
 	}
-
-	double prevTime = 0;
-	int secs = 0;
-
+	
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
+		
+		if(startTime < 0) startTime = timeInSec;
+		timeInSec -= startTime;
 		
 		if ((int)timeInSec != secs) {
 			secs++;

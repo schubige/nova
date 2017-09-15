@@ -41,6 +41,7 @@ public class ReactionDiffusionRandom extends Content {
 	public final static int PATTERN_POCKED = 6;
 	public final static int PATTERN_TEST = 7;
 	public Random random;
+	public double startTime;
 	
 	public ReactionDiffusionRandom(int dimI, int dimJ, int dimK, int numFrames) {
 		super("ReactionDiffusionRandom", dimI, dimJ, dimK, numFrames);
@@ -49,15 +50,27 @@ public class ReactionDiffusionRandom extends Content {
 		this.nz = dimK;
 		nYZ = ny * nz;
 		iSetting = 2;
-		setupReaction();
+//		setupReaction();
 	}
 
 	int a = 0;
 	int b = 1;
 	int c = 0;
+	
+	@Override
+	public void start() {
+		startTime = -1;
+		setupReaction();
+	}
+	
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
+		
+		if(startTime < 0) startTime = timeInSec;
+		timeInSec -= startTime;
+		
 		int i = 0;
+		
 		// diffuse;
 		
 //		CA = settings[iSetting][0];

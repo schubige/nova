@@ -47,7 +47,7 @@ public class Boid {
 	}
 
 	public void move(double t) {
-//		this.vel.add(acc);
+		this.vel.add(acc);
 		MVector jitter = MVector.random3D();
 		jitter.mult(0.1);
 		this.vel.add(jitter);
@@ -77,12 +77,12 @@ public class Boid {
 	}
 
 	public void flock(ArrayList<Boid> boids) {
-//		ali = this.alignment(boids);
-//		coh = this.cohesion(boids);
+		ali = this.alignment(boids);
+		coh = this.cohesion(boids);
 		sep = this.separation(boids);
-//		this.acc.add(MVector.mult(ali, 1));
-//		this.acc.add(MVector.mult(coh, 1.5));
-		this.acc.add(MVector.mult(sep, 2));
+		this.acc.add(MVector.mult(ali, 0.5));
+		this.acc.add(MVector.mult(coh, 1.5));
+		this.acc.add(MVector.mult(sep, 1));
 		
 		// avoid walls, no direct bounce as in vel *= -1
 		float f = 0.5f;

@@ -9,6 +9,7 @@ public class BouncingMetaBalls extends Content {
 	private double[] radii;
 	private int[] dim;
 	private double prevTime = 0;
+	private double startTime;
 
 	public BouncingMetaBalls(int dimI, int dimJ, int dimK, int numFrames) {
 		super("BouncingMetaBalls", dimI, dimJ, dimK, numFrames);
@@ -19,6 +20,19 @@ public class BouncingMetaBalls extends Content {
 		dim[1] = dimJ;
 		dim[2] = dimK;
 		this.radii = new double[NUM];
+//		for (int i = 0; i < NUM; i++) {
+//			for (int j = 0; j < 3; j++) {
+//				this.positions[i][j] = FRAND(0, dim[j]);
+//				this.speeds[i][j] = FRAND(-0.2, 0.2);
+//				if (j==1) this.speeds[i][j] *= 3;
+//			}
+//			this.radii[i] = FRAND(1.2, 2.2);
+//		}
+	}
+	
+	@Override
+	public void start() {
+		startTime = -1;
 		for (int i = 0; i < NUM; i++) {
 			for (int j = 0; j < 3; j++) {
 				this.positions[i][j] = FRAND(0, dim[j]);
@@ -32,6 +46,8 @@ public class BouncingMetaBalls extends Content {
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
 		// update positions
+		if(startTime < 0) startTime = timeInSec;
+		timeInSec -= startTime;
 		double d = timeInSec - prevTime;
 		prevTime = timeInSec;
 		for (int i = 0; i < NUM; i++) {
