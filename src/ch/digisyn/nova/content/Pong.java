@@ -9,6 +9,7 @@ public class Pong extends Content {
 	public MVector speed;
 	public double radius;
 	int nx,ny,nz;
+	private double startTime;
 
 	public Pong(int dimI, int dimJ, int dimK, int numFrames) {
 		super("Pong", dimI, dimJ, dimK, numFrames);
@@ -16,15 +17,26 @@ public class Pong extends Content {
 		ny = dimJ;
 		nz = dimK;
 
+//		ball = new MVector(nx/2,ny/2,nz/2);
+//		double sy = FRAND(0.4,0.7);
+//		radius = 1.5;
+//		if (Math.random()>0.5) sy *= -1;
+//		speed = new MVector(FRAND(-0.2, 0.2), sy, FRAND(-0.2, 0.2));
+	}
+
+	double prevTime = 0;
+
+	@Override
+	public void start() {
+		startTime = -1;
+		
 		ball = new MVector(nx/2,ny/2,nz/2);
 		double sy = FRAND(0.4,0.7);
 		radius = 1.5;
 		if (Math.random()>0.5) sy *= -1;
 		speed = new MVector(FRAND(-0.2, 0.2), sy, FRAND(-0.2, 0.2));
 	}
-
-	double prevTime = 0;
-
+	
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
 		Arrays.fill(rgbFrame, 0);
