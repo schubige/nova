@@ -2,6 +2,8 @@ package ch.digisyn.nova.content;
 
 import java.util.ArrayList;
 
+import org.corebounce.util.Log;
+
 @SuppressWarnings("nls")
 public class Boids extends Content {
 	ArrayList<Boid> boids;
@@ -69,6 +71,11 @@ public class Boids extends Content {
 			b.color = colors[i%6];
 			boids.add(b);
 		}
+	}
+	
+	@Override
+	public void stop() {
+		Log.info("Stopping " + this);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package ch.digisyn.nova.content;
 
+import org.corebounce.util.Log;
+
 @SuppressWarnings("nls")
 public class BouncingMetaBallsT extends Content {
 
@@ -13,13 +15,13 @@ public class BouncingMetaBallsT extends Content {
 
 	public BouncingMetaBallsT(int dimI, int dimJ, int dimK, int numFrames) {
 		super("BouncingMetaBallsT", dimI, dimJ, dimK, numFrames);
-		this.positions = new double[NUM][3];
-		this.speeds = new double[NUM][3];
+//		this.positions = new double[NUM][3];
+//		this.speeds = new double[NUM][3];
 		dim = new int[3];
 		dim[0] = dimI;
 		dim[1] = dimJ;
 		dim[2] = dimK;
-		this.radii = new double[NUM];
+//		this.radii = new double[NUM];
 //		for (int i = 0; i < NUM; i++) {
 //			for (int j = 0; j < 3; j++) {
 //				this.positions[i][j] = FRAND(0, dim[j]);
@@ -33,6 +35,11 @@ public class BouncingMetaBallsT extends Content {
 	@Override
 	public void start() {
 		startTime = -1.0;
+		
+		this.positions = new double[NUM][3];
+		this.speeds = new double[NUM][3];
+		this.radii = new double[NUM];
+
 		for (int i = 0; i < NUM; i++) {
 			for (int j = 0; j < 3; j++) {
 				this.positions[i][j] = FRAND(0, dim[j]);
@@ -42,12 +49,18 @@ public class BouncingMetaBallsT extends Content {
 			this.radii[i] = FRAND(1.2, 2.2);
 		}
 	}
+	
+	@Override
+	public void stop() {
+		Log.info("Stopping " + this);
+	}
 
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
 		// update positions
 		if(startTime < 0) startTime = timeInSec;
 		timeInSec -= startTime;
+		
 		double d = timeInSec - prevTime;
 		prevTime = timeInSec;
 		for (int i = 0; i < NUM; i++) {

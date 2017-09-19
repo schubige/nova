@@ -3,6 +3,8 @@ package ch.digisyn.nova.content;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.corebounce.util.Log;
+
 @SuppressWarnings("nls")
 public class Pong2 extends Content {
 
@@ -17,8 +19,8 @@ public class Pong2 extends Content {
 		ny = dimJ;
 		nz = dimK;
 
-		nc = new MVector(0, 0, 0);
-		xc = new MVector(nx, ny, nz);
+//		nc = new MVector(0, 0, 0);
+//		xc = new MVector(nx, ny, nz);
 
 //		balls = new ArrayList<Ball>();
 //		for (int i = 0; i < 1; i++) {
@@ -36,6 +38,8 @@ public class Pong2 extends Content {
 	public void start() {
 		startTime = -1;
 		
+		nc = new MVector(0, 0, 0);
+		xc = new MVector(nx, ny, nz);
 		balls = new ArrayList<Ball>();
 		for (int i = 0; i < 1; i++) {
 			Ball b = new Ball(nx / 2.0, ny / 2.0, nz / 2.0);
@@ -43,6 +47,11 @@ public class Pong2 extends Content {
 			b.maxc = xc;
 			balls.add(b);
 		}
+	}
+	
+	@Override
+	public void stop() {
+		Log.info("Stopping " + this);
 	}
 	
 	@Override

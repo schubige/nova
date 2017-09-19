@@ -2,6 +2,8 @@ package ch.digisyn.nova.content;
 
 import java.util.Arrays;
 
+import org.corebounce.util.Log;
+
 @SuppressWarnings("nls")
 public class Pong extends Content {
 
@@ -32,13 +34,22 @@ public class Pong extends Content {
 		
 		ball = new MVector(nx/2,ny/2,nz/2);
 		double sy = FRAND(0.4,0.7);
-		radius = 1.5;
 		if (Math.random()>0.5) sy *= -1;
 		speed = new MVector(FRAND(-0.2, 0.2), sy, FRAND(-0.2, 0.2));
+		radius = 1.5;
+	}
+	
+	@Override
+	public void stop() {
+		Log.info("Stopping " + this);
 	}
 	
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
+		
+		if(startTime < 0) startTime = timeInSec;
+		timeInSec -= startTime;
+		
 		Arrays.fill(rgbFrame, 0);
 		double d = timeInSec - prevTime;
 		prevTime = timeInSec;

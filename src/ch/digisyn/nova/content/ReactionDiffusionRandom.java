@@ -2,6 +2,8 @@ package ch.digisyn.nova.content;
 
 import java.util.Random;
 
+import org.corebounce.util.Log;
+
 @SuppressWarnings("nls")
 public class ReactionDiffusionRandom extends Content {
 
@@ -61,6 +63,11 @@ public class ReactionDiffusionRandom extends Content {
 	public void start() {
 		startTime = -1;
 		setupReaction();
+	}
+	
+	@Override
+	public void stop() {
+		Log.info("Stopping " + this);
 	}
 	
 	@Override
