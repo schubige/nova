@@ -76,6 +76,7 @@ public class Boids extends Content {
 	@Override
 	public void stop() {
 		Log.info("Stopping " + this);
+		boids = null;
 	}
 
 	@Override

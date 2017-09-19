@@ -53,6 +53,10 @@ public class BouncingMetaBalls extends Content {
 	@Override
 	public void stop() {
 		Log.info("Stopping " + this);
+		
+		this.positions = null;
+		this.speeds = null;
+		this.radii = null;
 	}
 
 	@Override

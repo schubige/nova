@@ -52,6 +52,7 @@ public class Pong2 extends Content {
 	@Override
 	public void stop() {
 		Log.info("Stopping " + this);
+		balls = null;
 	}
 	
 	@Override
