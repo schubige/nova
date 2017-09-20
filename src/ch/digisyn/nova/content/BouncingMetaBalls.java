@@ -1,7 +1,5 @@
 package ch.digisyn.nova.content;
 
-import org.corebounce.util.Log;
-
 @SuppressWarnings("nls")
 public class BouncingMetaBalls extends Content {
 
@@ -35,6 +33,7 @@ public class BouncingMetaBalls extends Content {
 	@Override
 	public void start() {
 		startTime = -1;
+		prevTime  = 0;
 		
 		this.positions = new double[NUM][3];
 		this.speeds = new double[NUM][3];
@@ -52,15 +51,6 @@ public class BouncingMetaBalls extends Content {
 		super.start();
 	}
 	
-	@Override
-	public void stop() {
-		Log.info("Stopping " + this);
-		
-		this.positions = null;
-		this.speeds = null;
-		this.radii = null;
-	}
-
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
 		// update positions

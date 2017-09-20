@@ -2,8 +2,6 @@ package ch.digisyn.nova.content;
 
 import java.util.ArrayList;
 
-import org.corebounce.util.Log;
-
 @SuppressWarnings("nls")
 public class Boids extends Content {
 	ArrayList<Boid> boids;
@@ -45,6 +43,7 @@ public class Boids extends Content {
 	@Override
 	public void start() {
 		startTime = -1;
+		prevTime  = 0;
 		
 		int NUM = 30;
 		MVector nc = new MVector(0,0,0);
@@ -73,12 +72,6 @@ public class Boids extends Content {
 		}
 		
 		super.start();
-	}
-	
-	@Override
-	public void stop() {
-		Log.info("Stopping " + this);
-		boids = null;
 	}
 
 	@Override

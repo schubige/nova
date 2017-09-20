@@ -2,8 +2,6 @@ package ch.digisyn.nova.content;
 
 import java.util.Arrays;
 
-import org.corebounce.util.Log;
-
 @SuppressWarnings("nls")
 public class Pong extends Content {
 
@@ -31,6 +29,7 @@ public class Pong extends Content {
 	@Override
 	public void start() {
 		startTime = -1;
+		prevTime  = 0;
 		
 		ball = new MVector(nx/2,ny/2,nz/2);
 		double sy = FRAND(0.4,0.7);
@@ -39,13 +38,6 @@ public class Pong extends Content {
 		radius = 1.5;
 		
 		super.start();
-	}
-	
-	@Override
-	public void stop() {
-		Log.info("Stopping " + this);
-		ball = null;
-		speed = null;
 	}
 	
 	@Override
