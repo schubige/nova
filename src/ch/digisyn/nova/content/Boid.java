@@ -77,12 +77,12 @@ public class Boid {
 	}
 
 	public void flock(ArrayList<Boid> boids) {
-		ali = this.alignment(boids);
-		coh = this.cohesion(boids);
-		sep = this.separation(boids);
-		this.acc.add(MVector.mult(ali, 0.5));
-		this.acc.add(MVector.mult(coh, 1.5));
-		this.acc.add(MVector.mult(sep, 1));
+//		ali = this.alignment(boids);
+//		coh = this.cohesion(boids);
+//		sep = this.separation(boids);
+//		this.acc.add(MVector.mult(ali, 0.5));
+//		this.acc.add(MVector.mult(coh, 1.5));
+//		this.acc.add(MVector.mult(sep, 1));
 		
 		// avoid walls, no direct bounce as in vel *= -1
 		float f = 0.5f;
