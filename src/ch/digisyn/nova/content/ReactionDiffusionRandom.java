@@ -63,6 +63,8 @@ public class ReactionDiffusionRandom extends Content {
 	public void start() {
 		startTime = -1;
 		setupReaction();
+		
+		super.start();
 	}
 	
 	@Override

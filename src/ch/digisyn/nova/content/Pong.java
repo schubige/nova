@@ -37,6 +37,8 @@ public class Pong extends Content {
 		if (Math.random()>0.5) sy *= -1;
 		speed = new MVector(FRAND(-0.2, 0.2), sy, FRAND(-0.2, 0.2));
 		radius = 1.5;
+		
+		super.start();
 	}
 	
 	@Override

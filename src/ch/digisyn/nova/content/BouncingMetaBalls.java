@@ -48,6 +48,8 @@ public class BouncingMetaBalls extends Content {
 			}
 			this.radii[i] = FRAND(1.2, 2.2);
 		}
+		
+		super.start();
 	}
 	
 	@Override

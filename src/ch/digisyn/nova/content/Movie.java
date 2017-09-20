@@ -78,6 +78,8 @@ public class Movie extends Content {
 				}
 			}.start();
 		}
+		
+		super.start();
 	}
 
 	@Override

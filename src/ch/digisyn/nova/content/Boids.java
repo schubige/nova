@@ -71,6 +71,8 @@ public class Boids extends Content {
 			b.color = colors[i%6];
 			boids.add(b);
 		}
+		
+		super.start();
 	}
 	
 	@Override

@@ -47,6 +47,8 @@ public class Pong2 extends Content {
 			b.maxc = xc;
 			balls.add(b);
 		}
+		
+		super.start();
 	}
 	
 	@Override
