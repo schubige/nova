@@ -85,13 +85,13 @@ public class Boid {
 //		this.acc.add(MVector.mult(sep, 1));
 		
 		// avoid walls, no direct bounce as in vel *= -1
-		float f = 0.5f;
-		this.acc.add(MVector.mult(avoid(new MVector(maxc.x, pos.y, pos.z), true),  f));
-		this.acc.add(MVector.mult(avoid(new MVector(minc.x, pos.y, pos.z), true),  f));
-		this.acc.add(MVector.mult(avoid(new MVector(pos.x, maxc.y, pos.z), true),  f));
-		this.acc.add(MVector.mult(avoid(new MVector(pos.x, minc.y, pos.z), true),  f));
-		this.acc.add(MVector.mult(avoid(new MVector(pos.x, pos.y, maxc.z), true),  f));
-		this.acc.add(MVector.mult(avoid(new MVector(pos.x, pos.y, minc.z), true),  f));
+//		float f = 0.5f;
+//		this.acc.add(MVector.mult(avoid(new MVector(maxc.x, pos.y, pos.z), true),  f));
+//		this.acc.add(MVector.mult(avoid(new MVector(minc.x, pos.y, pos.z), true),  f));
+//		this.acc.add(MVector.mult(avoid(new MVector(pos.x, maxc.y, pos.z), true),  f));
+//		this.acc.add(MVector.mult(avoid(new MVector(pos.x, minc.y, pos.z), true),  f));
+//		this.acc.add(MVector.mult(avoid(new MVector(pos.x, pos.y, maxc.z), true),  f));
+//		this.acc.add(MVector.mult(avoid(new MVector(pos.x, pos.y, minc.z), true),  f));
 	}
 
 	private MVector separation(ArrayList<Boid> boids) {
