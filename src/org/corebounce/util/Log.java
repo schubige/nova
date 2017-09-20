@@ -23,7 +23,7 @@ import java.util.logging.Level;
 public class Log {
 	public static final String LOG = "org.corebounce.util";
 
-	private static final boolean LOG_TO_FILE = true;
+	private static final boolean LOG_TO_FILE = false;
 
 	static {
 		if(LOG_TO_FILE) {
