@@ -73,7 +73,7 @@ public class Pong2 extends Content {
 		prevTime = timeInSec;
 
 		for (Ball b : balls) {
-			b.update(d);
+			b.update(d*1.3);
 		}
 
 		for (Ball b : balls) {

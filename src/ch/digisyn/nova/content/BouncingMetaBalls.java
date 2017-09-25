@@ -61,7 +61,7 @@ public class BouncingMetaBalls extends Content {
 		prevTime = timeInSec;
 		for (int i = 0; i < NUM; i++) {
 			for (int j = 0; j < 3; j++) {
-				this.positions[i][j] += d*3 * this.speeds[i][j];
+				this.positions[i][j] += d*2 * this.speeds[i][j];
 				if (this.positions[i][j] < 0 || this.positions[i][j] > dim[j]) {
 					this.speeds[i][j] *= -1;
 				}

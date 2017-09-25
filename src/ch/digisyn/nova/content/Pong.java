@@ -49,7 +49,7 @@ public class Pong extends Content {
 		Arrays.fill(rgbFrame, 0);
 		double d = timeInSec - prevTime;
 		prevTime = timeInSec;
-		ball.add(MVector.mult(speed, d*5));
+		ball.add(MVector.mult(speed, d*7));
 		if (ball.x-radius < 0 || ball.x+radius > nx)
 			speed.x = speed.x * -1;
 		if (ball.y-radius < 0 || ball.y+radius > ny) {

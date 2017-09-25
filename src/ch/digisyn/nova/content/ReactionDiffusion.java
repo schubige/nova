@@ -68,10 +68,10 @@ public class ReactionDiffusion extends Content {
 		double fct = (Math.sin(timeInSec)*0.5)+0.5;
 		CA = (float) (fct*settings[a][0] + (1-fct)*settings[b][0]);
 		CB = (float) (fct*settings[a][1] + (1-fct)*settings[b][1]);
-		if ((int)(timeInSec/40)!=c) {
+		if ((int)(timeInSec/35)!=c) {
 			a = b;
 			b = (b+1) % 8;
-			c = (int)(timeInSec/40);
+			c = (int)(timeInSec/35);
 			System.out.println(a+" : "+ b);
 		}
 
