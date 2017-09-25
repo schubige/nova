@@ -9,7 +9,7 @@ import org.corebounce.util.Strings;
 
 @SuppressWarnings("nls")
 public class SyncGenerator implements IConstants {
-	private static final boolean DBG = true;
+	private static final boolean DBG = false;
 	
 	private final  AtomicInteger seqNum     = new AtomicInteger();
 	private final  Thread        sync;
