@@ -2,13 +2,13 @@ package ch.digisyn.nova.content;
 
 
 @SuppressWarnings("nls")
-public class Fourier2 extends Content {
+public class Waves3D extends Content {
 	
 	int nx, ny, nz;
 	int num = 4;
 	double[] params, par2;
-	public Fourier2(int dimI, int dimJ, int dimK, int numFrames) {
-		super("Fourier2", dimI, dimJ, dimK, numFrames);
+	public Waves3D(int dimI, int dimJ, int dimK, int numFrames) {
+		super("Waves3D", dimI, dimJ, dimK, numFrames);
 		nx = dimI;
 		ny = dimJ;
 		nz = dimK;
