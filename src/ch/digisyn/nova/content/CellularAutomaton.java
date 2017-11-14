@@ -9,7 +9,7 @@ public class CellularAutomaton extends Content {
 	public int nx;
 	public int ny;
 	public int nz;
-	int[] rule = { 0, 1, 0, 1, 1, 0, 1, 0, 0, 0 };
+	int[] rule = { 0, 1, 0, 1, 1, 1, 1, 0, 0, 0 };
 	int[][][] old_matrix; // , new_matrix;
 	int ix = 0;
 
@@ -23,8 +23,8 @@ public class CellularAutomaton extends Content {
 		for (int x = 0; x < this.nx; x++) {
 			for (int y = 0; y < this.ny; y++) {
 				for (int z = 0; z < this.nz; z++) {
-//					old_matrix[x][y][z] = Math.random() > 0.5 ? 1 : 0;
-					old_matrix[x][y][z] = ((z+y) % 10 == 0) ? 1 : 0;
+					old_matrix[x][y][z] = Math.random() > 0.5 ? 1 : 0;
+//					old_matrix[x][y][z] = ((z+y) % 10 == 0) ? 1 : 0;
 					if (x > 0)
 						old_matrix[x][y][z] = 0;
 				}
