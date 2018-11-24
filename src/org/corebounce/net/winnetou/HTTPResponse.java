@@ -37,6 +37,9 @@ public abstract class HTTPResponse {
 	public void responseHeader() throws IOException {
 		Date date = Calendar.getInstance().getTime();
 		request.writeln("Date: " + date.toString());
+		request.writeln("Cache-Control: no-cache, no-store, must-revalidate");
+		request.writeln("Pragma: no-cache");
+		request.writeln("Expires: 0");
 	}
 
 	public void errorPage(String title, String message) throws IOException {
