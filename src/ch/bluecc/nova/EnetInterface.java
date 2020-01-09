@@ -31,9 +31,10 @@ public class EnetInterface implements IConstants {
 		try {
 			String osname = System.getProperty("os.name").toLowerCase();
 			String arch   = System.getProperty("os.arch").toLowerCase();
+			File   tmp    = File.createTempFile("NOVAatHOME", "lck");
 			System.out.println("os.name:" + osname);
 			System.out.println("os.arch:" + arch);
-			File tmp = File.createTempFile("NOVAatHOME", "lck");
+			System.out.println("tmp:" + tmp.getAbsolutePath());
 			if(osname.contains("windows")) {
 				File dllDst = new File(tmp.getParentFile(), "jnetpcap.dll");
 				Utilities.copy(EnetInterface.class.getResourceAsStream("/native/" + dllDst.getName()), new FileOutputStream(dllDst));
@@ -41,7 +42,7 @@ public class EnetInterface implements IConstants {
 				dllDst.deleteOnExit();
 				System.load(dllDst.getAbsolutePath());
 			} else if(osname.contains("mac os")) {
-				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.dylib");
+				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.jnilib");
 				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (arch.contains("64") ? "/x64/" : "/x86/") + soDst.getName()), new FileOutputStream(soDst));
 				soDst.deleteOnExit();
 				soDst.setExecutable(true);
