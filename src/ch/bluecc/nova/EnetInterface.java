@@ -29,22 +29,28 @@ public class EnetInterface implements IConstants {
 
 	static {
 		try {
+			String osname = System.getProperty("os.name").toLowerCase();
+			String arch   = System.getProperty("os.arch").toLowerCase();
+			System.out.println("os.name:" + osname);
+			System.out.println("os.arch:" + arch);
 			File tmp = File.createTempFile("NOVAatHOME", "lck");
-			if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+			if(osname.contains("windows")) {
 				File dllDst = new File(tmp.getParentFile(), "jnetpcap.dll");
 				Utilities.copy(EnetInterface.class.getResourceAsStream("/native/" + dllDst.getName()), new FileOutputStream(dllDst));
 				dllDst.setExecutable(true);
 				dllDst.deleteOnExit();
 				System.load(dllDst.getAbsolutePath());
-			} else if(System.getProperty("os.name").toLowerCase().contains("mac os")) {
+			} else if(osname.contains("mac os")) {
 				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.dylib");
-				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (System.getProperty("os.arch").contains("64") ? "/x64/" : "/x86/") + soDst.getName()), new FileOutputStream(soDst));
+				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (arch.contains("64") ? "/x64/" : "/x86/") + soDst.getName()), new FileOutputStream(soDst));
 				soDst.deleteOnExit();
 				soDst.setExecutable(true);
 				System.load(soDst.getAbsolutePath());				
 			} else {
 				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.so");
-				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (System.getProperty("os.arch").contains("64") ? "/x64/" : "/x86/") + soDst.getName()), new FileOutputStream(soDst));
+				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (arch.contains("64") ? 
+						"/x64/" : (arch.contains("arm") ? "/arm/" : "/x86/")) 
+						+ soDst.getName()), new FileOutputStream(soDst));
 				soDst.deleteOnExit();
 				soDst.setExecutable(true);
 				System.load(soDst.getAbsolutePath());				
