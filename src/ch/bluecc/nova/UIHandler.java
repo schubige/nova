@@ -2,6 +2,7 @@ package ch.bluecc.nova;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.corebounce.io.HTML;
@@ -85,6 +86,12 @@ public class UIHandler extends HTTPHandler {
 	@Override
 	public HTTPResponse request(HTTPRequest req) {
 		try {
+			System.out.println("---- HTTP request");
+			System.out.println(req);
+			System.out.println(req.getReferer());
+			for(Enumeration<?> e = req.getHeaders().getAllHeaderLines(); e.hasMoreElements();)
+				System.out.println(e);
+				
 			ByteArrayOutputStream bout = new ByteArrayOutputStream();
 			
 			HtmlPrintWriter       out  = new HtmlPrintWriter(bout);
