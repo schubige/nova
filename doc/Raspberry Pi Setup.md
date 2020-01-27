@@ -111,6 +111,6 @@ ssh pi@novahost.local
 ```
 * You should be able to ping the NOVA hardware via
 ```
-ping 192.168.130.4
+ping 192.168.1.4
 ```
 * If this is not the case, check your address jumper settings again.
