@@ -72,7 +72,31 @@ public abstract class Content {
 		rgbFrame[idx+1] += g;
 		rgbFrame[idx+2] += b;
 	}
+	
+	/**
+	 * Utility function to add RGB values of a voxel at position (i,j,k) to rgbFrame. Clamps to [0..1]
+	 * @param rgbFrame The voxel frame to operate on.
+	 * @param i The X-position.
+	 * @param j The Y-position.
+	 * @param k The Z-position.
+	 * @param r The red value.
+	 * @param g The green value.
+	 * @param b The blue value.
+	 */
+	protected void addVoxelClamp(final float[] rgbFrame, final int i, final int j, final int k, final float r, final float g, final float b) {
+		final int idx = 3 * (k + (dimK * (i + j * dimI)));
+		addAndClamp(rgbFrame, idx+0, r);
+		addAndClamp(rgbFrame, idx+1, g);
+		addAndClamp(rgbFrame, idx+2, b);
+	}
 
+	private static void addAndClamp(final float[] rgbFrame, final int idx, final float value) {
+		final float v = rgbFrame[idx] + value;
+		if(v < 0f)      rgbFrame[idx] = 0f;
+		else if(v > 1f) rgbFrame[idx] = 1f;
+		else            rgbFrame[idx] = v;
+	}
+	
 	static final float SCALE = 5f;
 	/**
 	 * Utility function to set a weighted RGB values of a voxel at position (i,j,k).
@@ -151,5 +175,37 @@ public abstract class Content {
 	 */
 	public List<Content> getContents() {
 		return Collections.singletonList(this);
+	}
+		
+	protected void setRGBfromHSV(float h, float S, float V, float[] rgb, int idx) {
+		final float C = V * S;
+		final float H = (h * 360f) % 360f;
+		final float X = (float) (C * (1 - Math.abs(H / 60.0 % 2 - 1)));
+
+		if (H < 60) {
+			rgb[idx+0] = C;
+			rgb[idx+1] = X;
+			rgb[idx+2] = 0;
+		} else if (H < 120) {
+			rgb[idx+0] = X;
+			rgb[idx+1] = C;
+			rgb[idx+2] = 0;
+		} else if (H < 180) {
+			rgb[idx+0] = 0;
+			rgb[idx+1] = C;
+			rgb[idx+2] = X;
+		} else if (H < 240) {
+			rgb[idx+0] = 0;
+			rgb[idx+1] = X;
+			rgb[idx+2] = C;
+		} else if (H < 300) {
+			rgb[idx+0] = X;
+			rgb[idx+1] = 0;
+			rgb[idx+2] = C;
+		} else {
+			rgb[idx+0] = C;
+			rgb[idx+1] = 0;
+			rgb[idx+2] = X;
+		}
 	}
 }

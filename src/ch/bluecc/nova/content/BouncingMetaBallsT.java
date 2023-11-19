@@ -80,7 +80,6 @@ public class BouncingMetaBallsT extends Content {
 						dsq = Math.sqrt(dsq);
 						sum += 110 * rad / dsq;
 					}
-					double r,g,b;
 					double v = CROP_INTERVAL(sum, 0, 360);
 					double V = 1 / (1 + Math.exp(v - 140)); // sigmoid
 //					v = v>120?1:0;

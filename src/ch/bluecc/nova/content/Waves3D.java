@@ -25,7 +25,6 @@ public class Waves3D extends Content {
 	
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
-		double d = Math.sin(timeInSec);
 		for (int x = 0; x<nx; x++) {
 			for (int y = 0; y<ny; y++) {
 				for (int z = 0; z<nz; z++) {
@@ -44,7 +43,7 @@ public class Waves3D extends Content {
 //					v *= vx;
 //					v *= vz;
 //					v /= 1.;
-					float f = Math.abs(v); //(float) (1 / (1 + Math.exp(v))); // sigmoid
+//					float f = Math.abs(v); //(float) (1 / (1 + Math.exp(v))); // sigmoid
 //					f = 3-f;
 					setVoxel(rgbFrame, x, y, z, v,vx,vz);
 					

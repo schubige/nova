@@ -14,7 +14,6 @@ public class Ball {
 	}
 	
 	public void update(double t) {
-		double chg = 0.03;
 		this.pos.add(MVector.mult(this.vel, t));
 		if (pos.x > maxc.x || pos.x < minc.x)
 			vel.x *= -1;

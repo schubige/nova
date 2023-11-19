@@ -25,6 +25,7 @@ public class Movie extends Content {
 
 		try {
 			FileFilter fileFilter = new FileFilter() {
+				@Override
 				public boolean accept(File file) {
 					return ! file.isDirectory();
 				}
@@ -63,6 +64,7 @@ public class Movie extends Content {
 			final byte[] lbuffer = new byte[(int)file.length()];
 			buffer = lbuffer;
 			new Thread()  {
+				@Override
 				public void run() {
 					try {
 						RandomAccessFile f = new RandomAccessFile(file, "r");

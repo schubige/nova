@@ -2,6 +2,7 @@ package ch.bluecc.nova;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
@@ -22,10 +23,19 @@ import org.corebounce.net.winnetou.HTTPServer;
 import org.corebounce.util.ClassUtilities;
 
 public class NOVAControl implements ISyncListener, Runnable, IConstants {
-	private static final int N_BUFS            = 1024;
-	private static final int MODULE_QUEUE_SIZE = 4;
-	private static final int FRAME_QUEUE_SIZE  = MODULE_QUEUE_SIZE + 4;
-	private static final int DEFAULT_CONTENT   = 0;
+	private static final int     N_BUFS            = 1024;
+	private static final int     MODULE_QUEUE_SIZE = 4;
+	private static final int     FRAME_QUEUE_SIZE  = MODULE_QUEUE_SIZE + 4;
+	private static final int     DEFAULT_CONTENT   = 0;
+	private static final String  SP_ROOT_DIR       = "rootDir"; //$NON-NLS-1$
+	private static double        red               = 1.0;
+	private static double        green             = 1.0;
+	private static double        blue              = 1.0;
+	private static double        brightness        = 0.5;
+	private static double        speed             = 0;
+	private static int           content           = DEFAULT_CONTENT;
+	private static AtomicBoolean reset             = new AtomicBoolean();
+	private static String        CONTROL_PARAMS    = "controlParams.properties"; //$NON-NLS-1$
 
 	private final HTTPServer                   httpServer;
 	private final TCPServer                    tcpServer;
@@ -148,7 +158,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		return ip; 
 	}
 
-	@SuppressWarnings("nls")
+	@SuppressWarnings({ "nls", "unchecked" })
 	public static void main(String[] args) throws IOException, InterruptedException {
 		if(args.length != 1) {
 			System.out.println("usage: " + NOVAControl.class.getName() + " <config_file>");
@@ -159,7 +169,10 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 		
 		PROPS = new Properties();
-		PROPS.load(new FileReader(args[0]));
+		File  propFile = new File(args[0]).getAbsoluteFile();
+		PROPS.load(new FileReader(propFile));
+		PROPS.put(SP_ROOT_DIR, propFile.getParent());
+		
 
 		if(PROPS.getProperty("movies") != null) {
 			File movies = new File(PROPS.getProperty("movies"));
@@ -187,7 +200,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 				config[i][j] = tmp[i][j];
 
 		NOVAConfig novaConfig = new NOVAConfig(config, PROPS.getProperty("flip", "f").toLowerCase().startsWith("t"));
-
+		
 		int numFrames = 0;
 		try {
 			numFrames = Integer.parseInt(PROPS.getProperty("duration")) * 25;
@@ -195,13 +208,36 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 
 		for(String content : PROPS.getProperty("content").split("[,]")) {
 			try {
-				@SuppressWarnings("unchecked")
-				Class<Content> cls = (Class<Content>) Class.forName("ch.bluecc.nova.content." + content);
-				Content c = cls.getConstructor(ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int).
-						newInstance(novaConfig.dimI(), novaConfig.dimJ(), novaConfig.dimK(), numFrames);
-				for(Content ci : c.getContents()) {
-					Log.info("Adding content '" + ci + "'");
-					contents.add(ci);
+				if("AUTO".equals(content)) {
+					File clsFolder = new File(ClassUtilities.getClassLocation(Content.class).toURI());
+					clsFolder = new File(clsFolder, "ch/bluecc/nova/content");
+					Log.info("Loading content from '" + clsFolder + "'");
+					for(File f : clsFolder.listFiles()) {
+						if(!(f.getName().endsWith(".class")))
+							continue;
+						try {
+							Class<Content> cls = (Class<Content>) Class.forName("ch.bluecc.nova.content." + f.getName().substring(0, f.getName().indexOf('.')));							
+							if(!(cls.getSuperclass().equals(Content.class)))
+								continue;
+							
+							Content c = cls.getConstructor(ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int).
+									newInstance(novaConfig.dimI(), novaConfig.dimJ(), novaConfig.dimK(), numFrames);
+							for(Content ci : c.getContents()) {
+								Log.info("Adding content '" + ci + "'");
+								contents.add(ci);
+							}
+						} catch(Throwable t) {
+							Log.warning(t, "Could not load content '" + content + "'");
+						}							
+					}
+				} else {
+					Class<Content> cls = (Class<Content>) Class.forName("ch.bluecc.nova.content." + content);
+					Content c = cls.getConstructor(ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int).
+							newInstance(novaConfig.dimI(), novaConfig.dimJ(), novaConfig.dimK(), numFrames);
+					for(Content ci : c.getContents()) {
+						Log.info("Adding content '" + ci + "'");
+						contents.add(ci);
+					}					
 				}
 			} catch(Throwable t) {
 				Log.warning(t, "Could not load content '" + content + "'");
@@ -210,18 +246,50 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 
 		try {
 			brightness = Double.parseDouble(PROPS.getProperty("brightness"));
-		}catch (Throwable t) {}
+		} catch (Throwable t) {}
 
+		readControlParams();
+		
 		new NOVAControl(novaConfig);
 	}
-
-	private static double        red        = 1.0;
-	private static double        green      = 1.0;
-	private static double        blue       = 1.0;
-	private static double        brightness = 0.5;
-	private static double        speed      = 0;
-	private static int           content    = DEFAULT_CONTENT;
-	private static AtomicBoolean reset      = new AtomicBoolean();
+	
+	@SuppressWarnings("nls")
+	static private void readControlParams() {
+		Properties props = new Properties();
+		try {
+			FileReader in = new FileReader(new File(PROPS.getProperty(SP_ROOT_DIR, "."), CONTROL_PARAMS));
+			props.load(in);
+			in.close();
+			
+			setRed       (Double.parseDouble(props.getProperty("red",        "" + red)));
+			setGreen     (Double.parseDouble(props.getProperty("green",      "" + green)));
+			setBlue      (Double.parseDouble(props.getProperty("blue",       "" + blue)));
+			setBrightness(Double.parseDouble(props.getProperty("brightness", "" + brightness)));
+			setSpeed     (Double.parseDouble(props.getProperty("speed",      "" + speed)));
+			setContent   (Integer.parseInt(  props.getProperty("content",    "" + content)));
+		} catch(Throwable t) {
+			Log.severe(t);
+		}
+	}
+	
+	@SuppressWarnings("nls")
+	static private void writeControlParams() {
+		Log.info("writeControlParams()");
+		Properties props = new Properties();
+		props.put("red",        "" + getRed());
+		props.put("green",      "" + getGreen());
+		props.put("blue",       "" + getBlue());
+		props.put("brightness", "" + getBrightness());
+		props.put("speed",      "" + getSpeed());
+		props.put("content",    "" + getContent());
+		try {
+			FileWriter out = new FileWriter(new File(PROPS.getProperty(SP_ROOT_DIR, "."), "controlParams.properties"));
+			props.store(out, "NOVA control parameters");
+			out.close();
+		} catch(Throwable t) {
+			Log.severe(t);
+		}
+	}
 
 	public static void resetNOVA() {
 		reset.set(true);
@@ -265,22 +333,27 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 
 	public static void setRed(double value) {
 		red = value;
+		writeControlParams();
 	}
 
 	public static void setGreen(double value) {
 		green = value;
+		writeControlParams();
 	}
 
 	public static void setBlue(double value) {
 		blue = value;
+		writeControlParams();
 	}
 
 	public static void setBrightness(double value) {
 		brightness = value;
+		writeControlParams();
 	}
 
 	public static void setSpeed(double value) {
 		speed = value;
+		writeControlParams();
 	}
 
 	@SuppressWarnings("nls")
@@ -289,6 +362,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		content = value % contents.size();
 		Log.info("setContent(" + content + ")" + contents.get(content));
 		try{contents.get(content).start();}catch(Throwable t) {}
+		writeControlParams();
 	}
 
 	public boolean isOn() {

@@ -1,5 +1,7 @@
 package ch.bluecc.nova.content;
 
+import ch.bluecc.nova.NOVAControl;
+
 @SuppressWarnings("nls")
 public class Cylinder extends Content {
 	private double      dimI1;
@@ -16,6 +18,11 @@ public class Cylinder extends Content {
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
 		double twist = 0.1;
+		float  speed = (float)((NOVAControl.getSpeed() + 3.0) / 8.0);
+		if(speed < 0.1f) speed = 0.1f;
+		if(speed > 1f)   speed = 1f;
+		timeInSec *= 0.2;
+		final float dimFactor =  ((1f - speed) * 0.3f) + 0.7f;
 		for(int k = 0; k < dimK; k++) {
 			final double t = (timeInSec + k * twist) * Math.PI;
 			double sin = Math.sin(t);
@@ -29,7 +36,7 @@ public class Cylinder extends Content {
 					if(x == i && y == j || x0 == i && y0 == j)
 						buffer[i][j][k] =  1f;
 					else
-						buffer[i][j][k] *= 0.95f;
+						buffer[i][j][k] *= dimFactor;
 					final float b = buffer[i][j][k];
 					setVoxel(rgbFrame, i, j, k, b, b, b);
 				}

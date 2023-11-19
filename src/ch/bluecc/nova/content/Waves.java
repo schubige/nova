@@ -25,7 +25,6 @@ public class Waves extends Content {
 	
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
-		double d = Math.sin(timeInSec);
 		for (int x = 0; x<nx; x++) {
 			for (int y = 0; y<ny; y++) {
 				for (int z = 0; z<nz; z++) {

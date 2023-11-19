@@ -94,7 +94,7 @@ public class Boid {
 //		this.acc.add(MVector.mult(avoid(new MVector(pos.x, pos.y, minc.z), true),  f));
 	}
 
-	private MVector separation(ArrayList<Boid> boids) {
+	MVector separation(ArrayList<Boid> boids) {
 		MVector posSum = new MVector();
 		MVector repulse;
 		for (Boid b : boids) {
@@ -109,7 +109,7 @@ public class Boid {
 		return posSum;
 	}
 
-	private MVector cohesion(ArrayList<Boid> boids) {
+	MVector cohesion(ArrayList<Boid> boids) {
 		MVector posSum = new MVector(0, 0, 0);
 		MVector steer = new MVector(0, 0, 0);
 		int count = 0;
@@ -128,7 +128,7 @@ public class Boid {
 		return steer;
 	}
 
-	private MVector alignment(ArrayList<Boid> boids) {
+	MVector alignment(ArrayList<Boid> boids) {
 		MVector velSum = new MVector(0, 0, 0);
 		int count = 0;
 		for (Boid b : boids) {
@@ -145,7 +145,7 @@ public class Boid {
 		return velSum;
 	}
 
-	private MVector avoid(MVector target, boolean weight) {
+	MVector avoid(MVector target, boolean weight) {
 		MVector steer = MVector.sub(this.pos, target);
 		if (weight)
 			steer.mult(1 / Math.pow(MVector.dist(pos, target), 2));

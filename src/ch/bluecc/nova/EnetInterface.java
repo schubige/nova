@@ -1,6 +1,7 @@
 package ch.bluecc.nova;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -35,28 +36,27 @@ public class EnetInterface implements IConstants {
 			System.out.println("os.name:" + osname);
 			System.out.println("os.arch:" + arch);
 			System.out.println("tmp:" + tmp.getAbsolutePath());
+			File soDst;
 			if(osname.contains("windows")) {
-				File dllDst = new File(tmp.getParentFile(), "jnetpcap.dll");
-				Utilities.copy(EnetInterface.class.getResourceAsStream("/native/" + dllDst.getName()), new FileOutputStream(dllDst));
-				dllDst.setExecutable(true);
-				dllDst.deleteOnExit();
-				System.load(dllDst.getAbsolutePath());
+				soDst = new File(tmp.getParentFile(), "jnetpcap.dll");
+				Utilities.copy(EnetInterface.class.getResourceAsStream("/native/" + soDst.getName()), new FileOutputStream(soDst));
 			} else if(osname.contains("mac os")) {
-				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.jnilib");
+				soDst  = new File(tmp.getParentFile(), "libjnetpcap.jnilib");
 				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (arch.contains("64") ? "/x64/" : "/x86/") + soDst.getName()), new FileOutputStream(soDst));
-				soDst.deleteOnExit();
-				soDst.setExecutable(true);
-				System.load(soDst.getAbsolutePath());				
 			} else {
-				File soDst  = new File(tmp.getParentFile(), "libjnetpcap.so");
+				soDst  = new File(tmp.getParentFile(), "libjnetpcap.so");
 				Utilities.copy(EnetInterface.class.getResourceAsStream("/native" + (arch.contains("64") ? 
 						"/x64/" : (arch.contains("arm") ? "/arm/" : "/x86/")) 
 						+ soDst.getName()), new FileOutputStream(soDst));
-				soDst.deleteOnExit();
-				soDst.setExecutable(true);
-				System.load(soDst.getAbsolutePath());				
 			}
+			if(!(soDst.exists()))
+				throw new FileNotFoundException(soDst.getAbsolutePath());
+			else
+				Log.info("Loading native lib from '" + soDst + "'");
+			soDst.setExecutable(true);
+			soDst.deleteOnExit();
 			tmp.delete();
+			System.load(soDst.getAbsolutePath());
 		} catch(Throwable t) {
 			Log.severe(t);
 		}
