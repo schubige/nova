@@ -86,7 +86,6 @@ public class Snake extends Content {
 		}
 
 		private void claim(int i, int j, int k) {
-			volume[trace[p][0]][trace[p][1]][trace[p][2]] = 0;
 			volume[i+1][j+1][k+1] = 1;
 			trace[p++] = new int[] {i+1, j+1, k+1};
 			if(p >= trace.length) p = 0;
