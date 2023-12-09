@@ -116,7 +116,7 @@ public class Snake extends Content {
 					move();
 				
 				for(int[] p : trace)
-					volume[p[0]][p[1]][p[2]] *= 0.95f;
+					volume[p[0]][p[1]][p[2]] *= 0.90f;
 			}
 			for(int[] p : trace) {
 				final float w = volume[p[0]][p[1]][p[2]];
