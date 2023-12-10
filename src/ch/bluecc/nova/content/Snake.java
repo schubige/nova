@@ -20,19 +20,19 @@ public class Snake extends Content {
 				for(int k = 0; k < dimK; k++)
 					volume[i+1][j+1][k+1] = 0f;							
 		
-		snakes = new Snake_[Math.max(dimJ, dimI) / 2];
+		snakes = new Snake_[1 + Math.max(dimJ, dimI) / 2];
 		for(int i = 0; i < snakes.length; i++)
 			snakes[i] = new Snake_();
 	}
 
 	private boolean isFree(int i, int j, int k) {
-		return volume[i+1][j+1][k+1] < 0.2f;
+		return volume[i+1][j+1][k+1] < 0.1f;
 	}
 	
 	class Snake_ {
 		static final int DIE_FRAMES = 50;
 		
-		int[][] trace = new int[30][3];
+		int[][] trace = new int[25][3];
 		
 		int i;
 		int j;
