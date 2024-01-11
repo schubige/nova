@@ -518,7 +518,8 @@ public class ClassUtilities {
         return (object != null) ? (Class<? extends T>) object.getClass() : null;
     }
     
-    public static URL getClassLocation(Class<?> c) {
+    @SuppressWarnings("deprecation")
+	public static URL getClassLocation(Class<?> c) {
         URL url = c.getResource(c.getSimpleName() + ".class");
         if (url == null)
             return null;

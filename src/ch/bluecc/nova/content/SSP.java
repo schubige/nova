@@ -3,35 +3,35 @@ package ch.bluecc.nova.content;
 import java.util.Arrays;
 
 public class SSP extends Content {
-	static final float _ = 0f;
+	static final float Z = 0f;
 	static final float x = .5f;
 	static final float X = 1f;
 	
 	private static final float[][] FONT = {
 			{},
 			{
-				_,X,X,X,X,
+				Z,X,X,X,X,
 				X,x,x,x,x,
-				X,x,_,_,_,
-				X,x,_,_,_,
+				X,x,Z,Z,Z,
+				X,x,Z,Z,Z,
 				x,X,X,X,x,
-				_,x,x,x,X,
-				_,_,_,x,X,
-				_,_,_,x,X,
+				Z,x,x,x,X,
+				Z,Z,Z,x,X,
+				Z,Z,Z,x,X,
 				x,x,x,x,X,
-				X,X,X,X,_,
+				X,X,X,X,Z,
 			},
 			{
-				X,X,X,X,_,
+				X,X,X,X,Z,
 				x,x,x,x,X,
-				_,_,_,x,X,
-				_,_,_,x,X,
+				Z,Z,Z,x,X,
+				Z,Z,Z,x,X,
 				X,X,X,X,x,
-				X,x,x,x,_,
-				X,x,_,_,_,
-				X,x,_,_,_,
-				X,x,_,_,_,
-				X,x,_,_,_,
+				X,x,x,x,Z,
+				X,x,Z,Z,Z,
+				X,x,Z,Z,Z,
+				X,x,Z,Z,Z,
+				X,x,Z,Z,Z,
 			},
 			{},
 			{},

@@ -1,4 +1,5 @@
 /bin/
 /3dd/
 /.vscode/
+controlParams.properties
 .DS_store

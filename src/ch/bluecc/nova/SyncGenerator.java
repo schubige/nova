@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.corebounce.util.Log;
 import org.corebounce.util.Strings;
+import org.jnetpcap.PcapException;
 
 @SuppressWarnings("nls")
 public class SyncGenerator implements IConstants {
@@ -108,7 +109,7 @@ public class SyncGenerator implements IConstants {
 		running.set(false);
 	}
 
-	public void handle(int cmd, byte[] status) throws IOException {
+	public void handle(int cmd, byte[] status) throws IOException, PcapException {
 		switch(cmd) {
 		case CMD_START:
 			Log.info("\nSTART " + running + " " + Strings.toHex((byte)(seqNum.get() >> 1)));

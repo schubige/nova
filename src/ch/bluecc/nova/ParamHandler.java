@@ -7,6 +7,7 @@ import org.corebounce.net.winnetou.HTTPResponse;
 import org.corebounce.net.winnetou.HTTPServer;
 import org.corebounce.net.winnetou.Response200;
 import org.corebounce.net.winnetou.Response500;
+import org.corebounce.util.Log;
 
 @SuppressWarnings("nls")
 public class ParamHandler extends HTTPHandler {
@@ -21,31 +22,43 @@ public class ParamHandler extends HTTPHandler {
 			String[] url   = req.tokens[1].split("[/?=]");
 			String   param = url[2];
 			String   value = url.length > 4 ? url[4] : null;
-			if("red".equals(param))
+			switch (param) {
+			case "red":
 				NOVAControl.setRed(Double.parseDouble(value));
-			else if("green".equals(param))
+				break;
+			case "green":
 				NOVAControl.setGreen(Double.parseDouble(value));
-			else if("blue".equals(param))
+				break;
+			case "blue":
 				NOVAControl.setBlue(Double.parseDouble(value));
-			else if("brightness".equals(param))
+				break;
+			case "brightness":
 				NOVAControl.setBrightness(Double.parseDouble(value));
-			else if("color".equals(param)) {
+				break;
+			case "color":
 				NOVAControl.setRed(  Integer.parseInt(value.substring(0, 2), 16) << 2);
 				NOVAControl.setGreen(Integer.parseInt(value.substring(2, 4), 16) << 2);
 				NOVAControl.setBlue( Integer.parseInt(value.substring(4, 6), 16) << 2);
-			}
-			else if("speed".equals(param))
+				break;
+			case "speed":
 				NOVAControl.setSpeed(Double.parseDouble(value));
-			else if("content".equals(param))
+				break;
+			case "content":
 				NOVAControl.setContent((int)Double.parseDouble(value));
-			else if("reset".equals(param))
+				break;
+			case "reset":
 				NOVAControl.resetNOVA();
-			else if("reload".equals(param))
+				break;
+			case "reload":
+				Log.info("User requested reload. Exiting.");
 				System.exit(0);
+				break;
+			default:
+				Log.warning("Unkonwn HTTP request " + param);
+			}
 			return new Response200(req, MIME.HTML, EMPTY);
 		} catch(Throwable t) {
 			return new Response500(req, t);
 		}
 	}
-
 }

@@ -24,7 +24,7 @@ public class Dispatcher extends Thread implements IConstants {
 		AddressUtils.SYNC(status, 6);
 		for(;;) {
 			try {
-				byte[] packet = device.recieve();
+				byte[] packet = device.receive();
 				if(!(PacketUtils.isNOVAEnet(packet)))   continue;
 				if(AddressUtils.isDstBroadcast(packet)) continue;
 				synchronized(this) {

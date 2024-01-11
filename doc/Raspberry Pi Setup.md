@@ -89,7 +89,7 @@ cd /home/pi/nova/scripts
 exit
 ```
 
-* Get and compile nova code
+* Get and compile NOVA code
 
 ```
 cd /home/pi
@@ -100,13 +100,10 @@ cd ..
 cp -rp src/native bin/native
 ```
 
-* Edit raspi_1x1.properties, comment out:
+* Edit raspi_1x1.properties. Importantly, set the correct Ethernet interface for communication with NOVA (usually it will be eth0 on the Raspberry Pi):
 
 ```
-## IP address for binding the HTTP server
-# http=192.168.130.130
-## IP address for binding the TCP server (only used by windows phone client)
-# tcp=192.168.130.130
+nova=eth0
 ```
 
 * Plug in nova via ethernet and reboot

@@ -1,12 +1,13 @@
 package org.corebounce.net;
 
 import org.corebounce.util.SystemInfo;
+import org.jnetpcap.PcapException;
 
 @SuppressWarnings("nls")
 public class NetworkUtilities {
 	private static byte[][] macAddresses;
 
-	public synchronized final static byte[][] getMacAddress() {
+	public synchronized final static byte[][] getMacAddress() throws PcapException {
 		if(macAddresses == null) {
 			String[] macs = SystemInfo.getMACAddresses().split("[:;,]");
 			macAddresses  = new byte[macs.length][];

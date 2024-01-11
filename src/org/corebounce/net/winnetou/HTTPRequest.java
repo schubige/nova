@@ -146,6 +146,7 @@ public class HTTPRequest implements Runnable {
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
 	public URL getReferer() throws MalformedURLException {
 		return new URL(getHeaderField("referer"));
 	}
@@ -208,6 +209,7 @@ public class HTTPRequest implements Runnable {
 
 			// Get the method handler
 
+			@SuppressWarnings("deprecation")
 			HTTPHandler handler = server.getHandler(tokens[0], new URL("http", server.getHostAddress(), server.getPort(), tokens[1]));
 
 			// Log.info("handler for " + tokens[0] + " " + tokens[1] +

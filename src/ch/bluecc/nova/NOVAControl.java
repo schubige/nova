@@ -6,22 +6,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.corebounce.net.winnetou.HTTPServer;
+import org.corebounce.util.ClassUtilities;
 import org.corebounce.util.Log;
+import org.jnetpcap.PcapException;
 
 import ch.bluecc.nova.content.Content;
 import ch.bluecc.nova.content.Movie;
 
-import org.corebounce.net.winnetou.HTTPServer;
-import org.corebounce.util.ClassUtilities;
-
+@SuppressWarnings("nls")
 public class NOVAControl implements ISyncListener, Runnable, IConstants {
 	private static final int     N_BUFS            = 1024;
 	private static final int     MODULE_QUEUE_SIZE = 4;
@@ -38,7 +37,6 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 	private static String        CONTROL_PARAMS    = "controlParams.properties"; //$NON-NLS-1$
 
 	private final HTTPServer                   httpServer;
-	private final TCPServer                    tcpServer;
 	private final ParamHandler                 paramHandler;
 	private final UIHandler                    uiHandler;
 	private SyncGenerator                      syncGen;
@@ -56,31 +54,15 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 	static final  List<Content>                contents   = new ArrayList<Content>();
 	static        Properties                   PROPS      = System.getProperties();
 
-	@SuppressWarnings("nls")
-	public NOVAControl(NOVAConfig config) throws IOException, InterruptedException {
-		this.config     = config;
-		this.selfIpAddr = Inet4Address.getLocalHost().getAddress();
-		this.socket     = new DatagramSocket();
-		this.selfIpPort = this.socket.getLocalPort();
-
-		for(EnetInterface eif : EnetInterface.interfaces()) 
-			Log.info("Interface:" + eif);
-
-		EnetInterface device = null;
-		for(EnetInterface eif : EnetInterface.interfaces()) {
-			if(useInterface(eif, false)) {
-				Log.info("Using " + eif);
-				eif.open();
-				device = eif;
-				break;
-			}
-		}
-
-		if(device == null) {
-			throw new IOException("No ethernet interface found.");
-		}
-
-		this.device = device;
+	public NOVAControl(NOVAConfig config) throws IOException, InterruptedException, PcapException {
+		this.config = config;
+		selfIpAddr  = Inet4Address.getLocalHost().getAddress();
+		socket      = new DatagramSocket();
+		selfIpPort  = this.socket.getLocalPort();
+		device      = EnetInterface.getInterface(PROPS.getProperty("nova", "eth0"));
+		Log.info("Using interface " + device.getName());
+		device.toString();
+		device.open();
 
 		int maxModule = 0;
 		for(int m : config.getModules()) {
@@ -92,14 +74,13 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			frameQ.add(new int[maxModule + 1][config.dimI() * config.dimJ() * config.dimK() * 3]);
 
 		disp           = new Dispatcher(device, config);
-		httpServer     = new HTTPServer(null, 80);
 
+		httpServer     = new HTTPServer(null, 80);
 		uiHandler      = new UIHandler(httpServer);
 		paramHandler   = new ParamHandler(httpServer);
 
 		httpServer.setDefaultHandler(uiHandler);
 		httpServer.addHandler(uiHandler,    "/");
-		httpServer.addHandler(new RedirectHandler(httpServer), "/ncsi.txt");
 		httpServer.addHandler(uiHandler,    "/index.html");
 		httpServer.addHandler(paramHandler, "/nova/red");
 		httpServer.addHandler(paramHandler, "/nova/green");		
@@ -111,9 +92,6 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		httpServer.addHandler(paramHandler, "/nova/reset");
 		httpServer.addHandler(paramHandler, "/nova/reload");
 		httpServer.start();
-
-		tcpServer     = new TCPServer(localIp(PROPS.getProperty("tcp")), TCPServer.PORT);
-		tcpServer.start();
 
 		Thread sender = new Thread(this, "Voxel Streamer");
 		sender.setPriority(Thread.MIN_PRIORITY);
@@ -127,8 +105,10 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 					if(!(isOn()))
 						novaOn();
 				} else {
+					// note: not sure if we want this (if nova behaves unstable, just comment out)					
 					if(isOn()) {
 						novaOff();
+						Log.info("NOVA Off: exiting");
 						System.exit(0);
 					}
 				}
@@ -139,27 +119,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 	}
 
-	@SuppressWarnings("nls")
-	private String localIp(String ip) {
-		if(ip == null) {
-			try {
-				ip = "";
-				byte[] addr = InetAddress.getLocalHost().getAddress();
-				for(int i = 0; i < addr.length; i++) {
-					if(i > 0) ip += ".";
-					ip += (addr[i] & 0xFF);
-				}
-				if(addr.length != 4) throw new UnknownHostException("Not an IPv4 address:" + ip);
-			} catch (UnknownHostException e) {
-				Log.severe(e);
-				ip = "127.0.01";
-			}
-		}
-		return ip; 
-	}
-
-	@SuppressWarnings({ "nls", "unchecked" })
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException, PcapException {
 		if(args.length != 1) {
 			System.out.println("usage: " + NOVAControl.class.getName() + " <config_file>");
 			System.exit(0);
@@ -216,6 +176,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 						if(!(f.getName().endsWith(".class")))
 							continue;
 						try {
+							@SuppressWarnings("unchecked")
 							Class<Content> cls = (Class<Content>) Class.forName("ch.bluecc.nova.content." + f.getName().substring(0, f.getName().indexOf('.')));							
 							if(!(cls.getSuperclass().equals(Content.class)))
 								continue;
@@ -231,6 +192,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 						}							
 					}
 				} else {
+					@SuppressWarnings("unchecked")
 					Class<Content> cls = (Class<Content>) Class.forName("ch.bluecc.nova.content." + content);
 					Content c = cls.getConstructor(ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int).
 							newInstance(novaConfig.dimI(), novaConfig.dimJ(), novaConfig.dimK(), numFrames);
@@ -253,7 +215,6 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		new NOVAControl(novaConfig);
 	}
 	
-	@SuppressWarnings("nls")
 	static private void readControlParams() {
 		Properties props = new Properties();
 		try {
@@ -272,9 +233,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 	}
 	
-	@SuppressWarnings("nls")
 	static private void writeControlParams() {
-		Log.info("writeControlParams()");
 		Properties props = new Properties();
 		props.put("red",        "" + getRed());
 		props.put("green",      "" + getGreen());
@@ -356,7 +315,6 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		writeControlParams();
 	}
 
-	@SuppressWarnings("nls")
 	public static void setContent(int value) {
 		try{contents.get(content).stop();}catch(Throwable t) {}
 		content = value % contents.size();
@@ -369,8 +327,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		return syncGen != null;
 	}
 
-	@SuppressWarnings("nls")
-	public void novaOn() throws IOException, InterruptedException {
+	public void novaOn() throws IOException, InterruptedException, PcapException {
 		if(!(isOn()) && device != null) {
 			Log.info("NOVA ON");
 			reset();
@@ -386,15 +343,14 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		return packets[bufPtr++ % N_BUFS];
 	}
 
-	private void send(byte[] packet, int module) throws IOException {
+	private void send(byte[] packet, int module) throws IOException, PcapException {
 		AddressUtils.MMUX(packet, 0, module);
 		System.arraycopy(device.getAddr(), 0, packet, 6, 6);
 		PacketUtils.UDP(packet, 12, selfIpAddr, selfIpPort, novaIpAddr[module], 3210, 1100);
 		device.send(packet);
 	}
 
-	@SuppressWarnings("nls")
-	void reset() throws IOException, InterruptedException {
+	void reset() throws IOException, InterruptedException, PcapException {
 		StringBuilder msg = new StringBuilder("Resetting Modules:");
 		for(int m : config.getModules())
 			msg.append(" ").append(m);
@@ -417,7 +373,6 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		Log.info("Reset done.");
 	}
 
-	@SuppressWarnings("nls")
 	public void novaOff() {
 		if(isOn()) {
 			Log.info("NOVA OFF");
@@ -486,7 +441,6 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 	}
 
-	@SuppressWarnings("nls")
 	@Override
 	public void sync(int seqNum) {
 		try {
@@ -515,7 +469,6 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		}
 	}
 
-	@SuppressWarnings("nls")
 	public void getStatus() {
 		byte[] packet = new byte[ADDR_LEN + PROT_LEN + DATA_LEN];
 		AddressUtils.BROADCAST(packet, 0);
@@ -534,15 +487,4 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			}
 		}
 	}
-
-	@SuppressWarnings("nls")
-	public static boolean useInterface(EnetInterface eif, boolean forSync) {
-		if(eif == EnetInterface.DUMMY) return true;
-		String eth = PROPS.getProperty(forSync ? "sync" : "nova");
-		if(eth == null)
-			eth = "eth0";
-
-		return eif.toString().contains("Intel") || eif.toString().contains(eth);	
-	}
-
 }

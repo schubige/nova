@@ -37,6 +37,7 @@ public class HandlerGET extends HTTPHandler implements HTML {
 		this.prefix = prefix;
 	}
 
+	@SuppressWarnings("deprecation")
 	public URL getURLforFile(File file) throws MalformedURLException {
 		String path = file.toURI().toURL().getPath();
 		if (path.startsWith(root.toURI().toURL().getPath())) {

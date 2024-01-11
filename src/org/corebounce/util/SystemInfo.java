@@ -1,10 +1,7 @@
 package org.corebounce.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jnetpcap.Pcap;
-import org.jnetpcap.PcapIf;
+import org.jnetpcap.PcapException;
 
 @SuppressWarnings("nls")
 public class SystemInfo {
@@ -14,22 +11,11 @@ public class SystemInfo {
 	 * 
 	 * @return string of the form "MAC0;MAC1;MAC2..."
 	 */
-	public static String getMACAddresses() {
+	public static String getMACAddresses() throws PcapException {
 		StringBuilder result = new StringBuilder();
-		List<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with NICs  
-		StringBuilder errbuf = new StringBuilder(); // For any error msgs  
-
-		int r = Pcap.findAllDevs(alldevs, errbuf);  
-		if (r == Pcap.NOT_OK || alldevs.isEmpty()) {  
-			Log.severe("Can't read list of devices, error is " + errbuf.toString());  
-			return "";
-		} 
-		try {
-		for(PcapIf pif : alldevs)
-			result.append(TextUtilities.toHex(pif.getHardwareAddress())).append(';');
-		} catch(Throwable t) {}
+		for (var device : Pcap.findAllDevs()) {
+			result.append(TextUtilities.toHex(device.hardwareAddress().get())).append(';');
+		}
 		return result.toString();
 	}
-
-
 }
