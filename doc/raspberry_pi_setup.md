@@ -5,11 +5,23 @@ This document provides step-by-step instructions to set up a Raspberry Pi in hea
 Basic Linux console experience is assumed. To edit files use either vi or nano. For details to configure a Raspberry Pi, refer to
 headless setup from scratch for integration into home network: <https://www.raspberrypi.org/documentation/configuration/>.
 
+
+
 ## Step-by-step instructions
 
-### Get Raspian Buster Lite from: <https://www.raspberrypi.org/downloads/raspbian/>
 
-* Flash image to SD card
+### Flashing Raspberry Pi OS to SD Card
+
+* Get Raspberry Pi Imager from <https://www.raspberrypi.com/software/>
+* Choose your device (e.g., Raspberry Pi 4)
+* Select OS: Raspberry Pi OS Lite (64-bit)
+* Set up initial config before writing: user/password, WLAN, enable SSH access
+* Flash image to SD Card
+
+#### Alternative option without imager
+
+If you are not using the Imager, you need to setup initial config manually:
+ 
 * Mount the SD card and in /boot
 * Create empty file /boot/ssh
 * Create file /boot/wpa_supplicant.conf and add:
@@ -25,6 +37,8 @@ network={
 }
 ```
 
+
+
 ### Plugin your Raspberry Pi and wait until boot is complete
 
 * From your machine, ssh to raspberrypi.local:
@@ -33,7 +47,7 @@ network={
 ssh pi@raspberrypi.local
 ```
 
-* The default password is _raspberry_
+* If not set via Imager, the default password is _raspberry_
 * In case hostname cannot be resolved, find the Raspberry Pi's IP address on your router and connect with ssh using the IP address.
 * Change default password and enter root
 
@@ -41,6 +55,8 @@ ssh pi@raspberrypi.local
 passwd
 sudo su
 ```
+
+
 
 ### Run the Raspberry Pi configuration utility
 
@@ -53,6 +69,8 @@ raspi-config
   * Networking: set hostname to any name you prefer (we'll use "novahost" in this documentation)
   * Localization options: set timezone and keyboard layout
 
+
+
 ### Update and install software
 
 * Update the Raspberry Pi:
@@ -61,16 +79,21 @@ raspi-config
 apt update
 apt full-upgrade
 apt install rpi-eeprom
-rpi-eeprom-update
+rpi-eeprom-update -a
+reboot
 ```
+
+
 
 * Install required software:
 
 ```
-apt-get install openjdk-8-jdk
 apt-get install git
 apt-get install libpcap0.8
 ```
+
+DEV NOTE: from here onwards, the documentation is outdated. Details re latest JDK etc will follow...
+
 
 ### Configure startup script
 
@@ -80,6 +103,8 @@ apt-get install libpcap0.8
 cd /home/pi/nova/scripts
 ./novaraspi.sh > /dev/null 2>&1 &
 ```
+
+
 
 ### NOVA software setup
 
@@ -100,6 +125,7 @@ cd ..
 cp -rp src/native bin/native
 ```
 
+
 * Edit raspi_1x1.properties. Importantly, set the correct Ethernet interface for communication with NOVA (usually it will be eth0 on the Raspberry Pi):
 
 ```
@@ -114,6 +140,8 @@ sudo shutdown -r now
 
 * After 10 seconds, the random lights should go on
 * Connect to web interface via your web browser: http://novahost.local
+
+
 
 ## Troubleshooting
 
@@ -145,4 +173,4 @@ ssh pi@novahost.local
 ping 192.168.1.4
 ```
 
-* If this is not the case, check your Nova address jumper settings again.
+* If this is not the case, check your NOVA address jumper settings again.
