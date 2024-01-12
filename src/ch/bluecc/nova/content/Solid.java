@@ -2,6 +2,8 @@ package ch.bluecc.nova.content;
 
 import java.util.Arrays;
 
+import ch.bluecc.nova.Content;
+
 @SuppressWarnings("nls")
 public class Solid extends Content {
 

@@ -111,7 +111,6 @@ public class EnetInterface implements IConstants {
 	}
 
 	public String getName() {
-		device.toString();
 		return device.name();
 	}
 	

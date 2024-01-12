@@ -2,6 +2,8 @@ package ch.bluecc.nova.content;
 
 import java.util.Arrays;
 
+import ch.bluecc.nova.Content;
+
 public class ColorSplash extends Content {
 	static final int       N_SPHERES    = 5;
 	float[]                spheres      = new float[N_SPHERES * 9];

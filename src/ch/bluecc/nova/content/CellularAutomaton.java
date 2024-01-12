@@ -2,6 +2,8 @@ package ch.bluecc.nova.content;
 
 import org.corebounce.util.Log;
 
+import ch.bluecc.nova.Content;
+
 @SuppressWarnings("nls")
 public class CellularAutomaton extends Content {
 	float[] frame = new float[0];

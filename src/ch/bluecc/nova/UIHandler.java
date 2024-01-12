@@ -16,8 +16,6 @@ import org.corebounce.net.winnetou.Response302;
 import org.corebounce.net.winnetou.Response500;
 import org.corebounce.util.Strings;
 
-import ch.bluecc.nova.content.Content;
-
 @SuppressWarnings("nls")
 public class UIHandler extends HTTPHandler {
 

@@ -4,6 +4,8 @@ import java.util.Random;
 
 import org.corebounce.util.Log;
 
+import ch.bluecc.nova.Content;
+
 @SuppressWarnings("nls")
 public class ReactionDiffusionRandom extends Content {
 

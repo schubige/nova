@@ -13,11 +13,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.corebounce.net.winnetou.HTTPServer;
-import org.corebounce.util.ClassUtilities;
 import org.corebounce.util.Log;
 import org.jnetpcap.PcapException;
 
-import ch.bluecc.nova.content.Content;
 import ch.bluecc.nova.content.Movie;
 
 @SuppressWarnings("nls")
@@ -59,9 +57,9 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 		selfIpAddr  = Inet4Address.getLocalHost().getAddress();
 		socket      = new DatagramSocket();
 		selfIpPort  = this.socket.getLocalPort();
+
 		device      = EnetInterface.getInterface(PROPS.getProperty("nova", "eth0"));
 		Log.info("Using interface " + device.getName());
-		device.toString();
 		device.open();
 
 		int maxModule = 0;
@@ -124,9 +122,8 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			System.out.println("usage: " + NOVAControl.class.getName() + " <config_file>");
 			System.exit(0);
 		}
-		if(System.getProperty("os.name").toLowerCase().contains("windows") && System.getProperty("java.vm.name").contains("64")) {
-			Log.severe(NOVAControl.class.getName() + " requires a 32 Bit VM, current VM is '" + System.getProperty("java.vm.name") + "'");
-		}
+		
+		Log.info("Using configuration: " + args[0]);
 		
 		PROPS = new Properties();
 		File  propFile = new File(args[0]).getAbsoluteFile();
@@ -161,50 +158,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 
 		NOVAConfig novaConfig = new NOVAConfig(config, PROPS.getProperty("flip", "f").toLowerCase().startsWith("t"));
 		
-		int numFrames = 0;
-		try {
-			numFrames = Integer.parseInt(PROPS.getProperty("duration")) * 25;
-		} catch(Throwable t) {}
-
-		for(String content : PROPS.getProperty("content").split("[,]")) {
-			try {
-				if("AUTO".equals(content)) {
-					File clsFolder = new File(ClassUtilities.getClassLocation(Content.class).toURI());
-					clsFolder = new File(clsFolder, "ch/bluecc/nova/content");
-					Log.info("Loading content from '" + clsFolder + "'");
-					for(File f : clsFolder.listFiles()) {
-						if(!(f.getName().endsWith(".class")))
-							continue;
-						try {
-							@SuppressWarnings("unchecked")
-							Class<Content> cls = (Class<Content>) Class.forName("ch.bluecc.nova.content." + f.getName().substring(0, f.getName().indexOf('.')));							
-							if(!(cls.getSuperclass().equals(Content.class)))
-								continue;
-							
-							Content c = cls.getConstructor(ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int).
-									newInstance(novaConfig.dimI(), novaConfig.dimJ(), novaConfig.dimK(), numFrames);
-							for(Content ci : c.getContents()) {
-								Log.info("Adding content '" + ci + "'");
-								contents.add(ci);
-							}
-						} catch(Throwable t) {
-							Log.warning(t, "Could not load content '" + content + "'");
-						}							
-					}
-				} else {
-					@SuppressWarnings("unchecked")
-					Class<Content> cls = (Class<Content>) Class.forName("ch.bluecc.nova.content." + content);
-					Content c = cls.getConstructor(ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int, ClassUtilities.CLS_int).
-							newInstance(novaConfig.dimI(), novaConfig.dimJ(), novaConfig.dimK(), numFrames);
-					for(Content ci : c.getContents()) {
-						Log.info("Adding content '" + ci + "'");
-						contents.add(ci);
-					}					
-				}
-			} catch(Throwable t) {
-				Log.warning(t, "Could not load content '" + content + "'");
-			}
-		}
+		contents.addAll(Content.createContent(novaConfig, PROPS));
 
 		try {
 			brightness = Double.parseDouble(PROPS.getProperty("brightness"));
@@ -229,7 +183,7 @@ public class NOVAControl implements ISyncListener, Runnable, IConstants {
 			setSpeed     (Double.parseDouble(props.getProperty("speed",      "" + speed)));
 			setContent   (Integer.parseInt(  props.getProperty("content",    "" + content)));
 		} catch(Throwable t) {
-			Log.severe(t);
+			//Log.severe(t);
 		}
 	}
 	

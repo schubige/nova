@@ -1,7 +1,19 @@
-package ch.bluecc.nova.content;
+package ch.bluecc.nova;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.corebounce.util.Log;
+
+import ch.bluecc.nova.content.Test;
 
 /**
  * Content base class for NOVA Server content.
@@ -208,4 +220,57 @@ public abstract class Content {
 			rgb[idx+2] = X;
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	static List<Content> createContent(NOVAConfig config, Properties properties) {
+		int numFrames = -1;
+		try {
+			numFrames = Integer.parseInt(properties.getProperty("duration")) * 25;
+		} catch (Throwable t) {
+		}
+
+		var contents = new ArrayList<Content>();
+		for (String content : properties.getProperty("content", "AUTO").split("[,]")) {
+			try {
+				if ("AUTO".equals(content)) {
+					for (var cls : findAllContentClasses(Test.class.getPackageName())) {
+						Content c = cls.getConstructor(int.class, int.class, int.class, int.class)
+								.newInstance(config.dimI(), config.dimJ(), config.dimK(), numFrames);
+						for (Content ci : c.getContents()) {
+							Log.info("Adding content '" + ci + "'");
+							contents.add(ci);
+						}
+					}
+				} else {
+					Class<Content> cls = (Class<Content>) Class.forName("ch.bluecc.nova.content." + content);
+					Content c = cls.getConstructor(int.class, int.class, int.class, int.class)
+							.newInstance(config.dimI(), config.dimJ(), config.dimK(), numFrames);
+					for (Content ci : c.getContents()) {
+						Log.info("Adding content '" + ci + "'");
+						contents.add(ci);
+					}
+				}
+			} catch (Throwable t) {
+				Log.warning(t, "Could not load content '" + content + "'");
+			}
+		}
+		return contents;
+	}
+	
+	private static Set<Class<Content>> findAllContentClasses(String packageName) {
+		InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(packageName.replaceAll("[.]", "/"));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		return reader.lines().filter(line -> line.endsWith(".class")).map(line -> getClass(line, packageName)).filter(Objects::nonNull).collect(Collectors.toSet());
+	}
+ 
+    @SuppressWarnings("unchecked")
+	private static Class<Content> getClass(String className, String packageName) {
+        try {
+        	Class<?> cls = Class.forName(packageName + "." + className.substring(0, className.lastIndexOf('.')));
+        	if (cls.getSuperclass().equals(Content.class))
+        		return (Class<Content>)cls;
+        } catch (ClassNotFoundException e) {
+        }
+        return null;
+    }
 }

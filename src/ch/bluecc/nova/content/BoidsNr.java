@@ -2,6 +2,8 @@ package ch.bluecc.nova.content;
 
 import java.util.ArrayList;
 
+import ch.bluecc.nova.Content;
+
 @SuppressWarnings("nls")
 public class BoidsNr extends Content {
 	ArrayList<Boid> boids;

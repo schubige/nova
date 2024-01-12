@@ -2,6 +2,8 @@ package ch.bluecc.nova.content;
 
 import java.util.Arrays;
 
+import ch.bluecc.nova.Content;
+
 public class SSP extends Content {
 	static final float Z = 0f;
 	static final float x = .5f;

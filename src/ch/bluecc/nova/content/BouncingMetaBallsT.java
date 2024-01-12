@@ -1,5 +1,7 @@
 package ch.bluecc.nova.content;
 
+import ch.bluecc.nova.Content;
+
 @SuppressWarnings("nls")
 public class BouncingMetaBallsT extends Content {
 

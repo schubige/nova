@@ -3,6 +3,7 @@ package ch.bluecc.nova.content;
 import org.corebounce.util.Matrix3x3;
 import org.corebounce.util.Vector3D;
 
+import ch.bluecc.nova.Content;
 import ch.bluecc.nova.NOVAControl;
 
 @SuppressWarnings("nls")

@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.corebounce.util.Log;
 
+import ch.bluecc.nova.Content;
+
 @SuppressWarnings("nls")
 public class Movie extends Content {
 	public static File ROOT_DIR = new File("movies");

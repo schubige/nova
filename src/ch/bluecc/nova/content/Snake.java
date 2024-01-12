@@ -3,6 +3,8 @@ package ch.bluecc.nova.content;
 import java.util.Arrays;
 import java.util.Random;
 
+import ch.bluecc.nova.Content;
+
 public class Snake extends Content {
 	private float[][][] volume;
 	private Random      rnd = new Random();

@@ -1,5 +1,6 @@
 package ch.bluecc.nova.content;
 
+import ch.bluecc.nova.Content;
 import ch.bluecc.nova.NOVAControl;
 
 @SuppressWarnings("nls")
