@@ -104,9 +104,11 @@ class UIHandler extends HTTPHandler {
 					"}"
 					);
 			out.style(
-					"BODY {",
+					"body {",
 					"   font-family:sans-serif;",
-					"   }"
+					"   background-color:#202020;",
+					"   color:#a0a0a0;",
+					"}"
 					);
 			out.end(HTML.Head);
 			out.tag(HTML.Body);
@@ -118,7 +120,7 @@ class UIHandler extends HTTPHandler {
 			makeSlider(out,   "red",        "Red",        control.getRed(),         0,   1.0);
 			makeSlider(out,   "green",      "Green",      control.getGreen(),       0,   1.0);
 			makeSlider(out,   "blue",       "Blue",       control.getBlue(),        0,   1.0);
-			makeSlider(out,   "brightness", "Brightness", control.getBrightness(),  0.1, 1.0);
+			makeSlider(out,   "brightness", "B'ness", control.getBrightness(),  0.1, 1.0);
 			makeSlider(out,   "speed",      "Speed",      control.getSpeed(),      -3.0, 5);
 			makeButton(out,   "reset",      "Reset");
 			makeButton(out,   "reload",     "Reload");
