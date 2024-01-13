@@ -33,7 +33,7 @@ class UIHandler extends HTTPHandler {
 				"step",  Double.toString((max - min) / 200.0),
 				"value", Double.toString(value), 
 				"style", "width:250px;",
-				"onChange", 
+				"onInput", 
 				"httpGet('/nova/" + cmd + "?value=' + this.value);");
 		out.print(name);
 		out.end(HTML.Div);
