@@ -23,7 +23,7 @@ public class Movie extends Content {
 		super("Movie", dimI, dimJ, dimK, 0);
 
 		file     = null;
-		contents = new ArrayList<Content>();
+		contents = new ArrayList<>();
 
 		try {
 			FileFilter fileFilter = new FileFilter() {
@@ -68,14 +68,9 @@ public class Movie extends Content {
 			new Thread()  {
 				@Override
 				public void run() {
-					try {
-						RandomAccessFile f = new RandomAccessFile(file, "r");
-						try {
-							buffer = lbuffer;
-							f.readFully(lbuffer);
-						} finally {
-							f.close();
-						}
+					try (RandomAccessFile f = new RandomAccessFile(file, "r")) {
+						buffer = lbuffer;
+						f.readFully(lbuffer);
 					} catch(Throwable t) {
 						Log.severe(t);
 					}

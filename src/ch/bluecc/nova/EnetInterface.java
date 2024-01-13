@@ -19,7 +19,7 @@ public class EnetInterface implements IConstants {
 	private final PcapIf                      device;
 	private       Pcap                        pcap;
 	private final byte[]                      addr;
-	private final LinkedBlockingQueue<byte[]> queue = new LinkedBlockingQueue<byte[]>();
+	private final LinkedBlockingQueue<byte[]> queue = new LinkedBlockingQueue<>();
 	private final AtomicBoolean               close = new AtomicBoolean();
 	private static final int                  SEND_DELAY = 0;
 

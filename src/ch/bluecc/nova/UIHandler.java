@@ -17,7 +17,7 @@ import org.corebounce.net.winnetou.Response500;
 import org.corebounce.util.Strings;
 
 @SuppressWarnings("nls")
-public class UIHandler extends HTTPHandler {
+class UIHandler extends HTTPHandler {
 
 	protected UIHandler(HTTPServer server) {
 		super(GET, server);
@@ -70,7 +70,7 @@ public class UIHandler extends HTTPHandler {
 				"onChange", 
 				"httpGet('/nova/" + cmd + "?value=' + this.value);");
 		for(int i = 0; i < contents.size(); i++) {
-			if(i == NOVAControl.getContent())
+			if(i == NOVAControl.get().getContent())
 				out.tag(HTML.Option, "value", Integer.toString(i), "selected", "selected");
 			else
 				out.tag(HTML.Option, "value", Integer.toString(i));
@@ -83,13 +83,12 @@ public class UIHandler extends HTTPHandler {
 
 	@Override
 	public HTTPResponse request(HTTPRequest req) {
-		if(!(req.toString().contains("htm")))
+		if (!(req.toString().contains("htm")))
 			return new Response302(req, "http://" + server.getHostAddress() + "/index.html");
+
 		try {
 			ByteArrayOutputStream bout = new ByteArrayOutputStream();
-
-			HtmlPrintWriter       out  = new HtmlPrintWriter(bout);
-
+			HtmlPrintWriter out  = new HtmlPrintWriter(bout);
 			out.tag(HTML.Html);
 			out.tag(HTML.Head);
 			out.tag(HTML.Title);
@@ -112,22 +111,22 @@ public class UIHandler extends HTTPHandler {
 			out.end(HTML.Head);
 			out.tag(HTML.Body);
 
-			makeDropDown(out,    "content", "Content", NOVAControl.contents);			
-			// makeColorPicker(out, "color",   "Color",   NOVAControl.getRed(), NOVAControl.getGreen(), NOVAControl.getBlue());
-
-			makeSlider(out,   "red",        "Red",        NOVAControl.getRed(),         0,   1.0);
-			makeSlider(out,   "green",      "Green",      NOVAControl.getGreen(),       0,   1.0);
-			makeSlider(out,   "blue",       "Blue",       NOVAControl.getBlue(),        0,   1.0);
-			makeSlider(out,   "brightness", "Brightness", NOVAControl.getBrightness(),  0.1, 1.0);
-
-			makeSlider(out,   "speed",      "Speed",      NOVAControl.getSpeed(),       -3.0, 5);
-
+			NOVAControl control = NOVAControl.get();
+			
+			makeDropDown(out, "content",    "Content",    control.getContents());			
+			// makeColorPicker(out, "color",   "Color",   control.getRed(), control.getGreen(), control.getBlue());
+			makeSlider(out,   "red",        "Red",        control.getRed(),         0,   1.0);
+			makeSlider(out,   "green",      "Green",      control.getGreen(),       0,   1.0);
+			makeSlider(out,   "blue",       "Blue",       control.getBlue(),        0,   1.0);
+			makeSlider(out,   "brightness", "Brightness", control.getBrightness(),  0.1, 1.0);
+			makeSlider(out,   "speed",      "Speed",      control.getSpeed(),      -3.0, 5);
 			makeButton(out,   "reset",      "Reset");
 			makeButton(out,   "reload",     "Reload");
 
 			out.close();
+			
 			return new Response200(req, MIME.HTML, bout.toByteArray());
-		} catch(Throwable t) {
+		} catch (Throwable t) {
 			return new Response500(req, t);
 		}
 	}

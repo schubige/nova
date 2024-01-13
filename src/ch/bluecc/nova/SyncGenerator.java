@@ -11,71 +11,31 @@ import org.jnetpcap.PcapException;
 @SuppressWarnings("nls")
 public class SyncGenerator implements IConstants {
 	private static final boolean DBG = false;
-	
-	private final  AtomicInteger seqNum     = new AtomicInteger();
-	private final  Thread        sync;
-	private final  AtomicBoolean running    = new AtomicBoolean();
+
 	private static final long    PLL_TIME   = 20L * 1000L * 1000L;
-	private final  EnetInterface device;
-	private final  AtomicBoolean disposed   = new AtomicBoolean();
-	private        ISyncListener listener;
-	private        long          last;
-	private final  Dispatcher    disp;
 	private static final boolean NOSLEEP    = true;
 	
-	public SyncGenerator(EnetInterface device, Dispatcher disp) {
+	private final  EnetInterface device;
+	private final  Dispatcher    dispatcher;
+	private final  AtomicInteger seqNum     = new AtomicInteger();
+	private final  AtomicBoolean running    = new AtomicBoolean();
+	private final  AtomicBoolean disposed   = new AtomicBoolean();
+	private        ISyncListener listener;
+	
+	public SyncGenerator(EnetInterface device, Dispatcher dispatcher) {
 		this.device = device;
-		this.disp   = disp;
-		disp.setSyncGen(this);
-		sync = new Thread() {
-			@SuppressWarnings("unused")
-			@Override
-			public void run() {
-				try {
-					byte[] packet = new byte[ADDR_LEN + PROT_LEN + DATA_LEN];
-					AddressUtils.BROADCAST(packet, 0);
-					AddressUtils.SYNC(packet, 6);
-					last = System.nanoTime();
-					while(!(disposed.get())) {
-						long now   = System.nanoTime();
-						long ticks = ((now -last) + (PLL_TIME / 2)) / PLL_TIME;
-						last = now;
-						long next = now + (PLL_TIME - (now % PLL_TIME));
-						if(!(NOSLEEP) && next - now > 25000L)
-							Thread.sleep(10, 0);
-						while(System.nanoTime() < next) {}
-						synchronized(running) {
-							if(running.get())
-								PacketUtils.sync(packet, ADDR_LEN, seqNum.get());
-							else
-								PacketUtils.pll(packet, ADDR_LEN, seqNum.get());
-							SyncGenerator.this.device.send(packet);
-							if(DBG && ticks > 1)
-								Log.info("Sync miss: " + ticks);
-							while(ticks-- > 0) {
-								seqNum.incrementAndGet();
-								if((seqNum.get() & 1) == 1 && listener != null && running.get())
-									listener.sync(seqNum.get() >> 1);
-							}
-						}
-					}
-				} catch(Throwable t) {
-					Log.severe(t);
-				}
-				running.set(false);
-			}
-		};
-		sync.setPriority(Thread.MAX_PRIORITY);
-		sync.setDaemon(true);
-		sync.start();
+		this.dispatcher = dispatcher;
+		dispatcher.setSyncGen(this);
+		Thread thread = new Thread(this::syncTask);
+		thread.setPriority(Thread.MAX_PRIORITY);
+		thread.setDaemon(true);
+		thread.start();
 	}
 
 	public void on() {
-		
 	}
 	
 	public void off() {
-		
 	}
 	
 	public void setListener(ISyncListener listener) {
@@ -83,7 +43,7 @@ public class SyncGenerator implements IConstants {
 	}
 	
 	public void dispose() {
-		disp.setSyncGen(null);
+		dispatcher.setSyncGen(null);
 		disposed.set(true);
 	}
 
@@ -131,5 +91,41 @@ public class SyncGenerator implements IConstants {
 			device.send(status);
 			break;
 		}
+	}
+	
+	@SuppressWarnings("unused")
+	private void syncTask() {
+		try {
+			byte[] packet = new byte[ADDR_LEN + PROT_LEN + DATA_LEN];
+			AddressUtils.BROADCAST(packet, 0);
+			AddressUtils.SYNC(packet, 6);
+			long last = System.nanoTime();
+			while(!(disposed.get())) {
+				long now   = System.nanoTime();
+				long ticks = ((now - last) + (PLL_TIME / 2)) / PLL_TIME;
+				last = now;
+				long next = now + (PLL_TIME - (now % PLL_TIME));
+				if(!(NOSLEEP) && next - now > 25000L)
+					Thread.sleep(10, 0);
+				while(System.nanoTime() < next) {}
+				synchronized(running) {
+					if(running.get())
+						PacketUtils.sync(packet, ADDR_LEN, seqNum.get());
+					else
+						PacketUtils.pll(packet, ADDR_LEN, seqNum.get());
+					SyncGenerator.this.device.send(packet);
+					if(DBG && ticks > 1)
+						Log.info("Sync miss: " + ticks);
+					while(ticks-- > 0) {
+						seqNum.incrementAndGet();
+						if((seqNum.get() & 1) == 1 && listener != null && running.get())
+							listener.sync(seqNum.get() >> 1);
+					}
+				}
+			}
+		} catch(Throwable t) {
+			Log.severe(t);
+		}
+		running.set(false);
 	}
 }

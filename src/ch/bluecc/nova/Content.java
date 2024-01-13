@@ -225,9 +225,8 @@ public abstract class Content {
 	static List<Content> createContent(NOVAConfig config, Properties properties) {
 		int numFrames = -1;
 		try {
-			numFrames = Integer.parseInt(properties.getProperty("duration")) * 25;
-		} catch (Throwable t) {
-		}
+			numFrames = Integer.parseInt(properties.getProperty(NOVAControl.PROPERTY_KEY_DURATION, "-1")) * 25;
+		} catch (Throwable t) {}
 
 		var contents = new ArrayList<Content>();
 		for (String content : properties.getProperty("content", "AUTO").split("[,]")) {

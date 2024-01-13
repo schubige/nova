@@ -37,9 +37,7 @@ public class Utilities {
 		if (file.lastModified() + 2000 > System.currentTimeMillis())
 			return true;
 		if (file.canWrite()) {
-			try {
-				RandomAccessFile raf = new RandomAccessFile(file, "rw");
-				raf.close();
+			try (RandomAccessFile raf = new RandomAccessFile(file, "rw")) {
 				return false;
 			} catch (Exception e) {
 			}

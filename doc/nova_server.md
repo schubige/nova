@@ -8,17 +8,18 @@ The server is started through the `main()` method of the `NOVAControl` class, an
 
 The configuration can be stored in a text file, e.g., `nova.properties`, and contains the following elements:
 
-- `brightness`: The initial brightness value in the range [0..1]
-- `nova`: The ethernet interface used for communicating with NOVA. If omitted, it defaults to `eth0`.
-- `addr_<X>_<Y>`: The address (as configured by jumpers on the NOVA board, see below) of the module at module location (X,Y)
+- `nova`: The ethernet interface used for communicating with NOVA. Default if omitted is `eth0`.
+- `addr_<X>_<Y>`: The address (as configured by jumpers on the NOVA board, see below) of the module at module location (X,Y). Default if omitted is `addr_0_0 = 1`.
+- `flip`: If `flip = true` then content will be vertically mirrored. Default if omitted is `false`.
+- `brightness`: The initial brightness value in the range [0..1]. Default if omitted is `0.5`.
 - `content`: A comma separated list of the names of content classes to load at startup. See “Writing a Content Extension” below for writing a
-custom content extension. If `content` is set to `AUTO`, then all content classes will be loaded.
-- `duration`: The number of seconds a content class should run until the server switches to the next content class. If set to `-1`, the selected content will run indefinitely or until changed by the user using the Web interface.
+custom content extension. If `content` is set to `AUTO`, then all content classes will be loaded. Default if omitted is `AUTO`.
+- `duration`: The number of seconds a content class should run until the server switches to the next content class. If set to `-1`, the selected content will run indefinitely or until changed by the user using the Web interface. Default if omitted is `-1`.
+- `movies`: Path to voxel movies for the movie player. Default if omitted is `.`.
 
 A sample configuration could look like this:
 
 ```
-brightness=0.6 
 nova=eth1
 addr_0_0 = 1
 addr_0_1 = 5
@@ -36,6 +37,8 @@ addr_3_0 = 4
 addr_3_1 = 8
 addr_3_2 = 12
 addr_3_3 = 16
+flip=true
+brightness=0.6 
 content=Colorcube,Random,Movie,Sweep
 duration=300
 ```

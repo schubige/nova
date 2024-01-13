@@ -16,10 +16,10 @@ import java.util.ArrayList;
 @SuppressWarnings("nls")
 public class FileTypeMap extends MIME {
 
-	private static HashMap<String, String> mimeMediaType = new HashMap<String, String>();
-	private static HashMap<String, String> mimeSubType = new HashMap<String, String>();
-	private static HashMap<String, String> mime2extension = new HashMap<String, String>();
-	private static ArrayList<String[]> mimeTypes = new ArrayList<String[]>();
+	private static HashMap<String, String> mimeMediaType = new HashMap<>();
+	private static HashMap<String, String> mimeSubType = new HashMap<>();
+	private static HashMap<String, String> mime2extension = new HashMap<>();
+	private static ArrayList<String[]> mimeTypes = new ArrayList<>();
 
 	static {
 		put(Application, Mac_binhex40, ".hqx");

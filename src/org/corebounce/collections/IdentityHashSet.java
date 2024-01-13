@@ -560,6 +560,6 @@ public final class IdentityHashSet<K> extends AbstractSet<K> implements Cloneabl
 
 	@Override
 	public Iterator<K> iterator() {
-		return new IdentityHashSetIterator<K>();
+		return new IdentityHashSetIterator<>();
 	}
 }

@@ -90,17 +90,17 @@ public class ClassUtilities {
 	@SuppressWarnings("rawtypes")
 	public static final Class<ArrayList>       CLS_ArrayList       = ArrayList.class;
 
-	static final Hashtable<Class<?>, byte[]>            cls2md5               = new Hashtable<Class<?>, byte[]>();
-	static final Hashtable<String, Class<?>>            clsMap                = new Hashtable<String, Class<?>>();
-	static final Set<Class<?>>                          IS_INTEGRAL           = new IdentityHashSet<Class<?>>();           
-	static final Set<Class<?>>                          IS_FLOAT              = new IdentityHashSet<Class<?>>();           
-	static final Set<Class<?>>                          IS_PRIMITIVE          = new IdentityHashSet<Class<?>>();           
-	static final Set<Class<?>>                          IS_WRAPPER            = new IdentityHashSet<Class<?>>();           
-	static final Map<Class<?>, HashMap<String, Field>>  fieldMap              = new IdentityHashMap<Class<?>, HashMap<String, Field>>();
-	static final Map<Class<?>, Field[]>                 cls2fields            = new IdentityHashMap<Class<?>, Field[]>();
-	static final Map<Class<?>, Method[]>                cls2methods           = new IdentityHashMap<Class<?>, Method[]>();
-	static final Map<Class<?>, Map<Class<?>, Field[]>>  clsAnnotation2fields  = new IdentityHashMap<Class<?>, Map<Class<?>,Field[]>>();
-	static final Map<Class<?>, Map<Class<?>, Method[]>> clsAnnotation2methods = new IdentityHashMap<Class<?>, Map<Class<?>,Method[]>>();
+	static final Hashtable<Class<?>, byte[]>            cls2md5               = new Hashtable<>();
+	static final Hashtable<String, Class<?>>            clsMap                = new Hashtable<>();
+	static final Set<Class<?>>                          IS_INTEGRAL           = new IdentityHashSet<>();           
+	static final Set<Class<?>>                          IS_FLOAT              = new IdentityHashSet<>();           
+	static final Set<Class<?>>                          IS_PRIMITIVE          = new IdentityHashSet<>();           
+	static final Set<Class<?>>                          IS_WRAPPER            = new IdentityHashSet<>();           
+	static final Map<Class<?>, HashMap<String, Field>>  fieldMap              = new IdentityHashMap<>();
+	static final Map<Class<?>, Field[]>                 cls2fields            = new IdentityHashMap<>();
+	static final Map<Class<?>, Method[]>                cls2methods           = new IdentityHashMap<>();
+	static final Map<Class<?>, Map<Class<?>, Field[]>>  clsAnnotation2fields  = new IdentityHashMap<>();
+	static final Map<Class<?>, Map<Class<?>, Method[]>> clsAnnotation2methods = new IdentityHashMap<>();
 
 	static {
 		clsMap.put("boolean", CLS_boolean);
@@ -240,7 +240,7 @@ public class ClassUtilities {
 	public static Field[] getAllFields(Class<?> type) {
 		Field[] result = cls2fields.get(type);
 		if(result == null) {
-			Collection<Field> fields = getAllFields(type, new ArrayList<Field>());
+			Collection<Field> fields = getAllFields(type, new ArrayList<>());
 			result = fields.toArray(new Field[fields.size()]);
 			cls2fields.put(type, result);
 			AccessibleObject.setAccessible(result, true);			
@@ -262,7 +262,7 @@ public class ClassUtilities {
 	public static Method[] getAllMethods(Class<?> type) {
 		Method[] result = cls2methods.get(type);
 		if(result == null) {
-			Collection<Method> methods = getAllMethods(type, new ArrayList<Method>());
+			Collection<Method> methods = getAllMethods(type, new ArrayList<>());
 			result = methods.toArray(new Method[methods.size()]);
 			cls2methods.put(type, result);
 			AccessibleObject.setAccessible(result, true);			
@@ -296,7 +296,7 @@ public class ClassUtilities {
 	public static Field getField(Class<?> type, String field) {
 		HashMap<String, Field> fields = fieldMap.get(type);
 		if(fields == null) {
-			fields = new HashMap<String, Field>();
+			fields = new HashMap<>();
 			for(Field f : getAllFields(type))
 				fields.put(f.getName(), f);
 			fieldMap.put(type, fields);
@@ -310,12 +310,12 @@ public class ClassUtilities {
 	public static Field[] getAllAnotatedFields(Class<?> cls, Class<? extends Annotation> annotationCls) {
 		Map<Class<?>, Field[]> annotation2field = clsAnnotation2fields.get(cls);
 		if(annotation2field == null) {
-			annotation2field = new IdentityHashMap<Class<?>, Field[]>();
+			annotation2field = new IdentityHashMap<>();
 			clsAnnotation2fields.put(cls, annotation2field);
 		}
 		Field[] result = annotation2field.get(annotationCls);
 		if(result == null) {
-			List<Field> fields = new LinkedList<Field>();
+			List<Field> fields = new LinkedList<>();
 			for(Field field : getAllFields(cls)) {
 				if(field.getAnnotation(annotationCls) != null)
 					fields.add(field);
@@ -330,12 +330,12 @@ public class ClassUtilities {
 	public static Method[] getAllAnnotatedMethods(Class<?> cls, Class<? extends Annotation> annotationCls) {
 		Map<Class<?>, Method[]> annotation2method = clsAnnotation2methods.get(cls);
 		if(annotation2method == null) {
-			annotation2method = new IdentityHashMap<Class<?>, Method[]>();
+			annotation2method = new IdentityHashMap<>();
 			clsAnnotation2methods.put(cls, annotation2method);
 		}
 		Method[] result = annotation2method.get(annotationCls);
 		if(result == null) {
-			List<Method> methods = new LinkedList<Method>();
+			List<Method> methods = new LinkedList<>();
 			for(Method method : getAllMethods(cls)) {
 				if(method.getAnnotation(annotationCls) != null)
 					methods.add(method);
@@ -347,7 +347,7 @@ public class ClassUtilities {
 		return result;
 	}
 
-	private static final Map<Method, Class<?>[]> method2paramTypes = new IdentityHashMap<Method, Class<?>[]>();
+	private static final Map<Method, Class<?>[]> method2paramTypes = new IdentityHashMap<>();
 	public synchronized static Class<?>[] getParameterTypes(Method m) {
 		Class<?>[] result = method2paramTypes.get(m);
 		if(result == null) {
@@ -358,7 +358,7 @@ public class ClassUtilities {
 	}
 
 	public static Class<?>[] getTypeHierarchy(Class<?> cls) {
-		ArrayList<Class<?>> result = getTypeHierarchy(cls, new ArrayList<Class<?>>());	
+		ArrayList<Class<?>> result = getTypeHierarchy(cls, new ArrayList<>());	
 		return result.toArray(new Class<?>[result.size()]);
 	}
 
@@ -371,7 +371,7 @@ public class ClassUtilities {
 
 	private transient static Instrumentation inst;
 
-	static final Map<Class<?>, Integer> PRIMITIVE_SIZES = new IdentityHashMap<Class<?>, Integer>();
+	static final Map<Class<?>, Integer> PRIMITIVE_SIZES = new IdentityHashMap<>();
 
 	private static boolean SKIP_STATIC_FIELD    = true;
 	private static boolean SKIP_FINAL_FIELD     = true;
@@ -405,7 +405,7 @@ public class ClassUtilities {
 	 * 	by objectToSize and by all the objects reachable from it
 	 */
 	public static long deepSizeOf(Object objectToSize) {
-		Map<Object,Object> doneObj = new IdentityHashMap<Object,Object>();
+		Map<Object,Object> doneObj = new IdentityHashMap<>();
 		return deepSizeOf(objectToSize, doneObj, 0);
 	}
 

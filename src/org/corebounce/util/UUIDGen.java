@@ -39,8 +39,8 @@ import org.corebounce.net.NetworkUtilities;
 
 @SuppressWarnings("nls")
 public final class UUIDGen {
-	private static final CanonicalSynchronizedSet<UUID> intern     = new CanonicalSynchronizedSet<UUID>();
-	private static final Map<String, UUID>              chars2uuid = new ConcurrentHashMap<String, UUID>(); 
+	private static final CanonicalSynchronizedSet<UUID> intern     = new CanonicalSynchronizedSet<>();
+	private static final Map<String, UUID>              chars2uuid = new ConcurrentHashMap<>(); 
 
 	public static final UUID INVALID_UUID = newUUID(0, 0);
 

@@ -58,7 +58,7 @@ public class CanonicalSynchronizedSet<K> {
 	/**
 	 * Reference queue for cleared WeakEntries
 	 */
-	private final ReferenceQueue<K> queue = new ReferenceQueue<K>();
+	private final ReferenceQueue<K> queue = new ReferenceQueue<>();
 	
 	@SuppressWarnings("unchecked")
 	public CanonicalSynchronizedSet() {
@@ -186,7 +186,7 @@ public class CanonicalSynchronizedSet<K> {
 		}
 
 		Entry<K> e = tab[i];
-		tab[i] = new Entry<K>(k, queue, h, e);
+		tab[i] = new Entry<>(k, queue, h, e);
 		if (++size >= threshold)
 			resize(tab.length * 2);
 		return null;
@@ -333,7 +333,7 @@ public class CanonicalSynchronizedSet<K> {
 	}
 
 	private ArrayList<Object> toArrayList() {
-		ArrayList<Object> result = new ArrayList<Object>(size());
+		ArrayList<Object> result = new ArrayList<>(size());
 		Entry<K>[] tab = getTable();
 		for(int i = 0; i < tab.length; i++)
 			if(tab[i] != null) {

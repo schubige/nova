@@ -65,7 +65,7 @@ public class AddressUtilities {
 	}
 
 	private static InetAddress[] getLocalAddresses(boolean ipv4only) throws SocketException {
-		ArrayList<InetAddress> result = new ArrayList<InetAddress>();
+		ArrayList<InetAddress> result = new ArrayList<>();
 		for (Enumeration<NetworkInterface> e = NetworkInterface
 				.getNetworkInterfaces(); e.hasMoreElements();) {
 			NetworkInterface nif = e.nextElement();

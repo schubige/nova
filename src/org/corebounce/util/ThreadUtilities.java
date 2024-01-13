@@ -11,7 +11,7 @@ public class ThreadUtilities {
 	}
 
 	public static List<Thread> getAllThreads() {
-		List<Thread> result = new ArrayList<Thread>();
+		List<Thread> result = new ArrayList<>();
 		ThreadGroup root = Thread.currentThread().getThreadGroup().getParent();
 		while (root.getParent() != null)
 			root = root.getParent();

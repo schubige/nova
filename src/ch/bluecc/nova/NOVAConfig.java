@@ -1,5 +1,7 @@
 package ch.bluecc.nova;
 
+import java.util.Properties;
+
 import org.corebounce.util.Log;
 
 @SuppressWarnings("nls")
@@ -13,30 +15,60 @@ public final class NOVAConfig {
 	private final int[]        frameOffsets = new int[256];
 
 	
-	public NOVAConfig(int[][] modules, boolean flipK) {
-		this.modules  = modules;
-		this.dimI     = modules.length * moduleDimI();
-		this.flipK    = flipK;
-		int[] tmp     = new int[100];
-		int   count   = 0;
-		int   maxJ    = 0;
-		for(int[] row : modules)
+	public NOVAConfig(Properties properties) {
+		int moduleDimI = 0;
+		int moduleDimJ = 0;
+		int[][] config = new int[100][100];
+		for (int i = 0; i < config.length; i++) {
+			for (int j = 0; j < config[i].length; j++) {
+				String addr = properties.getProperty(NOVAControl.PROPERTY_KEY_ADDRESS + i + "_" + j);
+				if (addr != null) {
+					config[i][j] = Integer.parseInt(addr.trim());
+					moduleDimI = Math.max(moduleDimI, i + 1);
+					moduleDimJ = Math.max(moduleDimJ, j + 1);
+				}
+			}
+		}
+		// if no addresses are given, default to addr_0_0 = 1
+		if (moduleDimI == 0 || moduleDimJ == 0) {
+			moduleDimI = 1;
+			moduleDimJ = 1;
+			config[0][0] = 1;
+		}
+
+		modules = new int[moduleDimI][moduleDimJ];
+		for (int i = 0; i < moduleDimI; i++)
+			for (int j = 0; j < moduleDimJ; j++)
+				modules[i][j] = config[i][j];
+
+		dimI = modules.length * moduleDimI();
+
+		int[] tmp = new int[100];
+		int count = 0;
+		int maxJ = 0;
+		for (int[] row : modules)
 			maxJ = Math.max(maxJ, row.length);
 
-		for(int j = 0; j < maxJ; j++) {
-			for(int i = 0; i < modules.length; i++) {
+		for (int j = 0; j < maxJ; j++) {
+			for (int i = 0; i < modules.length; i++) {
 				int m = modules[i][j];
-				if(m > 0 && m < 101) {
+				if (m > 0 && m < 101) {
 					tmp[count++] = m;
 					frameOffsets[m] = calcFrameOffset(m);
 				}
 			}
 		}
-		
-		this.dimJ        = maxJ * moduleDimJ();
+
+		this.dimJ = maxJ * moduleDimJ();
+
 		this.modulesFlat = new int[count];
 		System.arraycopy(tmp, 0, this.modulesFlat, 0, count);
-		if(this.modulesFlat.length == 0) throw new IllegalArgumentException("At least one module must be configured");
+
+		if (this.modulesFlat.length == 0)
+			throw new IllegalArgumentException("At least one module must be configured");
+
+		flipK = properties.getProperty(NOVAControl.PROPERTY_KEY_FLIP, "f").toLowerCase().startsWith("t");
+
 		Log.info("Configured dimI=" + dimI + ", dimJ=" + dimJ + ", dimK=" + moduleDimK() + (flipK ? " (upside down)" : ""));
 	}
 

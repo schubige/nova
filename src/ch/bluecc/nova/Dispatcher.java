@@ -2,7 +2,7 @@ package ch.bluecc.nova;
 
 import org.corebounce.util.Log;
 
-public class Dispatcher extends Thread implements IConstants {
+public class Dispatcher implements IConstants {
 	final EnetInterface device;
 	final NOVAConfig    config;
 	SyncGenerator       sync;
@@ -10,16 +10,16 @@ public class Dispatcher extends Thread implements IConstants {
 	public Dispatcher(EnetInterface device, NOVAConfig config) {
 		this.device = device;
 		this.config = config;
-		setPriority(Thread.MIN_PRIORITY);
-		start();
+		Thread thread = new Thread(this::dispatchTask);
+		thread.setPriority(Thread.MIN_PRIORITY);
+		thread.start();
 	}
 	
 	public void setSyncGen(SyncGenerator sync) {
 		this.sync = sync;
 	}
 	
-	@Override
-	public void run() {
+	private void dispatchTask() {
 		byte[] status = new byte[ADDR_LEN + PROT_LEN + DATA_LEN];
 		AddressUtils.SYNC(status, 6);
 		for(;;) {

@@ -48,7 +48,7 @@ public class Colorcube extends Content {
 	}
 		
 	private void updateSpeed() {
-		double speed = NOVAControl.getSpeed();
+		double speed = NOVAControl.get().getSpeed();
 		if(mLastSpeed == speed) return;
 		
 		mLastSpeed = speed;

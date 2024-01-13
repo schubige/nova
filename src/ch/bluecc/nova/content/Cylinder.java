@@ -19,7 +19,7 @@ public class Cylinder extends Content {
 	@Override
 	public boolean fillFrame(float[] rgbFrame, double timeInSec) {
 		double twist = 0.1;
-		float  speed = (float)((NOVAControl.getSpeed() + 3.0) / 8.0);
+		float  speed = (float)((NOVAControl.get().getSpeed() + 3.0) / 8.0);
 		if(speed < 0.1f) speed = 0.1f;
 		if(speed > 1f)   speed = 1f;
 		timeInSec *= 0.2;

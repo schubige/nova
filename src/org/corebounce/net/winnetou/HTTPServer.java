@@ -39,9 +39,9 @@ public class HTTPServer implements Runnable {
 	}
 
 	public HTTPServer(String host, int port) {
-		handlers = new HashMap<Integer, HashMap<String, HTTPHandler>>();
+		handlers = new HashMap<>();
 		for (int i = HTTPHandler.METHODS.length; --i >= 0;)
-			handlers.put(i, new HashMap<String, HTTPHandler>());
+			handlers.put(i, new HashMap<>());
 		try {
 			this.port = port;
 			try {

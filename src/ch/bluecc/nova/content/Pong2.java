@@ -42,7 +42,7 @@ public class Pong2 extends Content {
 		
 		nc = new MVector(0, 0, 0);
 		xc = new MVector(nx, ny, nz);
-		balls = new ArrayList<Ball>();
+		balls = new ArrayList<>();
 		for (int i = 0; i < 1; i++) {
 			Ball b = new Ball(nx / 2.0, ny / 2.0, nz / 2.0);
 			b.minc = nc;

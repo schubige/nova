@@ -34,7 +34,7 @@ public class BoidsNr extends Content {
 		colors[4] = lime;
 		colors[5] = mint;
 		
-		boids = new ArrayList<Boid>();
+		boids = new ArrayList<>();
 		for (int i = 0; i < NUM; i++) {
 			Boid b = new Boid(nc,xc);
 //			Boid b = new Boid(5,25,5);

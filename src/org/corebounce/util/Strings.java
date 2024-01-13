@@ -83,7 +83,7 @@ public class Strings {
 	}
 
 	public static String[] removeDuplicates(String[] strings) {
-		Vector<String> result_v = new Vector<String>();
+		Vector<String> result_v = new Vector<>();
 		for (int i = 0; i < strings.length; i++)
 			if (!result_v.contains(strings[i]))
 				result_v.addElement(strings[i]);
@@ -194,7 +194,7 @@ public class Strings {
 	 * @return The list of words.
 	 */
 	public static String[] words(String string, String separators) {
-		Vector<String> resultv = new Vector<String>();
+		Vector<String> resultv = new Vector<>();
 		StringTokenizer st = new StringTokenizer(string, separators, false);
 
 		while (st.hasMoreTokens())

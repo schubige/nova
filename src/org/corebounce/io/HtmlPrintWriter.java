@@ -20,7 +20,7 @@ import org.corebounce.util.UTHTML;
 
 @SuppressWarnings("nls")
 public class HtmlPrintWriter implements HTML {
-	private Stack<String> tag_stack = new Stack<String>();
+	private Stack<String> tag_stack = new Stack<>();
 	PrintWriter writer;
 
 	public HtmlPrintWriter(String title, OutputStream out) throws IOException {

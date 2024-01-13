@@ -119,7 +119,7 @@ public class Common3DD {
 					return frameData;
 				else if(frame == null || frame.get() == null) {
 					frameArray = new byte[header.dimX * header.dimY * header.dimZ * 3];
-					frame      = new SoftReference<byte[]>(frameArray);
+					frame      = new SoftReference<>(frameArray);
 
 					if(header.raw != null) {
 						RandomAccessFile in = getRAFile(header.raw);
