@@ -2,6 +2,7 @@ target/
 bin/
 3dd/
 controlParams.properties
+dependency-reduced-pom.xml
 .classpath
 .project
 .settings/
