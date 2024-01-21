@@ -1,5 +1,9 @@
-/bin/
-/3dd/
-/.vscode/
+target/
+bin/
+3dd/
 controlParams.properties
+.classpath
+.project
+.settings/
+.vscode/
 .DS_Store
