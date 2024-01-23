@@ -1,4 +1,4 @@
-package org.corebounce.nova;
+package org.corebounce.nova.tools;
 
 import java.io.File;
 import java.io.FileOutputStream;
