@@ -2,6 +2,6 @@
 sleep 10
 while true
 do
-sudo java -Xmx512m -Djava.library.path=/tmp -cp ../bin:../lib/jnetpcap.jar:../lib/mail.jar ch.bluecc.nova.NOVAControl ../raspi_1x1.properties
+sudo $JAVA_HOME/bin/java --enable-preview -Dorg.jnetpcap.libpcap.file=/usr/lib/aarch64-linux-gnu/libpcap.so.0.8 target/novacontrol-1.0-SNAPSHOT.jar configs/nova.properties
 sleep 1
 done

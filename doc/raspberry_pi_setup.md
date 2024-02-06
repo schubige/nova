@@ -10,65 +10,31 @@ headless setup from scratch for integration into home network: <https://www.rasp
 ## Step-by-step instructions
 
 
-### Flashing Raspberry Pi OS to SD Card
+### Flash Raspberry Pi OS to SD Card
 
 * Get Raspberry Pi Imager from <https://www.raspberrypi.com/software/>
 * Choose your device (e.g., Raspberry Pi 4)
-* Select OS: Raspberry Pi OS Lite (64-bit)
-* Set up initial config before writing: user/password, WLAN, enable SSH access
+* Select OS: Raspberry Pi OS Lite (64-bit) (use latest, currently Debian Bookworm)
+* Set up initial configuration before writing: host name, user/password, WLAN, timezone, enable SSH access. **Important:** make sure to get this configuration right, otherwise you will not be able to connect to your Raspberry Pi after you boot it for the first time. For the rest of this document, `nova` is assumed as host name -- feel free to use another name of your choice.
 * Flash image to SD Card
-
-#### Alternative option without imager
-
-If you are not using the Imager, you need to setup initial config manually:
- 
-* Mount the SD card and in /boot
-* Create empty file /boot/ssh
-* Create file /boot/wpa_supplicant.conf and add:
-
-```
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=CH
-
-network={
- ssid="Hotel Anker"
- psk="mypasswordhere"
-}
-```
-
+* Put SD Card into Raspberry Pi
 
 
 ### Plugin your Raspberry Pi and wait until boot is complete
 
-* From your machine, ssh to raspberrypi.local:
+* From your machine, ssh to nova.local:
 
 ```
-ssh pi@raspberrypi.local
+ssh pi@nova.local
 ```
 
-* If not set via Imager, the default password is _raspberry_
 * In case hostname cannot be resolved, find the Raspberry Pi's IP address on your router and connect with ssh using the IP address.
-* Change default password and enter root
+
+* Run the Raspberry Pi configuration utility. Optional: this step allows you to change additional configuration parameters as required by your home setup. You can also use this in case you later move your Raspberry Pi to a different WLAN or if the WLAN password changes.
 
 ```
-passwd
-sudo su
+sudo raspi-config
 ```
-
-
-
-### Run the Raspberry Pi configuration utility
-
-```
-raspi-config
-```
-
-* Perform the following setup:
-  * Update configuration utility
-  * Networking: set hostname to any name you prefer (we'll use "novahost" in this documentation)
-  * Localization options: set timezone and keyboard layout
-
 
 
 ### Update and install software
@@ -76,101 +42,70 @@ raspi-config
 * Update the Raspberry Pi:
 
 ```
-apt update
-apt full-upgrade
-apt install rpi-eeprom
-rpi-eeprom-update -a
-reboot
+sudo apt update
+sudo apt full-upgrade
+sudo reboot
 ```
-
-
 
 * Install required software:
 
 ```
-apt-get install git
-apt-get install libpcap0.8
-```
-
-DEV NOTE: from here onwards, the documentation is outdated. Details re latest JDK etc will follow...
-
-
-### Configure startup script
-
-* Edit /etc/rc.local, add:
-
-```
-cd /home/pi/nova/scripts
-./novaraspi.sh > /dev/null 2>&1 &
+sudo apt-get install git
+sudo apt-get install libpcap0.8
+sudo apt-get install maven
 ```
 
 
+### Install OpenJDK 21 or later
 
-### NOVA software setup
+Note: once OpenJDK 21 or later becomes available via apt-get, you can install the package via apt-get, and skip to the next section.
 
-* Exit root
+* Get latest OpenJDK package via wget: go to https://jdk.java.net, select JDK 21 or later ("Ready for Use"), and copy link to Linux/AArch64 `.tar.gz` package.
+* In terminal on your Raspberry Pi, issue commands (make sure to update latest link and package name)
 
 ```
-exit
+wget https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-aarch64_bin.tar.gz
+tar -xzf tar xzf openjdk-21.0.2_linux-aarch64_bin.tar.gz
 ```
+
+* This will result in your JDK being unpacked in your home directory at `/home/pi/jdk-21.0.2` You will need this path later for the automatic startup. Again, the exact path will be different for later JDK versions.
+
+
+### NOVA software setup and configuration
 
 * Get and compile NOVA code
 
 ```
 cd /home/pi
-git clone https://bitbucket.org/sschubiger/nova.git
-cd nova/scripts
-./compile.sh
-cd ..
-cp -rp src/native bin/native
+git clone https://github.com/schubige/nova.git
+cd nova
+export JAVA_HOME=/home/pi/jdk-21.0.2/
+mvn install
 ```
 
-
-* Edit raspi_1x1.properties. Importantly, set the correct Ethernet interface for communication with NOVA (usually it will be eth0 on the Raspberry Pi):
+* Edit `configs/nova.properties`. Importantly, set the correct Ethernet interface and the correct module setup for communication with NOVA. Typically this will be as follows (depending on jumper setting on your module, see [here](nova_control.md)).
 
 ```
 nova=eth0
+addr_0_0=1
 ```
 
-* Plug in nova via ethernet and reboot
+
+### Configure startup script and reboot
+
+* Edit /etc/rc.local (e.g. `sudo nano /etc/rc.local`), add (before `exit 0`):
+
+```
+export JAVA_HOME=/home/pi/jdk-21.0.2/
+cd /home/pi/nova/scripts
+./novaraspi.sh > /dev/null 2>&1 &
+```
+
+* Plug in NOVA via ethernet and reboot
 
 ```
 sudo shutdown -r now
 ```
 
 * After 10 seconds, the random lights should go on
-* Connect to web interface via your web browser: http://novahost.local
-
-
-
-## Troubleshooting
-
-Important: likely, your home network runs on the 192.168.1.x network, you need to change this on your router, e.g. 192.168.2.x, since the 192.168.1.x network is used by the NOVA hardware.
-
-* Make sure your nova is set to address 4 (see NOVA Server documentation).
-* From your machine, ssh to novahost.local
-
-```
-ssh pi@novahost.local
-```
-
-* Edit /etc/dhcpcd.conf, add:
-
-```
-interface eth0
-static ip_address=192.168.1.130/24
-```
-
-* Reboot the Raspberry Pi & ssh to novahost.local again:
-
-```
-ssh pi@novahost.local
-```
-
-* You should be able to ping the NOVA hardware via
-
-```
-ping 192.168.1.4
-```
-
-* If this is not the case, check your NOVA address jumper settings again.
+* Connect to web interface via your web browser: http://nova.local
