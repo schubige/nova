@@ -1,19 +1,23 @@
 package org.corebounce.nova;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.corebounce.util.Log;
+import java.util.stream.Stream;
 
 import org.corebounce.nova.content.Test;
+import org.corebounce.util.Log;
 
 /**
  * Content base class for NOVA Server content.
@@ -256,20 +260,34 @@ public abstract class Content {
 		return contents;
 	}
 	
-	private static Set<Class<Content>> findAllContentClasses(String packageName) {
-		InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(packageName.replaceAll("[.]", "/"));
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		return reader.lines().filter(line -> line.endsWith(".class")).map(line -> getClass(line, packageName)).filter(Objects::nonNull).collect(Collectors.toSet());
+	@SuppressWarnings("unchecked")
+	private static Set<Class<Content>> findAllContentClasses(String packageName) throws IOException, URISyntaxException {
+		var packagePath = packageName.replace('.', '/');
+		Path root;
+		var pkg = ClassLoader.getSystemClassLoader().getResource(packagePath).toURI();		
+		if (pkg.toString().startsWith("jar:")) {
+			try {
+				root = FileSystems.getFileSystem(pkg).getPath(packagePath);
+			} catch (FileSystemNotFoundException e) {
+				root = FileSystems.newFileSystem(pkg, Collections.emptyMap()).getPath(packagePath);
+			}
+		} else {
+			root = Paths.get(pkg);
+		}
+
+		var classes = new HashSet<Class<Content>>();
+		try (Stream<Path> paths = Files.walk(root)) {
+			paths.filter(Files::isRegularFile).forEach(file -> {
+				try {
+					var path = file.toString().replace('/', '.');
+					var name = path.substring(path.indexOf(packageName), path.length() - ".class".length());
+					var cls = Class.forName(name);
+					if (cls.getSuperclass().equals(Content.class))
+						classes.add((Class<Content>)cls);
+				} catch (Throwable t) {
+				}
+			});
+		}
+		return classes;
 	}
- 
-    @SuppressWarnings("unchecked")
-	private static Class<Content> getClass(String className, String packageName) {
-        try {
-        	Class<?> cls = Class.forName(packageName + "." + className.substring(0, className.lastIndexOf('.')));
-        	if (cls.getSuperclass().equals(Content.class))
-        		return (Class<Content>)cls;
-        } catch (ClassNotFoundException e) {
-        }
-        return null;
-    }
 }
