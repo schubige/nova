@@ -97,8 +97,8 @@ addr_0_0=1
 
 ```
 export JAVA_HOME=/home/pi/jdk-21.0.2/
-cd /home/pi/nova/scripts
-./novaraspi.sh > /dev/null 2>&1 &
+cd /home/pi/nova
+./scripts/novaraspi.sh > /dev/null 2>&1 &
 ```
 
 * Plug in NOVA via ethernet and reboot
